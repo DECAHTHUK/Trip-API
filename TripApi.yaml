@@ -1,0 +1,686 @@
+openapi: 3.0.3
+info:
+  version: 0.0.1-SNAPSHOT
+  description: API for reserving trips for Tinkoff employers
+  title: Tinkoff trip API
+  contact:
+    email: alexei.talanov003@mail.ru
+  license:
+    name: Chestnoye slovo 2.0
+servers:
+  - url: http://localhost:8080
+    description: Dev Server
+tags:
+  - name: userEnd
+    description: Эндпоинты для работы с полями юзера
+  - name: requestEnd
+    description: Эндпоинты для работы с запросами
+  - name: tripEnd
+    description: Эндпоинты для работы с командировками
+
+
+paths:
+  '/user/new':
+    post:
+      tags:
+        - userEnd
+      summary: создание нового пользователя
+      operationId: createNewUser
+      requestBody:
+        description: структура для создания нового пользователя
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Id'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema: 
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+    put:
+      tags:
+        - userEnd
+      summary: обновление пользователя
+      operationId: updateUser
+      requestBody:
+        description: Структура пользователя с id
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/user/{uuid}/get':
+    get:
+      tags:
+        - userEnd
+      summary: Получение пользователя по его {id}
+      operationId: getUserById
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/user/{uuid}/get-some-requests':
+    get:
+      tags:
+        - userEnd
+      summary: Первые 2-3 заявки на рассмотрение по дате для пользователя с {id}
+      operationId: getSomeRequests
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RequestDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/user/{uuid}/get-some-trips':
+    get:
+      tags:
+        - userEnd
+      summary: Первые 2-3 свои командировки по дате
+      operationId: getSomeTrips
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TripDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/user/{uuid}/get-trips-at/{page}':
+    get:
+      tags:
+        - userEnd
+      summary: Получение страницы номер {page}(либо все сразу если не указано) из n командировок для пользователя с заданным {id}
+      operationId: getTripsAt
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: path
+          name: page
+          schema:
+            type: integer
+            format: int32
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TripDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/user/{uuid}/get-requests-at/{page}':
+    get:
+      tags:
+        - userEnd
+      summary: Получение страницы номер {page}(либо все сразу если не указано) из n запросов для ментора с заданным {id}
+      operationId: getRequestsAt
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: path
+          name: page
+          schema:
+            type: integer
+            format: int32
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RequestDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/user/{uuid}/unwatched-notifications':
+    get:
+      tags:
+        - userEnd
+      operationId: getUnwatchedNotifications
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Notification'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+
+
+  '/request/new':
+    post:
+      tags:
+        - requestEnd
+      summary: Создание нового запроса
+      operationId: createNewRequest
+      requestBody:
+        description: Структура запроса
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Request'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Id'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+    put:
+      tags:
+        - requestEnd
+      summary: Обновление запроса
+      operationId: updateRequest
+      requestBody:
+        description: Структура запроса
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Request'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/request/{uuid}/approve':
+    put:
+      tags:
+        - requestEnd
+      summary: Изменение статуса заявки на принятый
+      operationId: updateRequestStatus
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+
+  '/request/{uuid}/get':
+    get:
+      tags:
+        - requestEnd
+      summary: Получение реквеста по заданному UUID.
+      operationId: getRequestById
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Request'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/trip/{uuid}/get':
+    get:
+      tags:
+        - tripEnd
+      summary: Получение командировки по заданному UUID
+      operationId: getTripById
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Trip'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/trip/new':
+    put:
+      tags:
+        - tripEnd
+      summary: Обновление командировки
+      operationId: updateTrip
+      requestBody:
+        description: Структура запроса
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Trip'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+
+
+components:
+  schemas:
+    User:
+      type: object
+      description: worker object
+      required:
+        - email
+        - password
+        - name
+        - surname
+        - role
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+        password:
+          type: string
+        name:
+          type: string
+        surname:
+          type: string
+        subordinators:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+        unwatchedNotifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/Notification'
+        role:
+          type: string
+
+    Notification:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        requestId:
+          $ref: '#/components/schemas/Request'
+
+        watched:
+          type: boolean
+
+    Transportation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        dtype:
+          type: string
+          enum:
+            - plane
+            - train
+        date:
+          type: string
+          format: date
+          example: "2021-01-30T08:30:00Z"
+        from:
+          type: string
+        to:
+          type: string
+        departurePoint:
+          type: string
+        recommendedDateTime:
+          type: string
+          format: date
+          example: "2021-01-30T08:30:00Z"
+
+    Trip:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        request:
+          $ref: '#/components/schemas/Request'
+        tripStatus:
+          type: string
+          enum:
+            - pending
+            - completed
+            - cancelled
+        accomodation:
+          $ref: '#/components/schemas/Accomodation'
+        destination:
+          $ref: '#/components/schemas/Destination'
+
+
+    Request:
+      type: object
+      required:
+        - tripId
+        - status
+        - worker
+        - officeId
+        - startDate
+        - endDate
+      properties:
+        id:
+          type: string
+          format: uuid
+        tripId:
+          $ref: '#/components/schemas/Trip'
+        status:
+          type: string
+          enum:
+            - approved
+            - pending
+            - awaitChanges
+            - declined
+        description:
+          type: string
+        worker:
+          $ref: '#/components/schemas/User'
+        office:
+          $ref: '#/components/schemas/Office'
+        comment:
+          type: string
+        startDate:
+          type: string
+          format: date
+          example: "2021-01-30T08:30:00Z"
+        endDate:
+          type: string
+          format: date
+          example: "2021-01-30T08:30:00Z"
+        transportTo:
+          type: string
+        transportFrom:
+          type: string
+        tickets:
+          type: string
+          format: url
+
+    Accomodation:
+      type: object
+      required:
+        - id
+        - address
+      properties:
+        id:
+          type: string
+          format: uuid
+        address:
+          type: string
+        checkinTime:
+          type: string
+          format: date
+          example: "2021-01-30T08:30:00Z"
+        checkoutTime:
+          type: string
+          format: date
+          example: "2021-01-30T08:30:00Z"
+        bookingTickets:
+          type: string
+          format: url
+
+    Destination:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        address:
+          type: string
+        description:
+          type: string
+        office:
+          $ref: '#/components/schemas/Office'
+        seatPlace:
+          type: string
+
+    Office:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        address:
+          type: string
+        description:
+          type: string
+
+    RequestDto:
+      type: object
+      description: Краткие сведения о запросе на командировку
+      properties:
+        id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          enum:
+            - approved
+            - pending
+            - awaitChanges
+            - declined
+        description:
+          type: string
+        workerId:
+          type: string
+          format: uuid
+        startDate:
+          type: string
+          format: date
+          example: "2021-01-30T08:30:00Z"
+
+    TripDto:
+      type: object
+      description: Краткие сведения о командировке
+      properties:
+        id:
+          type: string
+          format: uuid
+        tripStatus:
+          type: string
+          enum:
+            - pending
+            - completed
+            - cancelled
+        startDate:
+          type: string
+          format: date
+          example: "2021-01-30T08:30:00Z"
+        office:
+          $ref: '#/components/schemas/Office'
+
+    Id:
+      type: object
+      description: id return type
+      properties:
+        id:
+          type: string
+          format: uuid
