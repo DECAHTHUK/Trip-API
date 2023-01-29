@@ -11,10 +11,10 @@ CREATE INDEX idx_users_email on users (email);
 
 CREATE TABLE user_subordinator
 (
-    boss_id CHARACTER VARYING(36),
-    subordinator_id CHARACTER VARYING(36),
-    CONSTRAINT idx_boss_subordinator PRIMARY KEY (boss_id, subordinator_id)
+    boss_id CHARACTER VARYING(36) REFERENCES users (id),
+    subordinator_id CHARACTER VARYING(36) REFERENCES users (id)
 );
+CREATE INDEX idx_boss_subordinator ON user_subordinator (boss_id, subordinator_id)
 
 CREATE TABLE notification
 (
