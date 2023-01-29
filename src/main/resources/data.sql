@@ -1,7 +1,7 @@
 CREATE TABLE users
 (
     id CHARACTER VARYING(36) PRIMARY KEY,
-    email CHARACTER VARYING(100) NOT NULL,
+    email CHARACTER VARYING(100) NOT NULL UNIQUE,
     password CHARACTER VARYING(100) NOT NULL,
     user_name CHARACTER VARYING(50) NOT NULL,
     surname CHARACTER VARYING(50) NOT NULL,
@@ -12,9 +12,9 @@ CREATE INDEX idx_users_email on users (email);
 CREATE TABLE user_subordinator
 (
     boss_id CHARACTER VARYING(36),
-    subordinator_id CHARACTER VARYING(36)
+    subordinator_id CHARACTER VARYING(36),
+    CONSTRAINT idx_boss_subordinator PRIMARY KEY (boss_id, subordinator_id)
 );
-CREATE INDEX idx_boss_subordinator ON user_subordinator (boss_id, subordinator_id);
 
 CREATE TABLE notification
 (
@@ -76,7 +76,6 @@ CREATE TABLE request
     transport_from CHARACTER VARYING(50),
     tickets CHARACTER VARYING(100)
 );
-CREATE INDEX idx_request_worker_id on request (worker_id);
 CREATE INDEX idx_request_worker_id_status on request (worker_id, status);
 
 CREATE TABLE trip
