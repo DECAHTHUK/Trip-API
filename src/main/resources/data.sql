@@ -14,7 +14,7 @@ CREATE TABLE user_subordinator
     boss_id CHARACTER VARYING(36) REFERENCES users (id),
     subordinator_id CHARACTER VARYING(36) REFERENCES users (id)
 );
-CREATE INDEX idx_boss_subordinator ON user_subordinator (boss_id, subordinator_id)
+CREATE INDEX idx_boss_subordinator ON user_subordinator (boss_id, subordinator_id);
 
 CREATE TABLE notification
 (
