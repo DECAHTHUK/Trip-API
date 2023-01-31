@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog">
     <changeSet id="1" author="Rusya">
+
         <comment>
             Инициализация структуры базы данных.
         </comment>
+
+        <!-- USERS -->
         <createTable tableName="users">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false" primaryKey="true"/>
@@ -25,6 +28,7 @@
             </column>
         </createTable>
 
+        <!-- ACCOMMODATION -->
         <createTable tableName="accommodation">
             <column name="id" type="VARCHAR(36)">
                 <constraints nullable="false" primaryKey="true"/>
@@ -42,10 +46,40 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+
+        <!-- TRANSPORTATION -->
         <createTable tableName="transportation">
             <column name="id" type="VARCHAR(36)">
-                <constraints primaryKey="true"/>
+                <constraints nullable="false" primaryKey="true"/>
             </column>
+            <column name="dtype" type="VARCHAR(5)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_date" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="from_where" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="to_where" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="departure_point" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="recommended_datetime" type="TIMESTAMP"/>
         </createTable>
+
+        <!-- OFFICE -->
+        <createTable tableName="office">
+            <column name="id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="address" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+        </createTable>
+
     </changeSet>
 </databaseChangeLog>
