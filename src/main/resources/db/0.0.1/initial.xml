@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog">
+    <changeSet id="1" author="Rusya">
+        <comment>
+            Инициализация структуры базы данных.
+        </comment>
+        <createTable tableName="users">
+            <column name="id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="email" type="VARCHAR(100)">
+                <constraints primaryKey="false" nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_name" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="surname" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_role" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="accommodation">
+            <column name="id" type="VARCHAR(36)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="address" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="checkin_time" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="checkout_time" type="TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="booking_tickets" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createTable tableName="transportation">
+            <column name="id" type="VARCHAR(36)">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
