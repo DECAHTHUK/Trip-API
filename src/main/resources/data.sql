@@ -74,7 +74,7 @@ CREATE TABLE request
     end_date TIMESTAMP,
     transport_to CHARACTER VARYING(50),
     transport_from CHARACTER VARYING(50),
-    tickets CHARACTER VARYING(100)
+    tickets TEXT
 );
 CREATE INDEX idx_request_worker_id_status on request (worker_id, status);
 
