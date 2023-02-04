@@ -6,7 +6,7 @@
     <changeSet id="2" author="RusyaAndLyosha">
 
         <comment>
-            Инициализация индексов.
+            Indexes initialisation
         </comment>
 
         <createIndex tableName="users" indexName="idx_users_email">

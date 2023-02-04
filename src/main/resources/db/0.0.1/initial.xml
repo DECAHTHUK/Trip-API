@@ -3,15 +3,17 @@
                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
 		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
     <changeSet id="1" author="RusyaAndLyosha">
 
-        <comment>
-            Инициализация структуры базы данных.
-        </comment>
-
         <!-- USERS -->
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="users"/>
+            </not>
+        </preConditions>
         <createTable tableName="users">
-            <column name="id" type="VARCHAR(36)">
+            <column name="id" type="UUID">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="email" type="VARCHAR(100)">
@@ -20,10 +22,10 @@
             <column name="password" type="VARCHAR(100)">
                 <constraints nullable="false"/>
             </column>
-            <column name="user_name" type="VARCHAR(50)">
+            <column name="first_name" type="VARCHAR(100)">
                 <constraints nullable="false"/>
             </column>
-            <column name="surname" type="VARCHAR(50)">
+            <column name="second_name" type="VARCHAR(100)">
                 <constraints nullable="false"/>
             </column>
             <column name="user_role" type="VARCHAR(50)">
@@ -31,119 +33,155 @@
             </column>
         </createTable>
 
-        <!--USER_SUBORDINATOR -->
-        <createTable tableName="user_subordinator">
-            <column name="boss_id" type="VARCHAR(36)">
-                <constraints foreignKeyName="fk_user_subordinator_boss" references="users(id)"/>
+        <!--USER_RELATIONS -->
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="users_relations"/>
+            </not>
+        </preConditions>
+        <createTable tableName="users_relations">
+            <column name="boss_id" type="UUID">
+                <constraints foreignKeyName="fk_user_boss" references="users(id)"/>
             </column>
-            <column name="subordinator_id" type="VARCHAR(36)">
-                <constraints foreignKeyName="fk_user_subordinator_sub" references="users(id)"/>
+            <column name="user_id" type="UUID">
+                <constraints foreignKeyName="fk_user_sub" references="users(id)"/>
             </column>
         </createTable>
 
         <!-- NOTIFICATION -->
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="notification"/>
+            </not>
+        </preConditions>
         <createTable tableName="notification">
-            <column name="id" type="VARCHAR(36)">
+            <column name="id" type="UUID">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="request_id" type="VARCHAR(36)"/>
+            <column name="request_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
             <column name="watched" type="BOOLEAN"/>
-            <column name="user_id" type="VARCHAR(36)">
-                <constraints foreignKeyName="fk_notification_user" references="users(id)"/>
+            <column name="user_id" type="UUID">
+                <constraints foreignKeyName="fk_notification_user" references="users(id)" nullable="false"/>
             </column>
         </createTable>
 
         <!-- ACCOMMODATION -->
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="accommodation"/>
+            </not>
+        </preConditions>
         <createTable tableName="accommodation">
-            <column name="id" type="VARCHAR(36)">
+            <column name="id" type="UUID">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="address" type="VARCHAR(100)"/>
-            <column name="checkin_time" type="TIMESTAMP"/>
-            <column name="checkout_time" type="TIMESTAMP"/>
+            <column name="address" type="VARCHAR(250)"/>
+            <column name="checkin_time" type="TIMESTAMPTZ"/>
+            <column name="checkout_time" type="TIMESTAMPTZ"/>
             <column name="booking_tickets" type="TEXT"/>
         </createTable>
 
         <!-- OFFICE -->
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="office"/>
+            </not>
+        </preConditions>
         <createTable tableName="office">
-            <column name="id" type="VARCHAR(36)">
+            <column name="id" type="UUID">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="address" type="VARCHAR(100)">
+            <column name="address" type="VARCHAR(250)">
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="TEXT"/>
         </createTable>
 
         <!-- DESTINATION -->
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="destination"/>
+            </not>
+        </preConditions>
         <createTable tableName="destination">
-            <column name="id" type="VARCHAR(36)">
+            <column name="id" type="UUID">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="address" type="VARCHAR(36)">
-                <constraints nullable="false"/>
-            </column>
             <column name="description" type="TEXT"/>
-            <column name="office_id" type="VARCHAR(36)">
+            <column name="office_id" type="UUID">
                 <constraints foreignKeyName="fk_destination_office" references="office(id)"/>
             </column>
             <column name="seat_place" type="TEXT"/>
         </createTable>
 
         <!-- TRANSPORTATION -->
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="transportation"/>
+            </not>
+        </preConditions>
         <createTable tableName="transportation">
-            <column name="id" type="VARCHAR(36)">
+            <column name="id" type="UUID">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="dtype" type="VARCHAR(5)">
                 <constraints nullable="false"/>
             </column>
-            <column name="start_date" type="TIMESTAMP"/>
-            <column name="from_where" type="VARCHAR(50)"/>
-            <column name="to_where" type="VARCHAR(50)"/>
-            <column name="departure_point" type="VARCHAR(50)"/>
-            <column name="recommended_datetime" type="TIMESTAMP"/>
+            <column name="start_date" type="TIMESTAMPTZ"/>
+            <column name="city_from" type="VARCHAR(150)"/>
+            <column name="city_to" type="VARCHAR(150)"/>
+            <column name="departure_point" type="VARCHAR(150)"/>
+            <column name="recommended_datetime" type="TIMESTAMPTZ"/>
         </createTable>
         
         <!-- REQUEST -->
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="request"/>
+            </not>
+        </preConditions>
         <createTable tableName="request">
-            <column name="id" type="VARCHAR(36)">
+            <column name="id" type="UUID">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="trip_id" type="VARCHAR(36)"/>
+            <column name="trip_id" type="UUID"/>
             <column name="status" type="VARCHAR(36)">
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="TEXT"/>
-            <column name="worker_id" type="VARCHAR(36)">
+            <column name="worker_id" type="UUID">
                 <constraints foreignKeyName="fk_request_user" references="users(id)" nullable="false"/>
             </column>
-            <column name="office_id" type="VARCHAR(36)">
+            <column name="office_id" type="UUID">
                 <constraints foreignKeyName="fk_request_office" references="office(id)"/>
             </column>
             <column name="comment" type="TEXT"/>
-            <column name="start_date" type="TIMESTAMP"/>
-            <column name="end_date" type="TIMESTAMP"/>
-            <column name="transport_to" type="VARCHAR(50)"/>
-            <column name="transport_from" type="VARCHAR(50)"/>
+            <column name="start_date" type="TIMESTAMPTZ"/>
+            <column name="end_date" type="TIMESTAMPTZ"/>
+            <column name="transport_to" type="VARCHAR(150)"/>
+            <column name="transport_from" type="VARCHAR(150)"/>
             <column name="tickets" type="TEXT"/>
         </createTable>
         
         <!-- TRIP -->
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="trip"/>
+            </not>
+        </preConditions>
         <createTable tableName="trip">
-            <column name="id" type="VARCHAR(36)">
+            <column name="id" type="UUID">
                 <constraints nullable="false" primaryKey="true"/>
-            </column>
-            <column name="request_id" type="VARCHAR(36)">
-                <constraints foreignKeyName="fk_trip_request" references="request(id)"/>
             </column>
             <column name="trip_status" type="VARCHAR(10)">
                 <constraints nullable="false"/>
             </column>
-            <column name="accommodation_id" type="VARCHAR(36)">
+            <column name="accommodation_id" type="UUID">
                 <constraints foreignKeyName="fk_trip_accommodation" references="accommodation(id)"/>
             </column>
-            <column name="destination" type="VARCHAR(36)">
+            <column name="destination_id" type="UUID">
                 <constraints foreignKeyName="fk_trip_destination" references="destination(id)"/>
             </column>
         </createTable>
