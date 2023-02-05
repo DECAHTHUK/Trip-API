@@ -6,16 +6,16 @@
     <changeSet id="2" author="RusyaAndLyosha">
 
         <comment>
-            Инициализация индексов.
+            Indexes initialisation
         </comment>
 
         <createIndex tableName="users" indexName="idx_users_email">
             <column name="email"/>
         </createIndex>
         
-        <createIndex tableName="user_subordinator" indexName="idx_boss_subordinator">
+        <createIndex tableName="users_relations" indexName="idx_users_relations">
             <column name="boss_id"/>
-            <column name="subordinator_id"/>
+            <column name="user_id"/>
         </createIndex>
 
         <createIndex tableName="notification" indexName="idx_notification_user_id">

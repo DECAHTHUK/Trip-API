@@ -1,0 +1,9 @@
+spring:
+  liquibase:
+    change-log: classpath:/db/changelog.xml
+    enabled: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/tripAPI
+    username: name
+    password: qwerty1234
+    driver-class-name: org.postgresql.Driver

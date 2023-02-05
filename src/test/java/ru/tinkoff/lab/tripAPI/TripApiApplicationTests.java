@@ -1,4 +1,4 @@
-package tinkoff.lab.tripAPI;
+package ru.tinkoff.lab.tripAPI;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

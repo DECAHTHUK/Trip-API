@@ -1,4 +1,4 @@
-package tinkoff.lab.tripAPI;
+package ru.tinkoff.lab.tripAPI;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
