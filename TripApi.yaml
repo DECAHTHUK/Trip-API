@@ -104,70 +104,6 @@ paths:
         '500':
           description: Internal server error
 
-  '/user/{uuid}/get-some-requests':
-    get:
-      tags:
-        - userEnd
-      summary: Первые 2-3 заявки на рассмотрение по дате для пользователя с {id}
-      operationId: getSomeRequests
-      parameters:
-        - in: path
-          name: uuid
-          schema:
-            type: string
-            format: uuid
-          required: true
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/RequestDto'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: string
-                description: description
-        '500':
-          description: Internal server error
-
-  '/user/{uuid}/get-some-trips':
-    get:
-      tags:
-        - userEnd
-      summary: Первые 2-3 свои командировки по дате
-      operationId: getSomeTrips
-      parameters:
-        - in: path
-          name: uuid
-          schema:
-            type: string
-            format: uuid
-          required: true
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/TripDto'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: string
-                description: description
-        '500':
-          description: Internal server error
-
   '/user/{uuid}/get-trips-at/{page}':
     get:
       tags:
@@ -206,12 +142,50 @@ paths:
         '500':
           description: Internal server error
 
-  '/user/{uuid}/get-requests-at/{page}':
+  '/user/{uuid}/get-incoming-requests-at/{page}':
     get:
       tags:
         - userEnd
       summary: Получение страницы номер {page}(либо все сразу если не указано) из n запросов для ментора с заданным {id}
-      operationId: getRequestsAt
+      operationId: getIncomingRequestsAt
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: path
+          name: page
+          schema:
+            type: integer
+            format: int32
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RequestDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/user/{uuid}/get-outgoing-requests-at/{page}':
+    get:
+      tags:
+        - userEnd
+      summary: Получение страницы номер {page}(либо все сразу если не указано) из n запросов для сотрудника с заданным {id}
+      operationId: getOutgoingRequestsAt
       parameters:
         - in: path
           name: uuid
@@ -465,11 +439,11 @@ components:
           type: string
         password:
           type: string
-        name:
+        first_name:
           type: string
-        surname:
+        second_name:
           type: string
-        subordinators:
+        subordinates:
           type: array
           items:
             $ref: '#/components/schemas/User'
@@ -477,7 +451,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Notification'
-        role:
+        user_role:
           type: string
 
     Notification:
@@ -486,11 +460,12 @@ components:
         id:
           type: string
           format: uuid
-        requestId:
+        request:
           $ref: '#/components/schemas/Request'
-
         watched:
           type: boolean
+        user:
+          $ref: '#/components/schemas/User'
 
     Transportation:
       type: object
@@ -588,7 +563,6 @@ components:
       type: object
       required:
         - id
-        - address
       properties:
         id:
           type: string

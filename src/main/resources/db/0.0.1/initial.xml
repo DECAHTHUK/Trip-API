@@ -31,10 +31,10 @@
         <!--USER_RELATIONS -->
         <createTable tableName="users_relations">
             <column name="boss_id" type="UUID">
-                <constraints foreignKeyName="fk_user_boss" references="users(id)"/>
+                <constraints foreignKeyName="fk_user_boss" references="users(id)" nullable="false"/>
             </column>
             <column name="user_id" type="UUID">
-                <constraints foreignKeyName="fk_user_sub" references="users(id)"/>
+                <constraints foreignKeyName="fk_user_sub" references="users(id)" nullable="false"/>
             </column>
         </createTable>
 
