@@ -7,13 +7,8 @@
     <changeSet id="1" author="RusyaAndLyosha">
 
         <!-- USERS -->
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="users"/>
-            </not>
-        </preConditions>
         <createTable tableName="users">
-            <column name="id" type="UUID">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="email" type="VARCHAR(100)">
@@ -34,11 +29,6 @@
         </createTable>
 
         <!--USER_RELATIONS -->
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="users_relations"/>
-            </not>
-        </preConditions>
         <createTable tableName="users_relations">
             <column name="boss_id" type="UUID">
                 <constraints foreignKeyName="fk_user_boss" references="users(id)"/>
@@ -49,13 +39,8 @@
         </createTable>
 
         <!-- NOTIFICATION -->
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="notification"/>
-            </not>
-        </preConditions>
         <createTable tableName="notification">
-            <column name="id" type="UUID">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="request_id" type="UUID">
@@ -68,45 +53,30 @@
         </createTable>
 
         <!-- ACCOMMODATION -->
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="accommodation"/>
-            </not>
-        </preConditions>
         <createTable tableName="accommodation">
-            <column name="id" type="UUID">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="address" type="VARCHAR(250)"/>
+            <column name="address" type="TEXT"/>
             <column name="checkin_time" type="TIMESTAMPTZ"/>
             <column name="checkout_time" type="TIMESTAMPTZ"/>
             <column name="booking_tickets" type="TEXT"/>
         </createTable>
 
         <!-- OFFICE -->
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="office"/>
-            </not>
-        </preConditions>
         <createTable tableName="office">
-            <column name="id" type="UUID">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="address" type="VARCHAR(250)">
+            <column name="address" type="TEXT">
                 <constraints nullable="false"/>
             </column>
             <column name="description" type="TEXT"/>
         </createTable>
 
         <!-- DESTINATION -->
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="destination"/>
-            </not>
-        </preConditions>
         <createTable tableName="destination">
-            <column name="id" type="UUID">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="description" type="TEXT"/>
@@ -117,13 +87,8 @@
         </createTable>
 
         <!-- TRANSPORTATION -->
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="transportation"/>
-            </not>
-        </preConditions>
         <createTable tableName="transportation">
-            <column name="id" type="UUID">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="dtype" type="VARCHAR(5)">
@@ -137,13 +102,8 @@
         </createTable>
         
         <!-- REQUEST -->
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="request"/>
-            </not>
-        </preConditions>
         <createTable tableName="request">
-            <column name="id" type="UUID">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="trip_id" type="UUID"/>
@@ -166,13 +126,8 @@
         </createTable>
         
         <!-- TRIP -->
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="trip"/>
-            </not>
-        </preConditions>
         <createTable tableName="trip">
-            <column name="id" type="UUID">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="trip_status" type="VARCHAR(10)">
