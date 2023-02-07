@@ -13,10 +13,6 @@ public interface OfficeMapper {
             "VALUES(#{address}, #{description}) RETURNING id;")
     Id insertOffice(Office office);
 
-    @Select("SELECT id, address, description " +
-            "FROM office WHERE id = uuid(#{officeId});")
-    Office selectOffice(String officeId);
-
     @Update("UPDATE office " +
             "SET address=#{address}, description=#{description} " +
             "WHERE id = uuid(#{id});")

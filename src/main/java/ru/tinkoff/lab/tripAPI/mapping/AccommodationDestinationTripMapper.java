@@ -79,4 +79,9 @@ public interface AccommodationDestinationTripMapper {
     @Delete("DELETE FROM trip " +
             "WHERE id = uuid(#{tripId});")
     void deleteTrip(String tripId);
+
+    //TODO ASK ABOUT THIS(MYBATIS CANNOT USE METHODS FROM OTHER MAPPERS)
+    @Select("SELECT id, address, description " +
+            "FROM office WHERE id = uuid(#{officeId});")
+    Office selectOffice(String officeId);
 }
