@@ -340,6 +340,15 @@ font-style: italic;
     "description" : "description",
     "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
   },
+  "worker" : {
+    "user_role" : "user_role",
+    "password" : "password",
+    "second_name" : "second_name",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "first_name" : "first_name",
+    "subordinates" : [ null, null ],
+    "email" : "email"
+  },
   "startDate" : "2000-01-23",
   "status" : "approved"
 }</code></pre>
@@ -874,11 +883,29 @@ font-style: italic;
       "description" : "description",
       "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
     },
+    "worker" : {
+      "user_role" : "user_role",
+      "password" : "password",
+      "second_name" : "second_name",
+      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+      "first_name" : "first_name",
+      "subordinates" : [ null, null ],
+      "email" : "email"
+    },
     "startDate" : "2000-01-23",
     "status" : "approved"
   },
   "watched" : true,
-  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "user" : {
+    "user_role" : "user_role",
+    "password" : "password",
+    "second_name" : "second_name",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "first_name" : "first_name",
+    "subordinates" : [ null, null ],
+    "email" : "email"
+  }
 }</code></pre>
 
     <h3 class="field-label">Produces</h3>
@@ -934,89 +961,6 @@ font-style: italic;
   "password" : "password",
   "second_name" : "second_name",
   "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-  "unwatchedNotifications" : [ {
-    "request" : {
-      "transportFrom" : "transportFrom",
-      "tickets" : "http://example.com/aeiou",
-      "endDate" : "2000-01-23",
-      "transportTo" : "transportTo",
-      "description" : "description",
-      "tripId" : {
-        "accomodation" : {
-          "checkinTime" : "2000-01-23",
-          "address" : "address",
-          "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "checkoutTime" : "2000-01-23",
-          "bookingTickets" : "http://example.com/aeiou"
-        },
-        "destination" : {
-          "address" : "address",
-          "description" : "description",
-          "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "office" : {
-            "address" : "address",
-            "description" : "description",
-            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
-          },
-          "seatPlace" : "seatPlace"
-        },
-        "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-        "tripStatus" : "pending"
-      },
-      "comment" : "comment",
-      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-      "office" : {
-        "address" : "address",
-        "description" : "description",
-        "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
-      },
-      "startDate" : "2000-01-23",
-      "status" : "approved"
-    },
-    "watched" : true,
-    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
-  }, {
-    "request" : {
-      "transportFrom" : "transportFrom",
-      "tickets" : "http://example.com/aeiou",
-      "endDate" : "2000-01-23",
-      "transportTo" : "transportTo",
-      "description" : "description",
-      "tripId" : {
-        "accomodation" : {
-          "checkinTime" : "2000-01-23",
-          "address" : "address",
-          "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "checkoutTime" : "2000-01-23",
-          "bookingTickets" : "http://example.com/aeiou"
-        },
-        "destination" : {
-          "address" : "address",
-          "description" : "description",
-          "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "office" : {
-            "address" : "address",
-            "description" : "description",
-            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
-          },
-          "seatPlace" : "seatPlace"
-        },
-        "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-        "tripStatus" : "pending"
-      },
-      "comment" : "comment",
-      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-      "office" : {
-        "address" : "address",
-        "description" : "description",
-        "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
-      },
-      "startDate" : "2000-01-23",
-      "status" : "approved"
-    },
-    "watched" : true,
-    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
-  } ],
   "first_name" : "first_name",
   "subordinates" : [ null, null ],
   "email" : "email"
@@ -1239,7 +1183,6 @@ font-style: italic;
 <div class="param">first_name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
 <div class="param">second_name (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
 <div class="param">subordinates (optional)</div><div class="param-desc"><span class="param-type"><a href="#User">array[User]</a></span>  </div>
-<div class="param">unwatchedNotifications (optional)</div><div class="param-desc"><span class="param-type"><a href="#Notification">array[Notification]</a></span>  </div>
 <div class="param">user_role (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
     </div>  <!-- field-items -->
   </div>

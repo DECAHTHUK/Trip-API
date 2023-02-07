@@ -7,3 +7,13 @@ spring:
     username: name
     password: qwerty1234
     driver-class-name: org.postgresql.Driver
+
+logging:
+  level:
+    org:
+      springframework: warn
+  file:
+    name: logs/spring-boot-logging.log
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

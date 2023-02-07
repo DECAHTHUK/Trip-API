@@ -30,4 +30,10 @@ public class TestController {
     public User getUser(@PathVariable String id) {
         return userService.getUser(id);
     }
+
+    @GetMapping("/update")
+    public String update() {
+        userService.updateUser();
+        return "Success.";
+    }
 }

@@ -5,6 +5,7 @@ import lombok.*;
 import java.util.List;
 
 @Data
+@AllArgsConstructor
 public class User {
     private String id;
 
@@ -19,8 +20,6 @@ public class User {
     private String user_role;
 
     private List<User> subordinates;
-
-    private List<Notification> unwatchedNotifications;
 
     public User(String email, String password, String first_name, String second_name, String user_role) {
         this.email = email;
