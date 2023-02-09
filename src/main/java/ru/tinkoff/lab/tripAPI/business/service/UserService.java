@@ -26,8 +26,7 @@ public class UserService {
         return userMapper.selectUser(userId);
     }
 
-    public void updateUser() {
-        User user = new User("06998488-fa4c-43ec-975d-996fea1adcc9", "updatedValue", "test", "aa", "aa", "aa", null);
+    public void updateUser(User user) {
         userMapper.updateUser(user);
     }
 }

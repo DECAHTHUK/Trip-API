@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="1" author="RusyaAndLyosha">
+        <insert tableName="office">
+            <column name="id" value="1"/>
+            <column name="address" value="Revolution square 17"/>
+            <column name="description" value="Tinkoff office"/>
+        </insert>
+        <insert tableName="office">
+            <column name="id" value="2"/>
+            <column name="address" value="Svoboda square 228"/>
+            <column name="description" value="Zona office"/>
+        </insert>
+        <insert tableName="trip">
+            <column name="id" value="1"/>
+            <column name="trip_status" value="pending"/>
+            <column name="accommodation_id" value="1"/>
+            <column name="destination_id" value="1"/>
+        </insert>
+        <insert tableName="accommodation">
+            <column name="id" value="1"/>
+            <column name="address" value="Lvovskaya 1C"/>
+        </insert>
+        <insert tableName="users">
+            <column name="id" value="1"/>
+            <column name="email" value="krutoi1337@gmail.com"/>
+            <column name="password" value="qwertyuio"/>
+            <column name="first_name" value="Rusya"/>
+            <column name="second_name" value="Talanov"/>
+            <column name="user_role" value="user"/>
+        </insert>
+        <insert tableName="users">
+            <column name="id" value="2"/>
+            <column name="email" value="slavakpss@gmail.com"/>
+            <column name="password" value="12345678"/>
+            <column name="first_name" value="Lyosha"/>
+            <column name="second_name" value="Sultanov"/>
+            <column name="user_role" value="user"/>
+        </insert>
+        <insert tableName="users_relations">
+            <column name="boss_id" value="1"/>
+            <column name="user_id" value="2"/>
+        </insert>
+        <insert tableName="destination">
+            <column name="id" value="1"/>
+            <column name="description" value="Cheap hotel"/>
+            <column name="office_id" value="2"/>
+            <column name="seat_place" value="8"/>
+        </insert>
+        <insert tableName="request">
+            <column name="id" value="1"/>
+            <column name="trip_id" value="1"/>
+            <column name="status" value="pending"/>
+            <column name="worker_id" value="2"/>
+            <column name="office_id" value="1"/>
+        </insert>
+        <insert tableName="transportation">
+            <column name="id" value="1"/>
+            <column name="dtype" value="TRAIN"/>
+        </insert>
+        <insert tableName="notification">
+            <column name="id" value="1"/>
+            <column name="request_id" value="1"/>
+            <column name="watched" value="false"/>
+            <column name="user_id" value="1"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>

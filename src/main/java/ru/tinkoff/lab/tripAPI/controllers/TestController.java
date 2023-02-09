@@ -39,7 +39,7 @@ public class TestController {
 
     @GetMapping("/update")
     public String update() {
-        userService.updateUser();
+//        userService.updateUser();
         return "Success.";
     }
 
