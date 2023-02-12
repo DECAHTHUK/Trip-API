@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface UserRelationMapping {
+public interface UserRelationMapper {
     // CRUD for user_relations table (update and get are pretty much useless)
 
     @Insert("INSERT INTO users_relarions (boss_id, user_id) " +
