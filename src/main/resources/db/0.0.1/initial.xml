@@ -26,6 +26,7 @@
             <column name="user_role" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
+            <column name="salt" type="VARCHAR(10)"/>
         </createTable>
 
         <!--USER_RELATIONS -->

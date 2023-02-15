@@ -10,9 +10,9 @@ public class Accommodation {
 
     private String address;
 
-    private Timestamp checkin_time;
+    private Timestamp checkinTime;
 
-    private Timestamp checkout_time;
+    private Timestamp checkoutTime;
 
-    private String booking_tickets;
+    private String bookingUrl;
 }

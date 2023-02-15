@@ -5,7 +5,7 @@ import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.User;
 import ru.tinkoff.lab.tripAPI.mapping.UserMapper;
 
-import java.util.List;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -18,12 +18,8 @@ public class UserService {
         return userMapper.insertUser(user);
     }
 
-    public List<User> getAllUsers() {
-        return userMapper.selectAllUsers();
-    }
-
     public User getUser(String userId) {
-        return userMapper.selectUser(userId);
+        return userMapper.selectUser(UUID.fromString(userId));
     }
 
     public void updateUser(User user) {

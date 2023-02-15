@@ -8,7 +8,7 @@ public class Trip {
 
     private String id;
 
-    private TripStatus trip_status;
+    private TripStatus tripStatus;
 
     private Accommodation accommodation;
 

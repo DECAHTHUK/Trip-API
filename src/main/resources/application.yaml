@@ -17,3 +17,4 @@ logging:
 mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  type-handlers-package: ru.tinkoff.lab.tripAPI.mapping.handlers

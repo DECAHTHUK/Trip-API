@@ -1,11 +1,14 @@
 package ru.tinkoff.lab.tripAPI.business;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class User {
     private String id;
 
@@ -13,19 +16,34 @@ public class User {
 
     private String password;
 
-    private String first_name;
+    @JsonProperty("first_name")
+    private String firstName;
 
-    private String second_name;
+    @JsonProperty("second_name")
+    private String secondName;
 
-    private String user_role;
+    @JsonProperty("user_role")
+    private String userRole;
 
     private List<User> subordinates;
 
-    public User(String email, String password, String first_name, String second_name, String user_role) {
+    private String salt;
+
+    public User(String email, String password, String firstName, String secondName, String userRole) {
         this.email = email;
         this.password = password;
-        this.first_name = first_name;
-        this.second_name = second_name;
-        this.user_role = user_role;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.userRole = userRole;
     }
+
+    public User(UUID id, String email, String password, String firstName, String secondName, String userRole) {
+        this.id = id.toString();
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.userRole = userRole;
+    }
+
 }
