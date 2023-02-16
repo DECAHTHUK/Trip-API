@@ -6,6 +6,6 @@ services:
     image: "postgres:14.2"
     restart: unless-stopped
     environment:
-      POSTGRES_PASSWORD: qwerty1234 # user postgres
+      POSTGRES_PASSWORD: "qwerty1234" # user postgres
     ports:
       - "5432:5432"

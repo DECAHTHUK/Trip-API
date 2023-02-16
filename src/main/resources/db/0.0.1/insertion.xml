@@ -16,19 +16,26 @@
             <column name="description" value="Zona office"/>
         </insert>
 
-        <insert tableName="trip">
-            <column name="id" value="1fd42b13-0752-4909-8d6b-15f3bb0dbc4d"/>
-            <column name="trip_status" value="pending"/>
-            <column name="accommodation_id" value="c2032b19-29f5-4b88-958d-6c365af04c00"/>
-            <column name="destination_id" value="352f1748-5887-49e3-bc6b-a981234e9044"/>
-        </insert>
-
         <insert tableName="accommodation">
             <column name="id" value="c2032b19-29f5-4b88-958d-6c365af04c00"/>
             <column name="address" value="Lvovskaya 1C"/>
             <column name="booking_tickets" value="lalala.com"/>
             <column name="checkin_time" value="2023-04-04 20:00:00"/>
             <column name="checkout_time" value="2023-05-04 20:00:00"/>
+        </insert>
+
+        <insert tableName="destination">
+            <column name="id" value="352f1748-5887-49e3-bc6b-a981234e9044"/>
+            <column name="description" value="Cheap hotel"/>
+            <column name="office_id" value="d3b1749d-ca5a-459c-8f1c-5ec236fe5776"/>
+            <column name="seat_place" value="8"/>
+        </insert>
+
+        <insert tableName="trip">
+            <column name="id" value="1fd42b13-0752-4909-8d6b-15f3bb0dbc4d"/>
+            <column name="trip_status" value="pending"/>
+            <column name="accommodation_id" value="c2032b19-29f5-4b88-958d-6c365af04c00"/>
+            <column name="destination_id" value="352f1748-5887-49e3-bc6b-a981234e9044"/>
         </insert>
 
         <insert tableName="users">
@@ -53,11 +60,14 @@
             <column name="user_id" value="c1a0a7cc-6820-4b21-aab7-ddccce572faf"/>
         </insert>
 
-        <insert tableName="destination">
-            <column name="id" value="352f1748-5887-49e3-bc6b-a981234e9044"/>
-            <column name="description" value="Cheap hotel"/>
-            <column name="office_id" value="d3b1749d-ca5a-459c-8f1c-5ec236fe5776"/>
-            <column name="seat_place" value="8"/>
+        <insert tableName="transportation">
+            <column name="id" value="ef82634b-10c5-4cb8-84a0-c54cd5070238"/>
+            <column name="dtype" value="TRAIN"/>
+            <column name="city_from" value="Volgograd"/>
+            <column name="city_to" value="Saint-Petersburg"/>
+            <column name="departure_point" value="Moskovskiy vokzal"/>
+            <column name="start_date" value="2023-09-06 15:00:00"/>
+            <column name="recommended_datetime" value="2023-09-06 12:00:00"/>
         </insert>
 
         <insert tableName="request">
@@ -75,21 +85,11 @@
             <column name="tickets" value="lalala.com"/>
         </insert>
 
-        <insert tableName="transportation">
-            <column name="id" value="ef82634b-10c5-4cb8-84a0-c54cd5070238"/>
-            <column name="dtype" value="TRAIN"/>
-            <column name="city_from" value="Volgograd"/>
-            <column name="city_to" value="Saint-Petersburg"/>
-            <column name="departure_point" value="Moskovskiy vokzal"/>
-            <column name="start_date" value="2023-09-06 15:00:00"/>
-            <column name="recommended_datetime" value="2023-09-06 12:00:00"/>
-        </insert>
-
         <insert tableName="notification">
             <column name="id" value="d1e19c0f-db94-4a73-bb1e-0ee01288fdc4"/>
             <column name="request_id" value="26e20ebb-7c0a-4d90-820f-8cc756089c61"/>
             <column name="watched" value="false"/>
-            <column name="user_id" value="1"/>
+            <column name="user_id" value="15322743-91db-44fc-b121-cdee08ac71cb"/>
         </insert>
 
     </changeSet>
