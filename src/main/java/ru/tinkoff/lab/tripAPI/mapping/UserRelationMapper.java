@@ -14,7 +14,7 @@ import java.util.UUID;
 public interface UserRelationMapper {
 
     @Insert("""
-            INSERT INTO users_relarions (boss_id, user_id)
+            INSERT INTO users_relations (boss_id, user_id)
             VALUES ('${bossId}', '${userId}');
             """)
     void insertUserRelation(@Param("bossId") UUID bossId, @Param("userId") UUID userId);
