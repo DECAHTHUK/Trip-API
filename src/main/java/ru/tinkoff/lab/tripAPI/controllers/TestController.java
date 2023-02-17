@@ -24,7 +24,7 @@ public class TestController {
 
     @GetMapping("/user/{id}")
     public User getUser(@PathVariable String id) {
-        return userService.getUser(id);
+        return userService.findById(id);
     }
 
 }

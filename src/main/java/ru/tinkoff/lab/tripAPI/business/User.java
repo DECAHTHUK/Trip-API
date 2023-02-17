@@ -55,5 +55,4 @@ public class User {
         this.secondName = secondName;
         this.userRole = userRole;
     }
-
 }

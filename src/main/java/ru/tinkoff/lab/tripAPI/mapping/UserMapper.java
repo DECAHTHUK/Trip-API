@@ -13,6 +13,14 @@ import java.util.UUID;
 @Mapper
 public interface UserMapper {
 
+    @Result(property = "id", column = "id")
+    @Select("""
+            INSERT INTO users (email, password, first_name, second_name, user_role, salt)
+            VALUES(#{email}, #{password}, #{firstName}, #{secondName}, #{userRole}, #{salt})
+            RETURNING id;
+            """)
+    Id insertUser(User user) throws RuntimeException;
+
     @Results(value = {
             @Result(property = "subordinates", javaType = List.class,
                     column = "id", many = @Many(select = "selectSubordinates")),
@@ -27,14 +35,6 @@ public interface UserMapper {
             WHERE u.id = '${uuid}';
             """)
     User selectUser(@Param("uuid") UUID uuid);
-
-    @Result(property = "id", column = "id")
-    @Select("""
-            INSERT INTO users (email, password, first_name, second_name, user_role, salt)
-            VALUES(#{email}, #{password}, #{firstName}, #{secondName}, #{userRole}, #{salt})
-            RETURNING id;
-            """)
-    Id insertUser(User user);
 
     /**
      * Additional query for our many-to-many relationship(myBatis works only this way)

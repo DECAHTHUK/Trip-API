@@ -5,3 +5,7 @@ spring:
   liquibase:
     change-log: classpath:/db/changelog.xml
     enabled: true
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  type-handlers-package: ru.tinkoff.lab.tripAPI.mapping.handlers

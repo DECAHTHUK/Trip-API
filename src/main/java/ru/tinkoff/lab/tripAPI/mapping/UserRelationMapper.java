@@ -21,7 +21,7 @@ public interface UserRelationMapper {
 
     @Delete("""
             DELETE FROM users_relations
-            WHERE boss_id = '${bossId}' and user_id = '${userId}');
+            WHERE boss_id = '${bossId}' and user_id = '${userId}';
             """)
     void deleteUserRelation(@Param("bossId") UUID bossId, @Param("userId") UUID userId);
 }
