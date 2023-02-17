@@ -37,6 +37,15 @@ public class User {
         this.userRole = userRole;
     }
 
+    public User(String email, String password, String firstName, String secondName, String userRole, String salt) {
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.userRole = userRole;
+        this.salt = salt;
+    }
+
     public User(UUID id, String email, String password, String firstName, String secondName, String userRole) {
         this.id = id.toString();
         this.email = email;

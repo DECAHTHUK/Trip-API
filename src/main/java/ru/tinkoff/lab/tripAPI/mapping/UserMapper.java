@@ -22,7 +22,7 @@ public interface UserMapper {
             @Result(column = "id", property = "id")
     })
     @Select("""
-            SELECT u.id, u.email, u.password, u.first_name, u.second_name, u.user_role
+            SELECT u.id, u.email, u.password, u.first_name, u.second_name, u.user_role, u.salt
             FROM users as u
             WHERE u.id = '${uuid}';
             """)
@@ -30,7 +30,7 @@ public interface UserMapper {
 
     @Result(property = "id", column = "id")
     @Select("""
-            INSERT INTO users (email, password, first_name, second_name, user_role)
+            INSERT INTO users (email, password, first_name, second_name, user_role, salt)
             VALUES(#{email}, #{password}, #{firstName}, #{secondName}, #{userRole}, #{salt})
             RETURNING id;
             """)

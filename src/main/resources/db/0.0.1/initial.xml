@@ -6,6 +6,10 @@
 
     <changeSet id="1" author="RusyaAndLyosha">
 
+        <sql dbms="postgresql" endDelimiter=";">
+            CREATE EXTENSION pgcrypto
+        </sql>
+
         <!-- USERS -->
         <createTable tableName="users">
             <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
