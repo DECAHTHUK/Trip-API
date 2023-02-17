@@ -12,6 +12,8 @@ import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.User;
 import ru.tinkoff.lab.tripAPI.business.service.UserService;
 
+import java.util.UUID;
+
 @RunWith(SpringRunner.class)
 @MybatisTest
 @Import(UserService.class)
@@ -32,5 +34,21 @@ public class UserControllerTest {
         Id uuid = userService.createUser(user);
         Assertions.assertNotNull(uuid);
         System.out.println(uuid.getId());
+    }
+
+    @Test
+    public void getUserByIdTest() {
+        UUID uuid = UUID.randomUUID();
+        User user = new User(
+                uuid,
+                "ep@mail.ru",
+                "Anton",
+                "Pestrikov",
+                "USER",
+                "salt"
+        );
+        userService.createUser(user);
+        User userFromDB = userService.getUser(uuid.toString());
+        System.out.println(userFromDB);
     }
 }
