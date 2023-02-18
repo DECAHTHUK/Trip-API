@@ -28,6 +28,7 @@ public class UserService {
         return userMapper.selectUser(UUID.fromString(userId));
     }
 
+
     public void updateUser(User user) {
         userMapper.updateUser(user);
     }
