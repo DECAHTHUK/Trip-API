@@ -3,7 +3,18 @@ spring:
     change-log: classpath:/db/changelog.xml
     enabled: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/tripAPI
-    username: name
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
     password: qwerty1234
     driver-class-name: org.postgresql.Driver
+
+logging:
+  level:
+    org:
+      springframework: warn
+  file:
+    name: logs/spring-boot-logging.log
+mybatis:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  type-handlers-package: ru.tinkoff.lab.tripAPI.mapping.handlers

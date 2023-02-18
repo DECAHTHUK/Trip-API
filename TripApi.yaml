@@ -11,19 +11,25 @@ servers:
   - url: http://localhost:8080
     description: Dev Server
 tags:
-  - name: userEnd
-    description: Эндпоинты для работы с полями юзера
-  - name: requestEnd
-    description: Эндпоинты для работы с запросами
-  - name: tripEnd
-    description: Эндпоинты для работы с командировками
+  - name: usersEnd
+    description: Endpoint for users and theirs peripherals
+  - name: requestsEnd
+    description: Endpoints for requests
+  - name: tripsEnd
+    description: Endpoints for trips
+  - name: accommodationsEnd
+    description: Endpoints for accommodations
+  - name: destinationsEnd
+    description: Endpoints for destinations
+  - name: transportationsEnd
+    description: Endpoints for transportations
 
 
 paths:
-  '/user/new':
+  '/users':
     post:
       tags:
-        - userEnd
+        - usersEnd
       summary: создание нового пользователя
       operationId: createNewUser
       requestBody:
@@ -51,11 +57,11 @@ paths:
           description: Internal server error
     put:
       tags:
-        - userEnd
-      summary: обновление пользователя
+        - usersEnd
+      summary: Updating user by id(changes in subordinates field won't be registered)
       operationId: updateUser
       requestBody:
-        description: Структура пользователя с id
+        description: User structure with id
         required: true
         content:
           application/json:
@@ -74,10 +80,10 @@ paths:
         '500':
           description: Internal server error
 
-  '/user/{uuid}/get':
+  '/users/{uuid}':
     get:
       tags:
-        - userEnd
+        - usersEnd
       summary: Получение пользователя по его {id}
       operationId: getUserById
       parameters:
@@ -104,74 +110,10 @@ paths:
         '500':
           description: Internal server error
 
-  '/user/{uuid}/get-some-requests':
+  '/users/{uuid}/trips-at/{page}':
     get:
       tags:
-        - userEnd
-      summary: Первые 2-3 заявки на рассмотрение по дате для пользователя с {id}
-      operationId: getSomeRequests
-      parameters:
-        - in: path
-          name: uuid
-          schema:
-            type: string
-            format: uuid
-          required: true
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/RequestDto'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: string
-                description: description
-        '500':
-          description: Internal server error
-
-  '/user/{uuid}/get-some-trips':
-    get:
-      tags:
-        - userEnd
-      summary: Первые 2-3 свои командировки по дате
-      operationId: getSomeTrips
-      parameters:
-        - in: path
-          name: uuid
-          schema:
-            type: string
-            format: uuid
-          required: true
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/TripDto'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: string
-                description: description
-        '500':
-          description: Internal server error
-
-  '/user/{uuid}/get-trips-at/{page}':
-    get:
-      tags:
-        - userEnd
+        - usersEnd
       summary: Получение страницы номер {page}(либо все сразу если не указано) из n командировок для пользователя с заданным {id}
       operationId: getTripsAt
       parameters:
@@ -206,12 +148,12 @@ paths:
         '500':
           description: Internal server error
 
-  '/user/{uuid}/get-requests-at/{page}':
+  '/users/{uuid}/incoming-requests-at/{page}':
     get:
       tags:
-        - userEnd
+        - usersEnd
       summary: Получение страницы номер {page}(либо все сразу если не указано) из n запросов для ментора с заданным {id}
-      operationId: getRequestsAt
+      operationId: getIncomingRequestsAt
       parameters:
         - in: path
           name: uuid
@@ -244,10 +186,48 @@ paths:
         '500':
           description: Internal server error
 
-  '/user/{uuid}/unwatched-notifications':
+  '/users/{uuid}/outgoing-requests-at/{page}':
     get:
       tags:
-        - userEnd
+        - usersEnd
+      summary: Получение страницы номер {page}(либо все сразу если не указано) из n запросов для сотрудника с заданным {id}
+      operationId: getOutgoingRequestsAt
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: path
+          name: page
+          schema:
+            type: integer
+            format: int32
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RequestDto'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/users/{uuid}/unwatched-notifications':
+    get:
+      tags:
+        - usersEnd
       operationId: getUnwatchedNotifications
       parameters:
         - in: path
@@ -275,12 +255,74 @@ paths:
         '500':
           description: Internal server error
 
-
-
-  '/request/new':
+  '/users/{boss}/subordinates/{subordinate}':
     post:
       tags:
-        - requestEnd
+        - usersEnd
+      operationId: createRelation
+      description: Creates a relation for user with id {boss}
+      parameters:
+        - in: path
+          name: boss
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: path
+          name: subordinate
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+    delete:
+      tags:
+        - usersEnd
+      operationId: deleteRelation
+      description: Deletes a relation for user with id {boss}
+      parameters:
+        - in: path
+          name: boss
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: path
+          name: subordinate
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+
+
+  '/requests':
+    post:
+      tags:
+        - requestsEnd
       summary: Создание нового запроса
       operationId: createNewRequest
       requestBody:
@@ -289,7 +331,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Request'
+              $ref: '#/components/schemas/RequestDto'
       responses:
         '200':
           description: Success
@@ -308,7 +350,7 @@ paths:
           description: Internal server error
     put:
       tags:
-        - requestEnd
+        - requestsEnd
       summary: Обновление запроса
       operationId: updateRequest
       requestBody:
@@ -317,7 +359,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Request'
+              $ref: '#/components/schemas/RequestDto'
       responses:
         '200':
           description: Success
@@ -331,10 +373,10 @@ paths:
         '500':
           description: Internal server error
 
-  '/request/{uuid}/approve':
+  '/requests/{uuid}/approve':
     put:
       tags:
-        - requestEnd
+        - requestsEnd
       summary: Изменение статуса заявки на принятый
       operationId: updateRequestStatus
       parameters:
@@ -358,10 +400,10 @@ paths:
           description: Internal server error
 
 
-  '/request/{uuid}/get':
+  '/requests/{uuid}':
     get:
       tags:
-        - requestEnd
+        - requestsEnd
       summary: Получение реквеста по заданному UUID.
       operationId: getRequestById
       parameters:
@@ -388,10 +430,10 @@ paths:
         '500':
           description: Internal server error
 
-  '/trip/{uuid}/get':
+  '/trips/{uuid}':
     get:
       tags:
-        - tripEnd
+        - tripsEnd
       summary: Получение командировки по заданному UUID
       operationId: getTripById
       parameters:
@@ -418,11 +460,38 @@ paths:
         '500':
           description: Internal server error
 
-  '/trip/new':
+  '/trips':
+    post:
+      tags:
+        - tripsEnd
+      summary: Trip creation
+      operationId: createNewTrip
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TripDto'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Id'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
     put:
       tags:
-        - tripEnd
-      summary: Обновление командировки
+        - tripsEnd
+      summary: Trip update
       operationId: updateTrip
       requestBody:
         description: Структура запроса
@@ -430,7 +499,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Trip'
+              $ref: '#/components/schemas/TripDto'
       responses:
         '200':
           description: Success
@@ -444,6 +513,323 @@ paths:
         '500':
           description: Internal server error
 
+  '/accommodations':
+    post:
+      tags:
+        - accommodationsEnd
+      summary: Accommodation creation
+      operationId: createNewAccommodation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Accommodation'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Id'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+    put:
+      tags:
+        - accommodationsEnd
+      summary: Accommodation update
+      operationId: updateAccommodation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Accommodation'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/accommodations/{uuid}':
+    get:
+      tags:
+        - accommodationsEnd
+      summary: Get an accommodation
+      operationId: getAccommodation
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Accommodation'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+    delete:
+      tags:
+        - accommodationsEnd
+      summary: Delete an accommodation
+      operationId: deleteAccommodation
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/destinations':
+    post:
+      tags:
+        - destinationsEnd
+      summary: Destination creation
+      operationId: createNewDestination
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DestinationDto'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Id'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+    put:
+      tags:
+        - destinationsEnd
+      summary: Destination update
+      operationId: updateDestination
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DestinationDto'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/destinations/{uuid}':
+    get:
+      tags:
+        - destinationsEnd
+      summary: Get a destination
+      operationId: getDestination
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Destination'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+    delete:
+      tags:
+        - destinationsEnd
+      summary: Delete a destination
+      operationId: deleteDestination
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/transportations':
+    post:
+      tags:
+        - transportationsEnd
+      summary: Transportation creation
+      operationId: createNewTransportation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transportation'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Id'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+    put:
+      tags:
+        - transportationsEnd
+      summary: Transportation update
+      operationId: updateTransportation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Transportation'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/transportations/{uuid}':
+    get:
+      tags:
+        - transportationsEnd
+      summary: Get a transportation
+      operationId: getTransportation
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Transportation'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+    delete:
+      tags:
+        - transportationsEnd
+      summary: Delete a transportation
+      operationId: deleteTransportation
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
 
 
 components:
@@ -465,19 +851,15 @@ components:
           type: string
         password:
           type: string
-        name:
+        firstName:
           type: string
-        surname:
+        secondName:
           type: string
-        subordinators:
+        subordinates:
           type: array
           items:
             $ref: '#/components/schemas/User'
-        unwatchedNotifications:
-          type: array
-          items:
-            $ref: '#/components/schemas/Notification'
-        role:
+        user_role:
           type: string
 
     Notification:
@@ -486,11 +868,12 @@ components:
         id:
           type: string
           format: uuid
-        requestId:
+        request:
           $ref: '#/components/schemas/Request'
-
         watched:
           type: boolean
+        user:
+          $ref: '#/components/schemas/User'
 
     Transportation:
       type: object
@@ -524,16 +907,14 @@ components:
         id:
           type: string
           format: uuid
-        request:
-          $ref: '#/components/schemas/Request'
         tripStatus:
           type: string
           enum:
             - pending
             - completed
             - cancelled
-        accomodation:
-          $ref: '#/components/schemas/Accomodation'
+        accommodation:
+          $ref: '#/components/schemas/Accommodation'
         destination:
           $ref: '#/components/schemas/Destination'
 
@@ -551,7 +932,7 @@ components:
         id:
           type: string
           format: uuid
-        tripId:
+        trip:
           $ref: '#/components/schemas/Trip'
         status:
           type: string
@@ -584,11 +965,10 @@ components:
           type: string
           format: url
 
-    Accomodation:
+    Accommodation:
       type: object
       required:
         - id
-        - address
       properties:
         id:
           type: string
@@ -603,7 +983,7 @@ components:
           type: string
           format: date
           example: "2021-01-30T08:30:00Z"
-        bookingTickets:
+        bookingUrl:
           type: string
           format: url
 
@@ -613,8 +993,6 @@ components:
         id:
           type: string
           format: uuid
-        address:
-          type: string
         description:
           type: string
         office:
@@ -635,9 +1013,11 @@ components:
 
     RequestDto:
       type: object
-      description: Краткие сведения о запросе на командировку
       properties:
         id:
+          type: string
+          format: uuid
+        tripId:
           type: string
           format: uuid
         status:
@@ -652,10 +1032,26 @@ components:
         workerId:
           type: string
           format: uuid
+        officeId:
+          type: string
+          format: uuid
+        comment:
+          type: string
         startDate:
           type: string
           format: date
           example: "2021-01-30T08:30:00Z"
+        endDate:
+          type: string
+          format: date
+          example: "2021-01-30T08:30:00Z"
+        transportTo:
+          type: string
+        transportFrom:
+          type: string
+        tickets:
+          type: string
+          format: url
 
     TripDto:
       type: object
@@ -670,12 +1066,26 @@ components:
             - pending
             - completed
             - cancelled
-        startDate:
+        accommodationId:
           type: string
-          format: date
-          example: "2021-01-30T08:30:00Z"
-        office:
-          $ref: '#/components/schemas/Office'
+          format: uuid
+        destinationId:
+          type: string
+          format: uuid
+
+    DestinationDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        description:
+          type: string
+        officeId:
+          type: string
+          format: uuid
+        seatPlace:
+          type: string
 
     Id:
       type: object

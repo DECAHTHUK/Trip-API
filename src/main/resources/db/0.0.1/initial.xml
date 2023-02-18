@@ -6,6 +6,10 @@
 
     <changeSet id="1" author="RusyaAndLyosha">
 
+        <sql dbms="postgresql" endDelimiter=";">
+            CREATE EXTENSION pgcrypto
+        </sql>
+
         <!-- USERS -->
         <createTable tableName="users">
             <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
@@ -26,15 +30,16 @@
             <column name="user_role" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
+            <column name="salt" type="VARCHAR(10)"/>
         </createTable>
 
         <!--USER_RELATIONS -->
         <createTable tableName="users_relations">
             <column name="boss_id" type="UUID">
-                <constraints foreignKeyName="fk_user_boss" references="users(id)"/>
+                <constraints foreignKeyName="fk_user_boss" references="users(id)" nullable="false"/>
             </column>
             <column name="user_id" type="UUID">
-                <constraints foreignKeyName="fk_user_sub" references="users(id)"/>
+                <constraints foreignKeyName="fk_user_sub" references="users(id)" nullable="false"/>
             </column>
         </createTable>
 

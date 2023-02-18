@@ -194,35 +194,471 @@ font-style: italic;
 
   <h3>Table of Contents </h3>
   <div class="method-summary"></div>
-  <h4><a href="#RequestEnd">RequestEnd</a></h4>
+  <h4><a href="#AccommodationsEnd">AccommodationsEnd</a></h4>
   <ul>
-  <li><a href="#createNewRequest"><code><span class="http-method">post</span> /request/new</code></a></li>
-  <li><a href="#getRequestById"><code><span class="http-method">get</span> /request/{uuid}/get</code></a></li>
-  <li><a href="#updateRequest"><code><span class="http-method">put</span> /request/new</code></a></li>
-  <li><a href="#updateRequestStatus"><code><span class="http-method">put</span> /request/{uuid}/approve</code></a></li>
+  <li><a href="#createNewAccommodation"><code><span class="http-method">post</span> /accommodations</code></a></li>
+  <li><a href="#deleteAccommodation"><code><span class="http-method">delete</span> /accommodations/{uuid}</code></a></li>
+  <li><a href="#getAccommodation"><code><span class="http-method">get</span> /accommodations/{uuid}</code></a></li>
+  <li><a href="#updateAccommodation"><code><span class="http-method">put</span> /accommodations</code></a></li>
   </ul>
-  <h4><a href="#TripEnd">TripEnd</a></h4>
+  <h4><a href="#DestinationsEnd">DestinationsEnd</a></h4>
   <ul>
-  <li><a href="#getTripById"><code><span class="http-method">get</span> /trip/{uuid}/get</code></a></li>
-  <li><a href="#updateTrip"><code><span class="http-method">put</span> /trip/new</code></a></li>
+  <li><a href="#createNewDestination"><code><span class="http-method">post</span> /destinations</code></a></li>
+  <li><a href="#deleteDestination"><code><span class="http-method">delete</span> /destinations/{uuid}</code></a></li>
+  <li><a href="#getDestination"><code><span class="http-method">get</span> /destinations/{uuid}</code></a></li>
+  <li><a href="#updateDestination"><code><span class="http-method">put</span> /destinations</code></a></li>
   </ul>
-  <h4><a href="#UserEnd">UserEnd</a></h4>
+  <h4><a href="#RequestsEnd">RequestsEnd</a></h4>
   <ul>
-  <li><a href="#createNewUser"><code><span class="http-method">post</span> /user/new</code></a></li>
-  <li><a href="#getRequestsAt"><code><span class="http-method">get</span> /user/{uuid}/get-requests-at/{page}</code></a></li>
-  <li><a href="#getSomeRequests"><code><span class="http-method">get</span> /user/{uuid}/get-some-requests</code></a></li>
-  <li><a href="#getSomeTrips"><code><span class="http-method">get</span> /user/{uuid}/get-some-trips</code></a></li>
-  <li><a href="#getTripsAt"><code><span class="http-method">get</span> /user/{uuid}/get-trips-at/{page}</code></a></li>
-  <li><a href="#getUnwatchedNotifications"><code><span class="http-method">get</span> /user/{uuid}/unwatched-notifications</code></a></li>
-  <li><a href="#getUserById"><code><span class="http-method">get</span> /user/{uuid}/get</code></a></li>
-  <li><a href="#updateUser"><code><span class="http-method">put</span> /user/new</code></a></li>
+  <li><a href="#createNewRequest"><code><span class="http-method">post</span> /requests</code></a></li>
+  <li><a href="#getRequestById"><code><span class="http-method">get</span> /requests/{uuid}</code></a></li>
+  <li><a href="#updateRequest"><code><span class="http-method">put</span> /requests</code></a></li>
+  <li><a href="#updateRequestStatus"><code><span class="http-method">put</span> /requests/{uuid}/approve</code></a></li>
+  </ul>
+  <h4><a href="#TransportationsEnd">TransportationsEnd</a></h4>
+  <ul>
+  <li><a href="#createNewTransportation"><code><span class="http-method">post</span> /transportations</code></a></li>
+  <li><a href="#deleteTransportation"><code><span class="http-method">delete</span> /transportations/{uuid}</code></a></li>
+  <li><a href="#getTransportation"><code><span class="http-method">get</span> /transportations/{uuid}</code></a></li>
+  <li><a href="#updateTransportation"><code><span class="http-method">put</span> /transportations</code></a></li>
+  </ul>
+  <h4><a href="#TripsEnd">TripsEnd</a></h4>
+  <ul>
+  <li><a href="#createNewTrip"><code><span class="http-method">post</span> /trips</code></a></li>
+  <li><a href="#getTripById"><code><span class="http-method">get</span> /trips/{uuid}</code></a></li>
+  <li><a href="#updateTrip"><code><span class="http-method">put</span> /trips</code></a></li>
+  </ul>
+  <h4><a href="#UsersEnd">UsersEnd</a></h4>
+  <ul>
+  <li><a href="#createNewUser"><code><span class="http-method">post</span> /users</code></a></li>
+  <li><a href="#createRelation"><code><span class="http-method">post</span> /users/{boss}/subordinates/{subordinate}</code></a></li>
+  <li><a href="#deleteRelation"><code><span class="http-method">delete</span> /users/{boss}/subordinates/{subordinate}</code></a></li>
+  <li><a href="#getIncomingRequestsAt"><code><span class="http-method">get</span> /users/{uuid}/incoming-requests-at/{page}</code></a></li>
+  <li><a href="#getOutgoingRequestsAt"><code><span class="http-method">get</span> /users/{uuid}/outgoing-requests-at/{page}</code></a></li>
+  <li><a href="#getTripsAt"><code><span class="http-method">get</span> /users/{uuid}/trips-at/{page}</code></a></li>
+  <li><a href="#getUnwatchedNotifications"><code><span class="http-method">get</span> /users/{uuid}/unwatched-notifications</code></a></li>
+  <li><a href="#getUserById"><code><span class="http-method">get</span> /users/{uuid}</code></a></li>
+  <li><a href="#updateUser"><code><span class="http-method">put</span> /users</code></a></li>
   </ul>
 
-  <h1><a name="RequestEnd">RequestEnd</a></h1>
+  <h1><a name="AccommodationsEnd">AccommodationsEnd</a></h1>
+  <div class="method"><a name="createNewAccommodation"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /accommodations</code></pre></div>
+    <div class="method-summary">Accommodation creation (<span class="nickname">createNewAccommodation</span>)</div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">Accommodation <a href="#Accommodation">Accommodation</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+
+    </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Id">Id</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#Id">Id</a>
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="deleteAccommodation"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="delete"><code class="huge"><span class="http-method">delete</span> /accommodations/{uuid}</code></pre></div>
+    <div class="method-summary">Delete an accommodation (<span class="nickname">deleteAccommodation</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">uuid (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: uuid</div>
+    </div>  <!-- field-items -->
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getAccommodation"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /accommodations/{uuid}</code></pre></div>
+    <div class="method-summary">Get an accommodation (<span class="nickname">getAccommodation</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">uuid (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: uuid</div>
+    </div>  <!-- field-items -->
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Accommodation">Accommodation</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "checkinTime" : "2000-01-23",
+  "address" : "address",
+  "bookingUrl" : "http://example.com/aeiou",
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "checkoutTime" : "2000-01-23"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#Accommodation">Accommodation</a>
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="updateAccommodation"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /accommodations</code></pre></div>
+    <div class="method-summary">Accommodation update (<span class="nickname">updateAccommodation</span>)</div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">Accommodation <a href="#Accommodation">Accommodation</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+
+    </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="DestinationsEnd">DestinationsEnd</a></h1>
+  <div class="method"><a name="createNewDestination"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /destinations</code></pre></div>
+    <div class="method-summary">Destination creation (<span class="nickname">createNewDestination</span>)</div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">DestinationDto <a href="#DestinationDto">DestinationDto</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+
+    </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Id">Id</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#Id">Id</a>
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="deleteDestination"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="delete"><code class="huge"><span class="http-method">delete</span> /destinations/{uuid}</code></pre></div>
+    <div class="method-summary">Delete a destination (<span class="nickname">deleteDestination</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">uuid (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: uuid</div>
+    </div>  <!-- field-items -->
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getDestination"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /destinations/{uuid}</code></pre></div>
+    <div class="method-summary">Get a destination (<span class="nickname">getDestination</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">uuid (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: uuid</div>
+    </div>  <!-- field-items -->
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Destination">Destination</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "description" : "description",
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "office" : {
+    "address" : "address",
+    "description" : "description",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+  },
+  "seatPlace" : "seatPlace"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#Destination">Destination</a>
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="updateDestination"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /destinations</code></pre></div>
+    <div class="method-summary">Destination update (<span class="nickname">updateDestination</span>)</div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">DestinationDto <a href="#DestinationDto">DestinationDto</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+
+    </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="RequestsEnd">RequestsEnd</a></h1>
   <div class="method"><a name="createNewRequest"/>
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
-    <pre class="post"><code class="huge"><span class="http-method">post</span> /request/new</code></pre></div>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /requests</code></pre></div>
     <div class="method-summary">Создание нового запроса (<span class="nickname">createNewRequest</span>)</div>
     <div class="method-notes"></div>
 
@@ -235,7 +671,7 @@ font-style: italic;
 
     <h3 class="field-label">Request body</h3>
     <div class="field-items">
-      <div class="param">Request <a href="#Request">Request</a> (required)</div>
+      <div class="param">RequestDto <a href="#RequestDto">RequestDto</a> (required)</div>
 
       <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
 
@@ -280,7 +716,7 @@ font-style: italic;
   <div class="method"><a name="getRequestById"/>
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
-    <pre class="get"><code class="huge"><span class="http-method">get</span> /request/{uuid}/get</code></pre></div>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /requests/{uuid}</code></pre></div>
     <div class="method-summary">Получение реквеста по заданному UUID. (<span class="nickname">getRequestById</span>)</div>
     <div class="method-notes"></div>
 
@@ -308,20 +744,15 @@ font-style: italic;
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
   "transportFrom" : "transportFrom",
-  "tickets" : "http://example.com/aeiou",
-  "endDate" : "2000-01-23",
-  "transportTo" : "transportTo",
-  "description" : "description",
-  "tripId" : {
-    "accomodation" : {
+  "trip" : {
+    "accommodation" : {
       "checkinTime" : "2000-01-23",
       "address" : "address",
+      "bookingUrl" : "http://example.com/aeiou",
       "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-      "checkoutTime" : "2000-01-23",
-      "bookingTickets" : "http://example.com/aeiou"
+      "checkoutTime" : "2000-01-23"
     },
     "destination" : {
-      "address" : "address",
       "description" : "description",
       "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
       "office" : {
@@ -334,12 +765,25 @@ font-style: italic;
     "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
     "tripStatus" : "pending"
   },
+  "tickets" : "http://example.com/aeiou",
+  "endDate" : "2000-01-23",
+  "transportTo" : "transportTo",
+  "description" : "description",
   "comment" : "comment",
   "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
   "office" : {
     "address" : "address",
     "description" : "description",
     "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+  },
+  "worker" : {
+    "firstName" : "firstName",
+    "user_role" : "user_role",
+    "password" : "password",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "subordinates" : [ null, null ],
+    "email" : "email",
+    "secondName" : "secondName"
   },
   "startDate" : "2000-01-23",
   "status" : "approved"
@@ -367,7 +811,7 @@ font-style: italic;
   <div class="method"><a name="updateRequest"/>
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
-    <pre class="put"><code class="huge"><span class="http-method">put</span> /request/new</code></pre></div>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /requests</code></pre></div>
     <div class="method-summary">Обновление запроса (<span class="nickname">updateRequest</span>)</div>
     <div class="method-notes"></div>
 
@@ -380,7 +824,7 @@ font-style: italic;
 
     <h3 class="field-label">Request body</h3>
     <div class="field-items">
-      <div class="param">Request <a href="#Request">Request</a> (required)</div>
+      <div class="param">RequestDto <a href="#RequestDto">RequestDto</a> (required)</div>
 
       <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
 
@@ -415,7 +859,7 @@ font-style: italic;
   <div class="method"><a name="updateRequestStatus"/>
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
-    <pre class="put"><code class="huge"><span class="http-method">put</span> /request/{uuid}/approve</code></pre></div>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /requests/{uuid}/approve</code></pre></div>
     <div class="method-summary">Изменение статуса заявки на принятый (<span class="nickname">updateRequestStatus</span>)</div>
     <div class="method-notes"></div>
 
@@ -454,11 +898,276 @@ font-style: italic;
         <a href="#"></a>
   </div> <!-- method -->
   <hr/>
-  <h1><a name="TripEnd">TripEnd</a></h1>
+  <h1><a name="TransportationsEnd">TransportationsEnd</a></h1>
+  <div class="method"><a name="createNewTransportation"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /transportations</code></pre></div>
+    <div class="method-summary">Transportation creation (<span class="nickname">createNewTransportation</span>)</div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">Transportation <a href="#Transportation">Transportation</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+
+    </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Id">Id</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#Id">Id</a>
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="deleteTransportation"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="delete"><code class="huge"><span class="http-method">delete</span> /transportations/{uuid}</code></pre></div>
+    <div class="method-summary">Delete a transportation (<span class="nickname">deleteTransportation</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">uuid (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: uuid</div>
+    </div>  <!-- field-items -->
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getTransportation"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /transportations/{uuid}</code></pre></div>
+    <div class="method-summary">Get a transportation (<span class="nickname">getTransportation</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">uuid (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: uuid</div>
+    </div>  <!-- field-items -->
+
+
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Transportation">Transportation</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "date" : "2000-01-23",
+  "departurePoint" : "departurePoint",
+  "dtype" : "plane",
+  "recommendedDateTime" : "2000-01-23",
+  "from" : "from",
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "to" : "to"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#Transportation">Transportation</a>
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="updateTransportation"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /transportations</code></pre></div>
+    <div class="method-summary">Transportation update (<span class="nickname">updateTransportation</span>)</div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">Transportation <a href="#Transportation">Transportation</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+
+    </div>  <!-- field-items -->
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="TripsEnd">TripsEnd</a></h1>
+  <div class="method"><a name="createNewTrip"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /trips</code></pre></div>
+    <div class="method-summary">Trip creation (<span class="nickname">createNewTrip</span>)</div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">TripDto <a href="#TripDto">TripDto</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+
+    </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Id">Id</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#Id">Id</a>
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
   <div class="method"><a name="getTripById"/>
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
-    <pre class="get"><code class="huge"><span class="http-method">get</span> /trip/{uuid}/get</code></pre></div>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /trips/{uuid}</code></pre></div>
     <div class="method-summary">Получение командировки по заданному UUID (<span class="nickname">getTripById</span>)</div>
     <div class="method-notes"></div>
 
@@ -485,15 +1194,14 @@ font-style: italic;
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
-  "accomodation" : {
+  "accommodation" : {
     "checkinTime" : "2000-01-23",
     "address" : "address",
+    "bookingUrl" : "http://example.com/aeiou",
     "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-    "checkoutTime" : "2000-01-23",
-    "bookingTickets" : "http://example.com/aeiou"
+    "checkoutTime" : "2000-01-23"
   },
   "destination" : {
-    "address" : "address",
     "description" : "description",
     "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
     "office" : {
@@ -529,8 +1237,8 @@ font-style: italic;
   <div class="method"><a name="updateTrip"/>
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
-    <pre class="put"><code class="huge"><span class="http-method">put</span> /trip/new</code></pre></div>
-    <div class="method-summary">Обновление командировки (<span class="nickname">updateTrip</span>)</div>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /trips</code></pre></div>
+    <div class="method-summary">Trip update (<span class="nickname">updateTrip</span>)</div>
     <div class="method-notes"></div>
 
 
@@ -542,7 +1250,7 @@ font-style: italic;
 
     <h3 class="field-label">Request body</h3>
     <div class="field-items">
-      <div class="param">Trip <a href="#Trip">Trip</a> (required)</div>
+      <div class="param">TripDto <a href="#TripDto">TripDto</a> (required)</div>
 
       <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
 
@@ -574,11 +1282,11 @@ font-style: italic;
         <a href="#"></a>
   </div> <!-- method -->
   <hr/>
-  <h1><a name="UserEnd">UserEnd</a></h1>
+  <h1><a name="UsersEnd">UsersEnd</a></h1>
   <div class="method"><a name="createNewUser"/>
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
-    <pre class="post"><code class="huge"><span class="http-method">post</span> /user/new</code></pre></div>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /users</code></pre></div>
     <div class="method-summary">создание нового пользователя (<span class="nickname">createNewUser</span>)</div>
     <div class="method-notes"></div>
 
@@ -633,11 +1341,99 @@ font-style: italic;
         <a href="#"></a>
   </div> <!-- method -->
   <hr/>
-  <div class="method"><a name="getRequestsAt"/>
+  <div class="method"><a name="createRelation"/>
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
-    <pre class="get"><code class="huge"><span class="http-method">get</span> /user/{uuid}/get-requests-at/{page}</code></pre></div>
-    <div class="method-summary">Получение страницы номер {page}(либо все сразу если не указано) из n запросов для ментора с заданным {id} (<span class="nickname">getRequestsAt</span>)</div>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /users/{boss}/subordinates/{subordinate}</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">createRelation</span>)</div>
+    <div class="method-notes">Creates a relation for user with id {boss}</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">boss (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: uuid</div><div class="param">subordinate (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: uuid</div>
+    </div>  <!-- field-items -->
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="deleteRelation"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="delete"><code class="huge"><span class="http-method">delete</span> /users/{boss}/subordinates/{subordinate}</code></pre></div>
+    <div class="method-summary"> (<span class="nickname">deleteRelation</span>)</div>
+    <div class="method-notes">Deletes a relation for user with id {boss}</div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">boss (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: uuid</div><div class="param">subordinate (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: uuid</div>
+    </div>  <!-- field-items -->
+
+
+
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getIncomingRequestsAt"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /users/{uuid}/incoming-requests-at/{page}</code></pre></div>
+    <div class="method-summary">Получение страницы номер {page}(либо все сразу если не указано) из n запросов для ментора с заданным {id} (<span class="nickname">getIncomingRequestsAt</span>)</div>
     <div class="method-notes"></div>
 
     <h3 class="field-label">Path parameters</h3>
@@ -665,8 +1461,15 @@ font-style: italic;
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
+  "transportFrom" : "transportFrom",
   "workerId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "tickets" : "http://example.com/aeiou",
+  "officeId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "endDate" : "2000-01-23",
+  "transportTo" : "transportTo",
   "description" : "description",
+  "tripId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "comment" : "comment",
   "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
   "startDate" : "2000-01-23",
   "status" : "approved"
@@ -691,18 +1494,20 @@ font-style: italic;
         <a href="#"></a>
   </div> <!-- method -->
   <hr/>
-  <div class="method"><a name="getSomeRequests"/>
+  <div class="method"><a name="getOutgoingRequestsAt"/>
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
-    <pre class="get"><code class="huge"><span class="http-method">get</span> /user/{uuid}/get-some-requests</code></pre></div>
-    <div class="method-summary">Первые 2-3 заявки на рассмотрение по дате для пользователя с {id} (<span class="nickname">getSomeRequests</span>)</div>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /users/{uuid}/outgoing-requests-at/{page}</code></pre></div>
+    <div class="method-summary">Получение страницы номер {page}(либо все сразу если не указано) из n запросов для сотрудника с заданным {id} (<span class="nickname">getOutgoingRequestsAt</span>)</div>
     <div class="method-notes"></div>
 
     <h3 class="field-label">Path parameters</h3>
     <div class="field-items">
       <div class="param">uuid (required)</div>
 
-      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: uuid</div>
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: uuid</div><div class="param">page (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: int32</div>
     </div>  <!-- field-items -->
 
 
@@ -721,70 +1526,18 @@ font-style: italic;
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
+  "transportFrom" : "transportFrom",
   "workerId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "tickets" : "http://example.com/aeiou",
+  "officeId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "endDate" : "2000-01-23",
+  "transportTo" : "transportTo",
   "description" : "description",
+  "tripId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "comment" : "comment",
   "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
   "startDate" : "2000-01-23",
   "status" : "approved"
-}</code></pre>
-
-    <h3 class="field-label">Produces</h3>
-    This API call produces the following media types according to the <span class="header">Accept</span> request header;
-    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
-    <ul>
-      <li><code>application/json</code></li>
-    </ul>
-
-    <h3 class="field-label">Responses</h3>
-    <h4 class="field-label">200</h4>
-    Success
-        
-    <h4 class="field-label">400</h4>
-    Bad Request
-        <a href="#String">String</a>
-    <h4 class="field-label">500</h4>
-    Internal server error
-        <a href="#"></a>
-  </div> <!-- method -->
-  <hr/>
-  <div class="method"><a name="getSomeTrips"/>
-    <div class="method-path">
-    <a class="up" href="#__Methods">Up</a>
-    <pre class="get"><code class="huge"><span class="http-method">get</span> /user/{uuid}/get-some-trips</code></pre></div>
-    <div class="method-summary">Первые 2-3 свои командировки по дате (<span class="nickname">getSomeTrips</span>)</div>
-    <div class="method-notes"></div>
-
-    <h3 class="field-label">Path parameters</h3>
-    <div class="field-items">
-      <div class="param">uuid (required)</div>
-
-      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: uuid</div>
-    </div>  <!-- field-items -->
-
-
-
-
-
-
-    <h3 class="field-label">Return type</h3>
-    <div class="return-type">
-      array[<a href="#TripDto">TripDto</a>]
-      
-    </div>
-
-    <!--Todo: process Response Object and its headers, schema, examples -->
-
-    <h3 class="field-label">Example data</h3>
-    <div class="example-data-content-type">Content-Type: application/json</div>
-    <pre class="example"><code>{
-  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-  "office" : {
-    "address" : "address",
-    "description" : "description",
-    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
-  },
-  "startDate" : "2000-01-23",
-  "tripStatus" : "pending"
 }</code></pre>
 
     <h3 class="field-label">Produces</h3>
@@ -809,7 +1562,7 @@ font-style: italic;
   <div class="method"><a name="getTripsAt"/>
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
-    <pre class="get"><code class="huge"><span class="http-method">get</span> /user/{uuid}/get-trips-at/{page}</code></pre></div>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /users/{uuid}/trips-at/{page}</code></pre></div>
     <div class="method-summary">Получение страницы номер {page}(либо все сразу если не указано) из n командировок для пользователя с заданным {id} (<span class="nickname">getTripsAt</span>)</div>
     <div class="method-notes"></div>
 
@@ -838,13 +1591,9 @@ font-style: italic;
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
+  "accommodationId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
   "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-  "office" : {
-    "address" : "address",
-    "description" : "description",
-    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
-  },
-  "startDate" : "2000-01-23",
+  "destinationId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
   "tripStatus" : "pending"
 }</code></pre>
 
@@ -870,7 +1619,7 @@ font-style: italic;
   <div class="method"><a name="getUnwatchedNotifications"/>
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
-    <pre class="get"><code class="huge"><span class="http-method">get</span> /user/{uuid}/unwatched-notifications</code></pre></div>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /users/{uuid}/unwatched-notifications</code></pre></div>
     <div class="method-summary"> (<span class="nickname">getUnwatchedNotifications</span>)</div>
     <div class="method-notes"></div>
 
@@ -897,23 +1646,17 @@ font-style: italic;
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
-  "watched" : true,
-  "requestId" : {
+  "request" : {
     "transportFrom" : "transportFrom",
-    "tickets" : "http://example.com/aeiou",
-    "endDate" : "2000-01-23",
-    "transportTo" : "transportTo",
-    "description" : "description",
-    "tripId" : {
-      "accomodation" : {
+    "trip" : {
+      "accommodation" : {
         "checkinTime" : "2000-01-23",
         "address" : "address",
+        "bookingUrl" : "http://example.com/aeiou",
         "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-        "checkoutTime" : "2000-01-23",
-        "bookingTickets" : "http://example.com/aeiou"
+        "checkoutTime" : "2000-01-23"
       },
       "destination" : {
-        "address" : "address",
         "description" : "description",
         "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
         "office" : {
@@ -926,6 +1669,10 @@ font-style: italic;
       "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
       "tripStatus" : "pending"
     },
+    "tickets" : "http://example.com/aeiou",
+    "endDate" : "2000-01-23",
+    "transportTo" : "transportTo",
+    "description" : "description",
     "comment" : "comment",
     "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
     "office" : {
@@ -933,10 +1680,29 @@ font-style: italic;
       "description" : "description",
       "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
     },
+    "worker" : {
+      "firstName" : "firstName",
+      "user_role" : "user_role",
+      "password" : "password",
+      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+      "subordinates" : [ null, null ],
+      "email" : "email",
+      "secondName" : "secondName"
+    },
     "startDate" : "2000-01-23",
     "status" : "approved"
   },
-  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+  "watched" : true,
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "user" : {
+    "firstName" : "firstName",
+    "user_role" : "user_role",
+    "password" : "password",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "subordinates" : [ null, null ],
+    "email" : "email",
+    "secondName" : "secondName"
+  }
 }</code></pre>
 
     <h3 class="field-label">Produces</h3>
@@ -961,7 +1727,7 @@ font-style: italic;
   <div class="method"><a name="getUserById"/>
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
-    <pre class="get"><code class="huge"><span class="http-method">get</span> /user/{uuid}/get</code></pre></div>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /users/{uuid}</code></pre></div>
     <div class="method-summary">Получение пользователя по его {id} (<span class="nickname">getUserById</span>)</div>
     <div class="method-notes"></div>
 
@@ -988,96 +1754,13 @@ font-style: italic;
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
+  "firstName" : "firstName",
+  "user_role" : "user_role",
   "password" : "password",
-  "role" : "role",
-  "surname" : "surname",
-  "subordinators" : [ null, null ],
-  "name" : "name",
   "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-  "unwatchedNotifications" : [ {
-    "watched" : true,
-    "requestId" : {
-      "transportFrom" : "transportFrom",
-      "tickets" : "http://example.com/aeiou",
-      "endDate" : "2000-01-23",
-      "transportTo" : "transportTo",
-      "description" : "description",
-      "tripId" : {
-        "accomodation" : {
-          "checkinTime" : "2000-01-23",
-          "address" : "address",
-          "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "checkoutTime" : "2000-01-23",
-          "bookingTickets" : "http://example.com/aeiou"
-        },
-        "destination" : {
-          "address" : "address",
-          "description" : "description",
-          "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "office" : {
-            "address" : "address",
-            "description" : "description",
-            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
-          },
-          "seatPlace" : "seatPlace"
-        },
-        "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-        "tripStatus" : "pending"
-      },
-      "comment" : "comment",
-      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-      "office" : {
-        "address" : "address",
-        "description" : "description",
-        "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
-      },
-      "startDate" : "2000-01-23",
-      "status" : "approved"
-    },
-    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
-  }, {
-    "watched" : true,
-    "requestId" : {
-      "transportFrom" : "transportFrom",
-      "tickets" : "http://example.com/aeiou",
-      "endDate" : "2000-01-23",
-      "transportTo" : "transportTo",
-      "description" : "description",
-      "tripId" : {
-        "accomodation" : {
-          "checkinTime" : "2000-01-23",
-          "address" : "address",
-          "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "checkoutTime" : "2000-01-23",
-          "bookingTickets" : "http://example.com/aeiou"
-        },
-        "destination" : {
-          "address" : "address",
-          "description" : "description",
-          "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-          "office" : {
-            "address" : "address",
-            "description" : "description",
-            "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
-          },
-          "seatPlace" : "seatPlace"
-        },
-        "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-        "tripStatus" : "pending"
-      },
-      "comment" : "comment",
-      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-      "office" : {
-        "address" : "address",
-        "description" : "description",
-        "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
-      },
-      "startDate" : "2000-01-23",
-      "status" : "approved"
-    },
-    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
-  } ],
-  "email" : "email"
+  "subordinates" : [ null, null ],
+  "email" : "email",
+  "secondName" : "secondName"
 }</code></pre>
 
     <h3 class="field-label">Produces</h3>
@@ -1102,8 +1785,8 @@ font-style: italic;
   <div class="method"><a name="updateUser"/>
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
-    <pre class="put"><code class="huge"><span class="http-method">put</span> /user/new</code></pre></div>
-    <div class="method-summary">обновление пользователя (<span class="nickname">updateUser</span>)</div>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /users</code></pre></div>
+    <div class="method-summary">Updating user by id(changes in subordinates field won't be registered) (<span class="nickname">updateUser</span>)</div>
     <div class="method-notes"></div>
 
 
@@ -1153,8 +1836,9 @@ font-style: italic;
 
   <h3>Table of Contents</h3>
   <ol>
-    <li><a href="#Accomodation"><code>Accomodation</code> - </a></li>
+    <li><a href="#Accommodation"><code>Accommodation</code> - </a></li>
     <li><a href="#Destination"><code>Destination</code> - </a></li>
+    <li><a href="#DestinationDto"><code>DestinationDto</code> - </a></li>
     <li><a href="#Id"><code>Id</code> - </a></li>
     <li><a href="#Notification"><code>Notification</code> - </a></li>
     <li><a href="#Office"><code>Office</code> - </a></li>
@@ -1167,14 +1851,14 @@ font-style: italic;
   </ol>
 
   <div class="model">
-    <h3><a name="Accomodation"><code>Accomodation</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <h3><a name="Accommodation"><code>Accommodation</code> - </a> <a class="up" href="#__Models">Up</a></h3>
     <div class='model-description'></div>
     <div class="field-items">
       <div class="param">id </div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
-<div class="param">address </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">address (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
 <div class="param">checkinTime (optional)</div><div class="param-desc"><span class="param-type"><a href="#date">date</a></span>  format: date</div>
 <div class="param">checkoutTime (optional)</div><div class="param-desc"><span class="param-type"><a href="#date">date</a></span>  format: date</div>
-<div class="param">bookingTickets (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: url</div>
+<div class="param">bookingUrl (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: url</div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
@@ -1182,9 +1866,18 @@ font-style: italic;
     <div class='model-description'></div>
     <div class="field-items">
       <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
-<div class="param">address (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
 <div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
 <div class="param">office (optional)</div><div class="param-desc"><span class="param-type"><a href="#Office">Office</a></span>  </div>
+<div class="param">seatPlace (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="DestinationDto"><code>DestinationDto</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
+<div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">officeId (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
 <div class="param">seatPlace (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
     </div>  <!-- field-items -->
   </div>
@@ -1200,8 +1893,9 @@ font-style: italic;
     <div class='model-description'></div>
     <div class="field-items">
       <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
-<div class="param">requestId (optional)</div><div class="param-desc"><span class="param-type"><a href="#Request">Request</a></span>  </div>
+<div class="param">request (optional)</div><div class="param-desc"><span class="param-type"><a href="#Request">Request</a></span>  </div>
 <div class="param">watched (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
+<div class="param">user (optional)</div><div class="param-desc"><span class="param-type"><a href="#User">User</a></span>  </div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
@@ -1218,7 +1912,7 @@ font-style: italic;
     <div class='model-description'></div>
     <div class="field-items">
       <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
-<div class="param">tripId </div><div class="param-desc"><span class="param-type"><a href="#Trip">Trip</a></span>  </div>
+<div class="param">trip (optional)</div><div class="param-desc"><span class="param-type"><a href="#Trip">Trip</a></span>  </div>
 <div class="param">status </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
         <div class="param-enum-header">Enum:</div>
         <div class="param-enum">approved</div><div class="param-enum">pending</div><div class="param-enum">awaitChanges</div><div class="param-enum">declined</div>
@@ -1235,15 +1929,22 @@ font-style: italic;
   </div>
   <div class="model">
     <h3><a name="RequestDto"><code>RequestDto</code> - </a> <a class="up" href="#__Models">Up</a></h3>
-    <div class='model-description'>Краткие сведения о запросе на командировку</div>
+    <div class='model-description'></div>
     <div class="field-items">
       <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
+<div class="param">tripId (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
 <div class="param">status (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
         <div class="param-enum-header">Enum:</div>
         <div class="param-enum">approved</div><div class="param-enum">pending</div><div class="param-enum">awaitChanges</div><div class="param-enum">declined</div>
 <div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
 <div class="param">workerId (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
+<div class="param">officeId (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
+<div class="param">comment (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
 <div class="param">startDate (optional)</div><div class="param-desc"><span class="param-type"><a href="#date">date</a></span>  format: date</div>
+<div class="param">endDate (optional)</div><div class="param-desc"><span class="param-type"><a href="#date">date</a></span>  format: date</div>
+<div class="param">transportTo (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">transportFrom (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">tickets (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  format: url</div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
@@ -1266,11 +1967,10 @@ font-style: italic;
     <div class='model-description'></div>
     <div class="field-items">
       <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
-<div class="param">request (optional)</div><div class="param-desc"><span class="param-type"><a href="#Request">Request</a></span>  </div>
 <div class="param">tripStatus (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
         <div class="param-enum-header">Enum:</div>
         <div class="param-enum">pending</div><div class="param-enum">completed</div><div class="param-enum">cancelled</div>
-<div class="param">accomodation (optional)</div><div class="param-desc"><span class="param-type"><a href="#Accomodation">Accomodation</a></span>  </div>
+<div class="param">accommodation (optional)</div><div class="param-desc"><span class="param-type"><a href="#Accommodation">Accommodation</a></span>  </div>
 <div class="param">destination (optional)</div><div class="param-desc"><span class="param-type"><a href="#Destination">Destination</a></span>  </div>
     </div>  <!-- field-items -->
   </div>
@@ -1282,8 +1982,8 @@ font-style: italic;
 <div class="param">tripStatus (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
         <div class="param-enum-header">Enum:</div>
         <div class="param-enum">pending</div><div class="param-enum">completed</div><div class="param-enum">cancelled</div>
-<div class="param">startDate (optional)</div><div class="param-desc"><span class="param-type"><a href="#date">date</a></span>  format: date</div>
-<div class="param">office (optional)</div><div class="param-desc"><span class="param-type"><a href="#Office">Office</a></span>  </div>
+<div class="param">accommodationId (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
+<div class="param">destinationId (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
@@ -1293,11 +1993,10 @@ font-style: italic;
       <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
 <div class="param">email </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
 <div class="param">password </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-<div class="param">name </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-<div class="param">surname </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-<div class="param">subordinators (optional)</div><div class="param-desc"><span class="param-type"><a href="#User">array[User]</a></span>  </div>
-<div class="param">unwatchedNotifications (optional)</div><div class="param-desc"><span class="param-type"><a href="#Notification">array[Notification]</a></span>  </div>
-<div class="param">role </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">firstName (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">secondName (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">subordinates (optional)</div><div class="param-desc"><span class="param-type"><a href="#User">array[User]</a></span>  </div>
+<div class="param">user_role (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
     </div>  <!-- field-items -->
   </div>
   </body>
