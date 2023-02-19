@@ -15,4 +15,11 @@ public class Accommodation {
     private Timestamp checkoutTime;
 
     private String bookingUrl;
+
+    public Accommodation(String address, Timestamp checkinTime, Timestamp checkoutTime, String bookingUrl) {
+        this.address = address;
+        this.checkinTime = checkinTime;
+        this.checkoutTime = checkoutTime;
+        this.bookingUrl = bookingUrl;
+    }
 }
