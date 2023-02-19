@@ -9,4 +9,9 @@ public class Office {
     private String address;
 
     private String description;
+
+    public Office(String address, String description) {
+        this.address = address;
+        this.description = description;
+    }
 }
