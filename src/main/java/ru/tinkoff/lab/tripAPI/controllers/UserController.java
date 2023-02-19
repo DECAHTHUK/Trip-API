@@ -8,32 +8,38 @@ import ru.tinkoff.lab.tripAPI.business.service.UserService;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
 
-    @PostMapping(value = "/users")
+    @PostMapping(value = "")
     public Id createNewUser(@RequestBody User user) {
         return userService.createUser(user);
     }
 
-    @GetMapping(value = "/users/{uuid}")
+    @GetMapping(value = "/{uuid}")
     public User getUserById(@PathVariable String uuid) {
         return userService.findById(uuid);
     }
 
-    @PutMapping(value = "/users")
+    @PutMapping(value = "")
     public String updateUser(@RequestBody User user) {
         userService.updateUser(user);
         return "Success";
     }
 
-    @PostMapping(value = "/users/{boss}/subordinates/{subordinate}")
+    @DeleteMapping("/{uuid}")
+    public void deleteUserById(@PathVariable String uuid) {
+        userService.deleteUser(uuid);
+    }
+
+    @PostMapping(value = "/{boss}/subordinates/{subordinate}")
     public void createRelation(@PathVariable String boss, @PathVariable String subordinate) {
         userService.createRelation(boss, subordinate);
     }
 
-    @DeleteMapping(value = "/users/{boss}/subordinates/{subordinate}")
+    @DeleteMapping(value = "/{boss}/subordinates/{subordinate}")
     public void deleteRelation(@PathVariable String boss, @PathVariable String subordinate) {
         userService.deleteRelation(boss, subordinate);
     }
