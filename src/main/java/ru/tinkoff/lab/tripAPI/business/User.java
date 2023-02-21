@@ -7,9 +7,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class User {
     private String id;
 

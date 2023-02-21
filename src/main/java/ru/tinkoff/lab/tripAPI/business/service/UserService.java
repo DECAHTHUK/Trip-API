@@ -1,7 +1,9 @@
 package ru.tinkoff.lab.tripAPI.business.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.User;
 import ru.tinkoff.lab.tripAPI.mapping.UserMapper;
@@ -20,12 +22,16 @@ public class UserService {
         try {
             return userMapper.insertUser(user);
         } catch (RuntimeException e) {
-            return null;
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
 
-    public User findById(String userId) {
-        return userMapper.selectUser(UUID.fromString(userId));
+    public User findById(String uuid) {
+        User user = userMapper.selectUser(UUID.fromString(uuid));
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with id = " + uuid + " was not found");
+        }
+        return user;
     }
 
     public void updateUser(User user) {

@@ -17,7 +17,7 @@ public interface OfficeMapper {
             INSERT INTO office (address, description)
             VALUES(#{address}, #{description}) RETURNING id;
             """)
-    Id insertOffice(Office office);
+    Id insertOffice(Office office) throws RuntimeException;
 
     @Select("""
             SELECT id, address, description

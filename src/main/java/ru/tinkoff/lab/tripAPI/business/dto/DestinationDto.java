@@ -1,8 +1,9 @@
 package ru.tinkoff.lab.tripAPI.business.dto;
 
-import lombok.Data;
+import lombok.*;
 
 @Data
+@NoArgsConstructor
 public class DestinationDto {
     private String id;
 

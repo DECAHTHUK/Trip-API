@@ -6,6 +6,5 @@
 
     <include file="db/0.0.1/initial.xml"/>
     <include file="db/0.0.1/indexes.xml"/>
-    <include file="db/0.0.1/insertion.xml"/>
-
+    
 </databaseChangeLog>
