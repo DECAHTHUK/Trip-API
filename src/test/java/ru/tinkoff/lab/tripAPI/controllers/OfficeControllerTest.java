@@ -104,6 +104,7 @@ public class OfficeControllerTest {
         mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
         ResponseStatusException exception = (ResponseStatusException) mvcResultGet.getResolvedException();
 
+        assert exception != null;
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
     }
 }
