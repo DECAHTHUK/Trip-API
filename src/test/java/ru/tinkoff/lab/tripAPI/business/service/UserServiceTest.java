@@ -32,10 +32,19 @@ public class UserServiceTest {
             "USER",
             "salt");
 
+    Id bossId = new Id();
+    Id subordinateId = new Id();
+
     @BeforeAll
-    public void createNewUser() {
+    public void init() {
         Id userId = userService.createUser(user);
         user.setId(userId.getId());
+
+        bossId = userService.createUser(new User("krutoi1337@gmail.com",
+                "qwertyuio", "Rusya", "Talanov", "user"));
+        subordinateId = userService.createUser(new User("slavakpss@gmail.com",
+                "12345678", "Lyosha", "Sultanov", "user"));
+        userService.createRelation(bossId.getId(), subordinateId.getId());
     }
 
     @Test
@@ -82,11 +91,11 @@ public class UserServiceTest {
     @Order(5)
     @DisplayName("Test if user's subordinates are accessed properly")
     public void testFindById_shouldReturnSubordinates() {
-        User boss = userService.findById("15322743-91db-44fc-b121-cdee08ac71cb");
+        User boss = userService.findById(bossId.getId());
 
         assertNotNull(boss.getSubordinates());
 
-        User subordinate = userService.findById("c1a0a7cc-6820-4b21-aab7-ddccce572faf");
+        User subordinate = userService.findById(subordinateId.getId());
 
         assertNotEquals(0,
                 boss.getSubordinates()
@@ -100,7 +109,7 @@ public class UserServiceTest {
     @DisplayName("Test new subordinates should be returned")
     public void testCreateDeleteRelation_shouldChangeOutput() {
         //Arrange
-        User boss = userService.findById("15322743-91db-44fc-b121-cdee08ac71cb");
+        User boss = userService.findById(bossId.getId());
         int initialSize = boss.getSubordinates().size();
         Id id = userService.createUser(new User("sobaka@sobaka.com",
                 "1223", "John", "Doe", "USER"));
@@ -114,7 +123,7 @@ public class UserServiceTest {
         assertEquals(1, sizeAfterAddition - initialSize);
 
         //Deletion check
-        userService.deleteRelation(boss.getId(), "c1a0a7cc-6820-4b21-aab7-ddccce572faf");
+        userService.deleteRelation(boss.getId(), subordinateId.getId());
         boss = userService.findById(boss.getId());
         int sizeAfterDeletion = boss.getSubordinates().size();
 

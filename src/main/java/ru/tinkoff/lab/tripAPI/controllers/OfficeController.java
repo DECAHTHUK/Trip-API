@@ -13,7 +13,7 @@ public class OfficeController {
 
     private final OfficeService officeService;
 
-    @PostMapping("")
+    @PostMapping(path = "")
     public Id createNewOffice(@RequestBody Office office) {
         return officeService.createOffice(office);
     }

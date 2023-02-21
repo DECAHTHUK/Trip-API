@@ -1,10 +1,12 @@
 package ru.tinkoff.lab.tripAPI.business;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
 
 @Data
+@NoArgsConstructor
 public class Accommodation {
     private String id;
 

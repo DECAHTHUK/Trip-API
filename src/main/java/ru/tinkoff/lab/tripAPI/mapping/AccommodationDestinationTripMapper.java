@@ -20,7 +20,7 @@ public interface AccommodationDestinationTripMapper {
             (address, checkin_time, checkout_time, booking_tickets)
             VALUES (#{address}, #{checkinTime}, #{checkoutTime}, #{bookingUrl}) RETURNING id;
             """)
-    Id insertAccommodation(Accommodation accommodation);
+    Id insertAccommodation(Accommodation accommodation) throws RuntimeException;
 
     @Results(value = {
             @Result(property = "checkinTime", column = "checkin_time"),
@@ -35,7 +35,7 @@ public interface AccommodationDestinationTripMapper {
 
     @Update("""
             UPDATE accommodation
-            SET address=#{address}, checkin_time=#{checkinTime}, checkout_time=#{checkoutTime}
+            SET address=#{address}, checkin_time=#{checkinTime}, checkout_time=#{checkoutTime},
             booking_tickets=#{bookingUrl}
             WHERE id = uuid(#{id});
             """)
@@ -51,13 +51,13 @@ public interface AccommodationDestinationTripMapper {
     /**
      * Destination CRUD
      */
-    //TODO ADD DTO-s
+    @Result(property = "id", column = "id")
     @Select("""
             INSERT INTO destination
             (description, office_id, seat_place)
-            VALUES (#{description}, #{officeId}, #{seatPlace}) RETURNING id;
+            VALUES(#{description}, uuid(#{officeId}), #{seatPlace}) RETURNING id;
             """)
-    Id insertDestination(DestinationDto destinationDto);
+    Id insertDestination(DestinationDto destinationDto) throws RuntimeException;
 
     @Results(value = {
             @Result(property = "office.id", column = "office_id"),
@@ -70,13 +70,13 @@ public interface AccommodationDestinationTripMapper {
             o.id as office_id, o.address as office_address, o.description as office_description
             FROM destination d
             JOIN office o on d.office_id = o.id
-            WHERE id = '${destinationId}';
+            WHERE d.id = '${destinationId}';
             """)
     Destination selectDestination(@Param("destinationId") UUID destinationId);
 
     @Update("""
             UPDATE destination
-            SET description=#{description}, office_id=#{officeId}, seat_place=#{seatPlace}
+            SET description=#{description}, office_id=uuid(#{officeId}), seat_place=#{seatPlace}
             WHERE id = uuid(#{id});
             """)
     void updateDestination(DestinationDto destinationDto);
@@ -90,15 +90,16 @@ public interface AccommodationDestinationTripMapper {
     /**
      * Trip CRUD
      */
-
+    @Result(property = "id", column = "id")
     @Select("""
             INSERT INTO trip
             (trip_status, accommodation_id, destination_id)
-            VALUES (#{tripStatus}, uuid(#{accommodationId}), uuid(#{destinationId}));
+            VALUES (#{tripStatus}, uuid(#{accommodationId}), uuid(#{destinationId})) RETURNING id;
             """)
-    Id insertTrip(TripDto tripDto);
+    Id insertTrip(TripDto tripDto) throws RuntimeException;
 
     @Results(value = {
+            @Result(property = "tripStatus", column = "trip_status"),
             @Result(property = "accommodation.id", column = "accom_id"),
             @Result(property = "accommodation.address", column = "address"),
             @Result(property = "accommodation.checkinTime", column = "checkin_time"),
