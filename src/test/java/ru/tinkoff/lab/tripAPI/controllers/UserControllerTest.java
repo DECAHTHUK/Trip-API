@@ -23,8 +23,7 @@ import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @AutoConfigureMybatis
@@ -87,6 +86,7 @@ public class UserControllerTest {
     @Order(2)
     @DisplayName("Test user relations gets created")
     public void testCreateUserRelation() throws Exception {
+        // Adding second user to create relations
         RequestBuilder requestBuilderPostUser = MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -114,7 +114,7 @@ public class UserControllerTest {
 
         // Testing post new relations
         RequestBuilder requestBuilderPostRelations = MockMvcRequestBuilders
-                .post("/users/" + user.getId() + "/subordinate/" + subUser.getId());
+                .post("/users/" + user.getId() + "/subordinates/" + subUser.getId());
 
         mockMvc.perform(requestBuilderPostRelations);
 
@@ -125,13 +125,41 @@ public class UserControllerTest {
         MvcResult mvcResultGetUser = mockMvc.perform(requestBuilderGetUser).andReturn();
         String responseBodyGetUser = mvcResultGetUser.getResponse().getContentAsString();
 
+        //Testing if relations were created successfully
         User bossUser = new ObjectMapper().readValue(responseBodyGetUser, User.class);
-        assertEquals(user, bossUser);
-        assertEquals(1, bossUser.getSubordinates().size());
+        assertNotNull(bossUser.getSubordinates());
+        assertNotEquals(0,
+                bossUser.getSubordinates()
+                        .stream()
+                        .filter(t -> t.getEmail().equals(subUser.getEmail()))
+                        .count());
     }
 
     @Test
     @Order(3)
+    @DisplayName("Test user relations gets deleted")
+    public void testDeleteUserRelation() throws Exception {
+        //Testing relations get deleted
+        RequestBuilder requestBuilderDelete = MockMvcRequestBuilders
+                .delete("/users/" + user.getId() + "/subordinates/" + subUser.getId());
+
+        mockMvc.perform(requestBuilderDelete);
+
+        RequestBuilder requestBuilderGet = MockMvcRequestBuilders
+                .get("/users/" + user.getId())
+                .accept(MediaType.APPLICATION_JSON_VALUE);
+
+        MvcResult mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
+        String responseBodyGetUser = mvcResultGet.getResponse().getContentAsString();
+
+        //Taking result of deleting
+        User userFromRequest = new ObjectMapper().readValue(responseBodyGetUser, User.class);
+        assertNotNull(userFromRequest);
+        assertEquals(0, userFromRequest.getSubordinates().size());
+    }
+
+    @Test
+    @Order(4)
     @DisplayName("Test user gets updated and deleted")
     public void testUpdateDeleteUser() throws Exception {
         //Updating user
