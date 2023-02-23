@@ -24,9 +24,8 @@ public class UserController {
     }
 
     @PutMapping(value = "")
-    public String updateUser(@RequestBody User user) {
+    public void updateUser(@RequestBody User user) {
         userService.updateUser(user);
-        return "Success";
     }
 
     @DeleteMapping("/{uuid}")

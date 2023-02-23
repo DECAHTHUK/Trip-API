@@ -22,7 +22,7 @@ public class UserService {
         try {
             return userMapper.insertUser(user);
         } catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad request for User entity");
         }
     }
 
