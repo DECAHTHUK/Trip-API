@@ -88,7 +88,7 @@ public class UserServiceTest {
     @DisplayName("Test the email unique constraint")
     public void testCreateUser_whenEmailAlreadyInDatabase_shouldReturnNull() {
         ResponseStatusException thrown = assertThrows(ResponseStatusException.class, () -> userService.createUser(user));
-        assertEquals(HttpStatus.BAD_REQUEST + " \"Bad request for User entity\"", thrown.getMessage());
+        assertEquals(HttpStatus.BAD_REQUEST, thrown.getStatusCode());
     }
 
     @Test

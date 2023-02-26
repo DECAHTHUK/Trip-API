@@ -17,7 +17,6 @@ import java.util.UUID;
 public class RequestService {
     private final RequestMapper requestMapper;
 
-
     public Id createRequest(RequestDto requestDto) {
         try {
             return requestMapper.insertRequest(requestDto);
@@ -32,5 +31,13 @@ public class RequestService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Request with id = " + uuid + " was not found");
         }
         return request;
+    }
+
+    public void updateRequest(RequestDto requestDto) {
+        requestMapper.updateRequest(requestDto);
+    }
+
+    public void deleteRequest(String id) {
+        requestMapper.deleteRequest(UUID.fromString(id));
     }
 }

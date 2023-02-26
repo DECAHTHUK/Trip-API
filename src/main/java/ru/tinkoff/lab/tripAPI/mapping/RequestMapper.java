@@ -73,4 +73,20 @@ public interface RequestMapper {
             WHERE r.id = '${requestId}';
             """)
     Request selectRequest(@Param("requestId") UUID requestId);
+
+    @Update("""
+            UPDATE request
+            SET trip_id=uuid(#{tripId}), status=#{requestStatus}, description=#{description},
+            worker_id=uuid(#{workerId}), office_id=uuid(#{officeId}), comment=#{comment},
+            start_date=#{startDate}, end_date=#{endDate}, transport_to=#{transportTo},
+            transport_from=#{transportFrom}, tickets=#{ticketsUrl}
+            WHERE id = uuid(#{id});
+            """)
+    void updateRequest(RequestDto requestDto);
+
+    @Delete("""
+            DELETE FROM request
+            WHERE id = '${requestId}';
+            """)
+    void deleteRequest(@Param("requestId") UUID requestId);
 }

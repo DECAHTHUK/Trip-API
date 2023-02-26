@@ -6,7 +6,9 @@ import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.*;
 import ru.tinkoff.lab.tripAPI.business.dto.DestinationDto;
 import ru.tinkoff.lab.tripAPI.business.dto.RequestDto;
@@ -16,6 +18,10 @@ import ru.tinkoff.lab.tripAPI.business.enums.TripStatus;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
 
 import java.sql.Timestamp;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @RunWith(SpringRunner.class)
 @MybatisTest
@@ -78,9 +84,45 @@ public class RequestServiceTest {
 
     @Test
     @Order(1)
-    @DisplayName("")
+    @DisplayName("Test if newly created request is getting from db")
     public void getRequestTest() {
         Request requestFromDb = requestService.getRequest(requestDto.getId());
-        System.out.println(requestFromDb);
+
+        assertEquals(requestFromDb.getId(), requestDto.getId());
+        assertEquals(requestFromDb.getRequestStatus(), requestDto.getRequestStatus());
+        assertEquals(requestFromDb.getComment(), requestDto.getComment());
+        assertEquals(requestFromDb.getDescription(), requestDto.getDescription());
+        assertEquals(requestFromDb.getEndDate(), requestDto.getEndDate());
+        assertEquals(requestFromDb.getOffice().getId(), requestDto.getOfficeId());
+        assertEquals(requestFromDb.getTicketsUrl(), requestDto.getTicketsUrl());
+        assertEquals(requestFromDb.getWorker().getId(), requestDto.getWorkerId());
+        assertEquals(requestFromDb.getStartDate(), requestDto.getStartDate());
+        assertEquals(requestFromDb.getTransportTo(), requestDto.getTransportTo());
+        assertEquals(requestFromDb.getTransportFrom(), requestDto.getTransportFrom());
+        assertEquals(requestFromDb.getTrip().getId(), requestDto.getTripId());
+    }
+
+    @Test
+    @Order(2)
+    @DisplayName("Test if request is getting updated")
+    public void updateRequestTest() {
+        requestDto.setComment("Updated comment");
+        requestService.updateRequest(requestDto);
+
+        Request newRequest = requestService.getRequest(requestDto.getId());
+        assertEquals("Updated comment", newRequest.getComment());
+    }
+
+    @Test
+    @Order(3)
+    @DisplayName("Test if request is getting deleted")
+    public void deleteRequest() {
+        assertNotNull(requestService.getRequest(requestDto.getId()));
+
+        requestService.deleteRequest(requestDto.getId());
+
+        ResponseStatusException thrown = assertThrows(ResponseStatusException.class, () -> requestService.getRequest(requestDto.getId()));
+
+        assertEquals(HttpStatus.NOT_FOUND, thrown.getStatusCode());
     }
 }
