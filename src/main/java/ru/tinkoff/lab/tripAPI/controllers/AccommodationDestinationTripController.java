@@ -35,7 +35,7 @@ public class AccommodationDestinationTripController {
     }
 
     @PutMapping(value = "/accommodations")
-    public void updateAccommodation(Accommodation accommodation) {
+    public void updateAccommodation(@RequestBody Accommodation accommodation) {
         service.updateAccommodation(accommodation);
     }
 

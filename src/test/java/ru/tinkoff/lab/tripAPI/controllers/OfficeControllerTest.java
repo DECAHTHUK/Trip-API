@@ -33,9 +33,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class OfficeControllerTest {
 
     @Autowired
-    private OfficeService officeService;
-
-    @Autowired
     private MockMvc mockMvc;
 
     Office office = new Office("Nizhny Novgorod", "Andrey is there!");

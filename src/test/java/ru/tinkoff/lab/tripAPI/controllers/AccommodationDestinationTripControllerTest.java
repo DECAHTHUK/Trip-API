@@ -241,7 +241,7 @@ public class AccommodationDestinationTripControllerTest {
     public void testUpdateDeleteAccommodation() throws Exception {
         accommodation.setAddress("New address");
         accommodation.setBookingUrl("New url");
-        assertNotNull(accommodation);
+        //assertNotNull(accommodation);
 
         RequestBuilder requestBuilderPut = MockMvcRequestBuilders
                 .put("/accommodations")
