@@ -5,6 +5,7 @@ import ru.tinkoff.lab.tripAPI.business.*;
 import ru.tinkoff.lab.tripAPI.business.dto.DestinationDto;
 import ru.tinkoff.lab.tripAPI.business.dto.TripDto;
 
+import java.util.List;
 import java.util.UUID;
 
 @Mapper
@@ -125,6 +126,35 @@ public interface AccommodationDestinationTripMapper {
             WHERE t.id = '${tripId}';
             """)
     Trip selectTrip(@Param("tripId") UUID tripId);
+
+    @Results(value = {
+            @Result(property = "id", column = "trip_id"),
+            @Result(property = "tripStatus", column = "trip_status"),
+            @Result(property = "accommodation.id", column = "accom_id"),
+            @Result(property = "accommodation.address", column = "address"),
+            @Result(property = "accommodation.checkinTime", column = "checkin_time"),
+            @Result(property = "accommodation.checkoutTime", column = "checkout_time"),
+            @Result(property = "accommodation.bookingUrl", column = "booking_tickets"),
+            @Result(property = "destination.id", column = "dest_id"),
+            @Result(property = "destination.description", column = "destination_description"),
+            @Result(property = "destination.seatPlace", column = "seat_place"),
+            @Result(property = "destination.office.id", column = "office_id"),
+            @Result(property = "destination.office.address", column = "office_address"),
+            @Result(property = "destination.office.description", column = "office_description")
+    })
+    @Select("""
+            SELECT t.id as trip_id, t.trip_status, a.id as accom_id, a.address, a.checkin_time, a.checkout_time, a.booking_tickets,
+            d.id as dest_id, d.description as destination_description, d.seat_place,
+            o.id as office_id, o.address as office_address, o.description as office_description
+            FROM request r
+            JOIN trip t on r.trip_id = t.id
+            JOIN office o on r.office_id = o.id
+            JOIN accommodation a on t.accommodation_id = a.id
+            JOIN destination d on t.destination_id = d.id
+            WHERE r.worker_id = '${userId}'
+            ORDER BY r.start_date OFFSET #{offset} ROWS FETCH NEXT #{rows} ROWS ONLY;
+            """)
+    List<Trip> selectSomeTrips(@Param("userId") UUID userId, int offset, int rows);
 
 
     @Update("""

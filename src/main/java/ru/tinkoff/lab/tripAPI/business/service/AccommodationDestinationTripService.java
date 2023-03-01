@@ -12,6 +12,7 @@ import ru.tinkoff.lab.tripAPI.business.dto.DestinationDto;
 import ru.tinkoff.lab.tripAPI.business.dto.TripDto;
 import ru.tinkoff.lab.tripAPI.mapping.AccommodationDestinationTripMapper;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -19,6 +20,12 @@ import java.util.UUID;
 public class AccommodationDestinationTripService {
 
     private final AccommodationDestinationTripMapper mapper;
+
+    private static final int ROWS_AMOUNT = 5;
+
+    public int getRowsAmount() {
+        return ROWS_AMOUNT;
+    }
 
     /**
      * Accommodation service
@@ -91,6 +98,10 @@ public class AccommodationDestinationTripService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Trip with id = " + uuid + " was not found");
         }
         return trip;
+    }
+
+    public List<Trip> getSomeTrips(String userId, int page) {
+        return mapper.selectSomeTrips(UUID.fromString(userId), page * ROWS_AMOUNT - ROWS_AMOUNT, ROWS_AMOUNT);
     }
 
     public void updateTrip(TripDto tripDto) {
