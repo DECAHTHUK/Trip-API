@@ -1,0 +1,173 @@
+package ru.tinkoff.lab.tripAPI.business.service;
+
+import org.junit.jupiter.api.*;
+import org.junit.runner.RunWith;
+import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.context.annotation.Import;
+import org.springframework.test.context.junit4.SpringRunner;
+import ru.tinkoff.lab.tripAPI.business.*;
+import ru.tinkoff.lab.tripAPI.business.dto.DestinationDto;
+import ru.tinkoff.lab.tripAPI.business.dto.NotificationDto;
+import ru.tinkoff.lab.tripAPI.business.dto.RequestDto;
+import ru.tinkoff.lab.tripAPI.business.dto.TripDto;
+import ru.tinkoff.lab.tripAPI.business.enums.RequestStatus;
+import ru.tinkoff.lab.tripAPI.business.enums.TripStatus;
+import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
+
+import java.sql.Timestamp;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+@RunWith(SpringRunner.class)
+@MybatisTest
+@Import({NotificationService.class, OfficeService.class, RequestService.class,
+        UserService.class, AccommodationDestinationTripService.class, UuidTypeHandler.class})
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class NotificationServiceTest {
+
+    @Autowired
+    NotificationService notificationService;
+
+    @Autowired
+    RequestService requestService;
+
+    @Autowired
+    AccommodationDestinationTripService accommodationDestinationTripService;
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    OfficeService officeService;
+
+    NotificationDto notificationDto = new NotificationDto();
+
+    Timestamp timestampStart = new Timestamp(2020 - 1901, 12, 12, 12, 0, 0, 0);
+    Timestamp timestampEnd = new Timestamp(2020 - 1901, 12, 15, 15, 0, 0, 0);
+
+    Integer unwatchedNotifications = 0;
+
+    Id workerId;
+    Id bossId;
+
+    List<RequestDto> requestDtos = List.of(
+            new RequestDto(RequestStatus.PENDING, "Just a request", "Nothing",
+                    timestampStart, timestampEnd, "New Orlean",
+                    "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
+            new RequestDto(RequestStatus.AWAIT_CHANGES, "Request with await", "Nothing",
+                    timestampStart, timestampEnd, "New Orlean",
+                    "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
+            new RequestDto(RequestStatus.PENDING, "Request 3", "Nothing",
+                    timestampStart, timestampEnd, "New Orlean",
+                    "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
+            new RequestDto(RequestStatus.PENDING, "Request with late start date",
+                    "Nothing", timestampEnd, timestampEnd, "New Orlean",
+                    "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
+            new RequestDto(RequestStatus.PENDING, "Request 5",
+                    "Nothing", timestampStart, timestampEnd, "New Orlean",
+                    "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
+            new RequestDto(RequestStatus.PENDING, "Request 6",
+                    "Nothing", timestampStart, timestampEnd, "New Orlean",
+                    "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
+            new RequestDto(RequestStatus.PENDING, "Request 7 with late start date",
+                    "Nothing", timestampEnd, timestampEnd, "New Orlean",
+                    "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"));
+
+    @BeforeAll
+    public void init() {
+        User user = new User("email@mail.ru",
+                "12345678",
+                "John",
+                "Smith",
+                "USER",
+                "something");
+        workerId = userService.createUser(user);
+        user.setId(workerId.getId());
+
+        User userBoss = new User("subordinate@mail.ru",
+                "1234",
+                "Sam",
+                "Winchester",
+                "USER",
+                "SALT");
+        bossId = userService.createUser(userBoss);
+        userBoss.setId(bossId.getId());
+        userService.createRelation(bossId.getId(), workerId.getId());
+
+        Accommodation accommodation = new Accommodation(
+                "Zolotenko 24",
+                new Timestamp(2022 - 1901, 12, 12, 12, 0, 0, 0),
+                new Timestamp(2022 - 1901, 12, 15, 15, 0, 0, 0),
+                "booking.com/DEJDNkdsmdneuwij12893hd"
+        );
+        Id accommodationId = accommodationDestinationTripService.createAccommodation(accommodation);
+
+        Office office = new Office("Street 15", "Fine");
+        Id officeId = officeService.createOffice(office);
+        DestinationDto destinationDto = new DestinationDto("Description", "Seat place 8");
+        destinationDto.setOfficeId(officeId.getId());
+        Id destinationId = accommodationDestinationTripService.createDestination(destinationDto);
+
+        TripDto tripDto = new TripDto(TripStatus.PENDING, accommodationId.getId(), destinationId.getId());
+        Id tripId = accommodationDestinationTripService.createTrip(tripDto);
+
+        for (RequestDto requestDto : requestDtos) {
+            requestDto.setOfficeId(officeId.getId());
+            requestDto.setTripId(tripId.getId());
+            requestDto.setWorkerId(workerId.getId());
+            Id requestId = requestService.createRequest(requestDto);
+            requestDto.setId(requestId.getId());
+            notificationDto.setUserId(bossId.getId());
+            notificationDto.setRequestId(requestId.getId());
+            Id notificationId = notificationService.createNotification(notificationDto);
+            notificationDto.setId(notificationId.getId());
+        }
+    }
+
+    @Test
+    @Order(1)
+    @DisplayName("Test if notifications are getting returned")
+    public void getUnwatchedNotificationsTest() {
+        List<Notification> notifications = notificationService.getUnwatchedNotifications(bossId.getId());
+        unwatchedNotifications = notifications.size();
+        for (Notification notification : notifications)
+            System.out.println(notification);
+        assertNotNull(notifications);
+        assertEquals(unwatchedNotifications, notifications.size());
+    }
+
+    @Test
+    @Order(2)
+    @DisplayName("Test if notification is getting updated")
+    public void updateNotificationTest() {
+        notificationDto.setWatched(true);
+        unwatchedNotifications--;
+        notificationService.updateNotification(notificationDto);
+        List<Notification> notifications = notificationService.getUnwatchedNotifications(bossId.getId());
+        assertEquals(unwatchedNotifications, notifications.size());
+    }
+
+    @Test
+    @Order(3)
+    @DisplayName("Test get notification by it's id")
+    public void getNotificationTest() {
+        Notification notification = notificationService.getNotificationById(notificationDto.getId());
+        assertNotNull(notification);
+    }
+
+    @Test
+    @Order(4)
+    @DisplayName("Test if notification is getting deleted")
+    public void deleteNotificationTest() {
+        notificationDto.setWatched(false);
+        notificationService.deleteNotification(notificationDto.getId());
+        List<Notification> notifications = notificationService.getUnwatchedNotifications(bossId.getId());
+        assertEquals(unwatchedNotifications, notifications.size());
+    }
+}
