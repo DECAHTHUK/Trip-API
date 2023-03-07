@@ -6,6 +6,8 @@ import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.Office;
 import ru.tinkoff.lab.tripAPI.business.service.OfficeService;
 
+import java.util.UUID;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/offices")
@@ -19,12 +21,12 @@ public class OfficeController {
     }
 
     @GetMapping("/{uuid}")
-    public Office getOfficeById(@PathVariable String uuid) {
+    public Office getOfficeById(@PathVariable UUID uuid) {
         return officeService.getOffice(uuid);
     }
 
     @DeleteMapping("/{uuid}")
-    public void deleteOfficeById(@PathVariable String uuid) {
+    public void deleteOfficeById(@PathVariable UUID uuid) {
         officeService.deleteOffice(uuid);
     }
 

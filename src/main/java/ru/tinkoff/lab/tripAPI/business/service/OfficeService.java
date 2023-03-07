@@ -24,16 +24,16 @@ public class OfficeService {
         }
     }
 
-    public Office getOffice(String uuid) {
-        Office office = officeMapper.selectOffice(UUID.fromString(uuid));
+    public Office getOffice(UUID uuid) {
+        Office office = officeMapper.selectOffice(uuid);
         if (office == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Office with id = " + uuid + " was not found");
         }
         return office;
     }
 
-    public void deleteOffice(String uuid) {
-        officeMapper.deleteOffice(UUID.fromString(uuid));
+    public void deleteOffice(UUID uuid) {
+        officeMapper.deleteOffice(uuid);
     }
 
     public void updateOffice(Office office) {

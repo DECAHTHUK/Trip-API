@@ -18,6 +18,7 @@ import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -102,7 +103,7 @@ public class NotificationServiceTest {
                 "SALT");
         bossId = userService.createUser(userBoss);
         userBoss.setId(bossId.getId());
-        userService.createRelation(bossId.getId(), workerId.getId());
+        userService.createRelation(UUID.fromString(bossId.getId()), UUID.fromString(workerId.getId()));
 
         Accommodation accommodation = new Accommodation(
                 "Zolotenko 24",
@@ -138,7 +139,7 @@ public class NotificationServiceTest {
     @Order(1)
     @DisplayName("Test if notifications are getting returned")
     public void getUnwatchedNotificationsTest() {
-        List<Notification> notifications = notificationService.getUnwatchedNotifications(bossId.getId());
+        List<Notification> notifications = notificationService.getUnwatchedNotifications(UUID.fromString(bossId.getId()));
         unwatchedNotifications = notifications.size();
         for (Notification notification : notifications)
             System.out.println(notification);
@@ -153,7 +154,7 @@ public class NotificationServiceTest {
         notificationDto.setWatched(true);
         unwatchedNotifications--;
         notificationService.updateNotification(notificationDto);
-        List<Notification> notifications = notificationService.getUnwatchedNotifications(bossId.getId());
+        List<Notification> notifications = notificationService.getUnwatchedNotifications(UUID.fromString(bossId.getId()));
         assertEquals(unwatchedNotifications, notifications.size());
     }
 
@@ -161,7 +162,7 @@ public class NotificationServiceTest {
     @Order(3)
     @DisplayName("Test get notification by it's id")
     public void getNotificationTest() {
-        Notification notification = notificationService.getNotificationById(notificationDto.getId());
+        Notification notification = notificationService.getNotificationById(UUID.fromString(notificationDto.getId()));
         assertNotNull(notification);
     }
 
@@ -170,8 +171,8 @@ public class NotificationServiceTest {
     @DisplayName("Test if notification is getting deleted")
     public void deleteNotificationTest() {
         notificationDto.setWatched(false);
-        notificationService.deleteNotification(notificationDto.getId());
-        List<Notification> notifications = notificationService.getUnwatchedNotifications(bossId.getId());
+        notificationService.deleteNotification(UUID.fromString(notificationDto.getId()));
+        List<Notification> notifications = notificationService.getUnwatchedNotifications(UUID.fromString(bossId.getId()));
         assertEquals(unwatchedNotifications, notifications.size());
     }
 }

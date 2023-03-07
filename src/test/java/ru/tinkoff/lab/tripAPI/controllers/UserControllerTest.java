@@ -18,6 +18,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.User;
+import ru.tinkoff.lab.tripAPI.business.service.AccommodationDestinationTripService;
+import ru.tinkoff.lab.tripAPI.business.service.RequestService;
 import ru.tinkoff.lab.tripAPI.business.service.UserService;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
 
@@ -28,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @RunWith(SpringRunner.class)
 @AutoConfigureMybatis
 @WebMvcTest(controllers = UserController.class)
-@Import({UserService.class, UuidTypeHandler.class})
+@Import({UserService.class, UuidTypeHandler.class, RequestService.class, AccommodationDestinationTripService.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

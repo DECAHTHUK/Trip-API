@@ -22,23 +22,23 @@ public class NotificationService {
         return notificationMapper.insertNotification(notificationDto);
     }
 
-    public Notification getNotificationById(String id) {
-        Notification notification = notificationMapper.selectNotification(UUID.fromString(id));
+    public Notification getNotificationById(UUID uuid) {
+        Notification notification = notificationMapper.selectNotification(uuid);
         if (notification == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Notification with id = " + id + " was not found");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Notification with id = " + uuid + " was not found");
         }
         return notification;
     }
 
-    public List<Notification> getUnwatchedNotifications(String id) {
-        return notificationMapper.selectUnwatchedNotifications(UUID.fromString(id));
+    public List<Notification> getUnwatchedNotifications(UUID uuid) {
+        return notificationMapper.selectUnwatchedNotifications(uuid);
     }
 
     public void updateNotification(NotificationDto notificationDto) {
         notificationMapper.updateNotification(notificationDto);
     }
 
-    public void deleteNotification(String id) {
-        notificationMapper.deleteNotification(UUID.fromString(id));
+    public void deleteNotification(UUID uuid) {
+        notificationMapper.deleteNotification(uuid);
     }
 }

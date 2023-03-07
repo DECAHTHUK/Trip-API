@@ -26,8 +26,8 @@ public class UserService {
         }
     }
 
-    public User findById(String uuid) {
-        User user = userMapper.selectUser(UUID.fromString(uuid));
+    public User findById(UUID uuid) {
+        User user = userMapper.selectUser(uuid);
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with id = " + uuid + " was not found");
         }
@@ -38,15 +38,15 @@ public class UserService {
         userMapper.updateUser(user);
     }
 
-    public void deleteUser(String id) {
-        userMapper.deleteUser(UUID.fromString(id));
+    public void deleteUser(UUID id) {
+        userMapper.deleteUser(id);
     }
 
-    public void createRelation(String bossId, String userId) {
-        userRelationMapper.insertUserRelation(UUID.fromString(bossId), UUID.fromString(userId));
+    public void createRelation(UUID bossId, UUID userId) {
+        userRelationMapper.insertUserRelation(bossId, userId);
     }
 
-    public void deleteRelation(String bossId, String userId) {
-        userRelationMapper.deleteUserRelation(UUID.fromString(bossId), UUID.fromString(userId));
+    public void deleteRelation(UUID bossId, UUID userId) {
+        userRelationMapper.deleteUserRelation(bossId, userId);
     }
 }

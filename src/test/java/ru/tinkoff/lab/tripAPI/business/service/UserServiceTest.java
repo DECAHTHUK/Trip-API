@@ -14,6 +14,8 @@ import ru.tinkoff.lab.tripAPI.business.User;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
 
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
@@ -47,14 +49,14 @@ public class UserServiceTest {
                 "qwertyuio", "Rusya", "Talanov", "user"));
         subordinateId = userService.createUser(new User("slavakpss@gmail.com",
                 "12345678", "Lyosha", "Sultanov", "user"));
-        userService.createRelation(bossId.getId(), subordinateId.getId());
+        userService.createRelation(UUID.fromString(bossId.getId()), UUID.fromString(subordinateId.getId()));
     }
 
     @Test
     @Order(1)
     @DisplayName("Test if newly created user gets returned from db")
     public void testFindById_shouldReturnCorrespondingUser() {
-        User userFromDB = userService.findById(user.getId());
+        User userFromDB = userService.findById(UUID.fromString(user.getId()));
 
         assertEquals(user.getEmail(), userFromDB.getEmail());
     }
@@ -63,11 +65,11 @@ public class UserServiceTest {
     @Order(2)
     @DisplayName("Test if user in the db is getting updated")
     public void testUpdateUser_shouldChangeValuesInDatabase() {
-        User updatedUser = userService.findById(user.getId());
+        User updatedUser = userService.findById(UUID.fromString(user.getId()));
         updatedUser.setEmail("newEmail@mail.ru");
         userService.updateUser(updatedUser);
 
-        User newUser = userService.findById(user.getId());
+        User newUser = userService.findById(UUID.fromString(user.getId()));
         assertEquals("newEmail@mail.ru", newUser.getEmail());
     }
 
@@ -75,11 +77,11 @@ public class UserServiceTest {
     @Order(3)
     @DisplayName("Test user getting deleted")
     public void testDeleteUser_shouldDeleteFromDatabase() {
-        assertNotNull(userService.findById(user.getId()));
+        assertNotNull(userService.findById(UUID.fromString(user.getId())));
 
-        userService.deleteUser(user.getId());
+        userService.deleteUser(UUID.fromString(user.getId()));
 
-        ResponseStatusException thrown = assertThrows(ResponseStatusException.class, () -> userService.findById(user.getId()));
+        ResponseStatusException thrown = assertThrows(ResponseStatusException.class, () -> userService.findById(UUID.fromString(user.getId())));
 
         assertEquals(HttpStatus.NOT_FOUND + " \"User with id = " + user.getId() + " was not found\"", thrown.getMessage());
     }
@@ -96,11 +98,11 @@ public class UserServiceTest {
     @Order(5)
     @DisplayName("Test if user's subordinates are accessed properly")
     public void testFindById_shouldReturnSubordinates() {
-        User boss = userService.findById(bossId.getId());
+        User boss = userService.findById(UUID.fromString(bossId.getId()));
 
         assertNotNull(boss.getSubordinates());
 
-        User subordinate = userService.findById(subordinateId.getId());
+        User subordinate = userService.findById(UUID.fromString(subordinateId.getId()));
 
         assertNotEquals(0,
                 boss.getSubordinates()
@@ -114,22 +116,22 @@ public class UserServiceTest {
     @DisplayName("Test new subordinates should be returned")
     public void testCreateDeleteRelation_shouldChangeOutput() {
         //Arrange
-        User boss = userService.findById(bossId.getId());
+        User boss = userService.findById(UUID.fromString(bossId.getId()));
         int initialSize = boss.getSubordinates().size();
         Id id = userService.createUser(new User("sobaka@sobaka.com",
                 "1223", "John", "Doe", "USER"));
 
         //Act
         //Addition check
-        userService.createRelation(boss.getId(), id.getId());
-        boss = userService.findById(boss.getId());
+        userService.createRelation(UUID.fromString(boss.getId()), UUID.fromString(id.getId()));
+        boss = userService.findById(UUID.fromString(boss.getId()));
         int sizeAfterAddition = boss.getSubordinates().size();
 
         assertEquals(1, sizeAfterAddition - initialSize);
 
         //Deletion check
-        userService.deleteRelation(boss.getId(), subordinateId.getId());
-        boss = userService.findById(boss.getId());
+        userService.deleteRelation(UUID.fromString(boss.getId()), UUID.fromString(subordinateId.getId()));
+        boss = userService.findById(UUID.fromString(boss.getId()));
         int sizeAfterDeletion = boss.getSubordinates().size();
 
         assertEquals(initialSize, sizeAfterDeletion);

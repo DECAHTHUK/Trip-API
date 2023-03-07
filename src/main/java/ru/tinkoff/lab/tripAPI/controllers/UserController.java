@@ -11,6 +11,7 @@ import ru.tinkoff.lab.tripAPI.business.service.RequestService;
 import ru.tinkoff.lab.tripAPI.business.service.UserService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -29,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping("/{uuid}")
-    public User getUserById(@PathVariable String uuid) {
+    public User getUserById(@PathVariable UUID uuid) {
         return userService.findById(uuid);
     }
 
@@ -39,32 +40,32 @@ public class UserController {
     }
 
     @DeleteMapping("/{uuid}")
-    public void deleteUserById(@PathVariable String uuid) {
+    public void deleteUserById(@PathVariable UUID uuid) {
         userService.deleteUser(uuid);
     }
 
     @PostMapping("/{boss}/subordinates/{subordinate}")
-    public void createRelation(@PathVariable String boss, @PathVariable String subordinate) {
+    public void createRelation(@PathVariable UUID boss, @PathVariable UUID subordinate) {
         userService.createRelation(boss, subordinate);
     }
 
     @DeleteMapping("/{boss}/subordinates/{subordinate}")
-    public void deleteRelation(@PathVariable String boss, @PathVariable String subordinate) {
+    public void deleteRelation(@PathVariable UUID boss, @PathVariable UUID subordinate) {
         userService.deleteRelation(boss, subordinate);
     }
 
     @GetMapping("/{uuid}/incoming-requests-at/{page}")
-    public List<Request> getIncomingRequests(@PathVariable String uuid, @PathVariable int page) {
+    public List<Request> getIncomingRequests(@PathVariable UUID uuid, @PathVariable int page) {
         return requestService.getIncomingRequests(uuid, page);
     }
 
     @GetMapping("/{uuid}/outgoing-requests-at/{page}")
-    public List<Request> getOutgoingRequests(@PathVariable String uuid, @PathVariable int page) {
+    public List<Request> getOutgoingRequests(@PathVariable UUID uuid, @PathVariable int page) {
         return requestService.getOutgoingRequests(uuid, page);
     }
 
     @GetMapping("/{uuid}/trips-at/{page}")
-    public List<Trip> getSomeTrips(@PathVariable String uuid, @PathVariable int page) {
+    public List<Trip> getSomeTrips(@PathVariable UUID uuid, @PathVariable int page) {
         return accommodationDestinationTripService.getSomeTrips(uuid, page);
     }
 }

@@ -10,6 +10,8 @@ import ru.tinkoff.lab.tripAPI.business.dto.DestinationDto;
 import ru.tinkoff.lab.tripAPI.business.dto.TripDto;
 import ru.tinkoff.lab.tripAPI.business.service.AccommodationDestinationTripService;
 
+import java.util.UUID;
+
 @RestController
 @RequiredArgsConstructor
 public class AccommodationDestinationTripController {
@@ -25,12 +27,12 @@ public class AccommodationDestinationTripController {
     }
 
     @DeleteMapping(value = "/accommodations/{uuid}")
-    public void deleteAccommodation(@PathVariable String uuid) {
+    public void deleteAccommodation(@PathVariable UUID uuid) {
         service.deleteAccommodation(uuid);
     }
 
     @GetMapping(value = "/accommodations/{uuid}")
-    public Accommodation getAccommodation(@PathVariable String uuid) {
+    public Accommodation getAccommodation(@PathVariable UUID uuid) {
         return service.getAccommodation(uuid);
     }
 
@@ -48,12 +50,12 @@ public class AccommodationDestinationTripController {
     }
 
     @GetMapping("/destinations/{uuid}")
-    public Destination getDestination(@PathVariable String uuid) {
+    public Destination getDestination(@PathVariable UUID uuid) {
         return service.getDestination(uuid);
     }
 
     @DeleteMapping("/destinations/{uuid}")
-    public void deleteDestination(@PathVariable String uuid) {
+    public void deleteDestination(@PathVariable UUID uuid) {
         service.deleteDestination(uuid);
     }
 
@@ -71,7 +73,7 @@ public class AccommodationDestinationTripController {
     }
 
     @GetMapping("/trips/{uuid}")
-    public Trip getTrip(@PathVariable String uuid) {
+    public Trip getTrip(@PathVariable UUID uuid) {
         return service.getTrip(uuid);
     }
 
@@ -81,7 +83,7 @@ public class AccommodationDestinationTripController {
     }
 
     @DeleteMapping("/trips/{uuid}")
-    public void deleteTrip(@PathVariable String uuid) {
+    public void deleteTrip(@PathVariable UUID uuid) {
         service.deleteTrip(uuid);
     }
 }

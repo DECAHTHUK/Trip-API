@@ -17,7 +17,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@PropertySource("/application.yaml")
+@PropertySource("classpath:application.yaml")
 public class RequestService {
     private final RequestMapper requestMapper;
 
@@ -32,30 +32,30 @@ public class RequestService {
         }
     }
 
-    public Request getRequest(String uuid) {
-        Request request = requestMapper.selectRequest(UUID.fromString(uuid));
+    public Request getRequest(UUID uuid) {
+        Request request = requestMapper.selectRequest(uuid);
         if (request == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Request with id = " + uuid + " was not found");
         }
         return request;
     }
 
-    public List<Request> getIncomingRequests(String bossId, int page) {
+    public List<Request> getIncomingRequests(UUID bossId, int page) {
         return requestMapper.selectIncomingRequests(
-                UUID.fromString(bossId), page * ROWS_AMOUNT - ROWS_AMOUNT, ROWS_AMOUNT);
+                bossId, page * ROWS_AMOUNT - ROWS_AMOUNT, ROWS_AMOUNT);
     }
 
     //TODO do we have to change type of workerId to uuid?
-    public List<Request> getOutgoingRequests(String workerId, int page) {
+    public List<Request> getOutgoingRequests(UUID workerId, int page) {
         return requestMapper.selectOutgoingRequests(
-                UUID.fromString(workerId), page * ROWS_AMOUNT - ROWS_AMOUNT, ROWS_AMOUNT);
+                workerId, page * ROWS_AMOUNT - ROWS_AMOUNT, ROWS_AMOUNT);
     }
 
     public void updateRequest(RequestDto requestDto) {
         requestMapper.updateRequest(requestDto);
     }
 
-    public void deleteRequest(String id) {
-        requestMapper.deleteRequest(UUID.fromString(id));
+    public void deleteRequest(UUID id) {
+        requestMapper.deleteRequest(id);
     }
 }

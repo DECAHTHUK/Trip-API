@@ -7,6 +7,8 @@ import ru.tinkoff.lab.tripAPI.business.Request;
 import ru.tinkoff.lab.tripAPI.business.dto.RequestDto;
 import ru.tinkoff.lab.tripAPI.business.service.RequestService;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/requests")
 @RequiredArgsConstructor
@@ -20,7 +22,7 @@ public class RequestController {
     }
 
     @GetMapping("/{uuid}")
-    public Request getRequestById(@PathVariable String uuid) {
+    public Request getRequestById(@PathVariable UUID uuid) {
         return requestService.getRequest(uuid);
     }
 
@@ -30,7 +32,7 @@ public class RequestController {
     }
 
     @DeleteMapping("/{uuid}")
-    public void deleteRequest(@PathVariable String uuid) {
+    public void deleteRequest(@PathVariable UUID uuid) {
         requestService.deleteRequest(uuid);
     }
 }

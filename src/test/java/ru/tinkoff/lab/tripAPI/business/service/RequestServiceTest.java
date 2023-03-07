@@ -20,6 +20,7 @@ import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -95,7 +96,7 @@ public class RequestServiceTest {
                 "USER",
                 "SALT");
         bossId = userService.createUser(userBoss);
-        userService.createRelation(bossId.getId(), workerId.getId());
+        userService.createRelation(UUID.fromString(bossId.getId()), UUID.fromString(workerId.getId()));
 
         Accommodation accommodation = new Accommodation(
                 "Zolotenko 24",
@@ -127,7 +128,7 @@ public class RequestServiceTest {
     @Order(1)
     @DisplayName("Test if newly created request is getting from db")
     public void getRequestTest() {
-        Request requestFromDb = requestService.getRequest(requestDtos.get(0).getId());
+        Request requestFromDb = requestService.getRequest(UUID.fromString(requestDtos.get(0).getId()));
 
         assertEquals(requestFromDb.getId(), requestDtos.get(0).getId());
         assertEquals(requestFromDb.getRequestStatus(), requestDtos.get(0).getRequestStatus());
@@ -150,7 +151,7 @@ public class RequestServiceTest {
         requestDtos.get(0).setComment("Updated comment");
         requestService.updateRequest(requestDtos.get(0));
 
-        Request newRequest = requestService.getRequest(requestDtos.get(0).getId());
+        Request newRequest = requestService.getRequest(UUID.fromString(requestDtos.get(0).getId()));
         assertEquals("Updated comment", newRequest.getComment());
     }
 
@@ -158,11 +159,11 @@ public class RequestServiceTest {
     @Order(3)
     @DisplayName("Test if request is getting deleted")
     public void deleteRequestTest() {
-        assertNotNull(requestService.getRequest(requestDtos.get(0).getId()));
+        assertNotNull(requestService.getRequest(UUID.fromString(requestDtos.get(0).getId())));
 
-        requestService.deleteRequest(requestDtos.get(0).getId());
+        requestService.deleteRequest(UUID.fromString(requestDtos.get(0).getId()));
 
-        ResponseStatusException thrown = assertThrows(ResponseStatusException.class, () -> requestService.getRequest(requestDtos.get(0).getId()));
+        ResponseStatusException thrown = assertThrows(ResponseStatusException.class, () -> requestService.getRequest(UUID.fromString(requestDtos.get(0).getId())));
 
         assertEquals(HttpStatus.NOT_FOUND, thrown.getStatusCode());
     }
@@ -171,11 +172,11 @@ public class RequestServiceTest {
     @Order(4)
     @DisplayName("Test get incoming requests")
     public void getIncomingRequestsTest() {
-        List<Request> requests = requestService.getIncomingRequests(bossId.getId(), 1);
+        List<Request> requests = requestService.getIncomingRequests(UUID.fromString(bossId.getId()), 1);
 
         assertEquals(ROWS_AMOUNT, requests.size());
 
-        List<Request> requests2 = requestService.getIncomingRequests(bossId.getId(), 2);
+        List<Request> requests2 = requestService.getIncomingRequests(UUID.fromString(bossId.getId()), 2);
 
         assertEquals(1, requests2.size());
         assertTrue(requests2.stream().map(Request::getDescription)
@@ -190,11 +191,11 @@ public class RequestServiceTest {
     @Order(5)
     @DisplayName("Test get outgoing requests")
     public void getOutgoingRequestsTest() {
-        List<Request> requests = requestService.getOutgoingRequests(workerId.getId(), 1);
+        List<Request> requests = requestService.getOutgoingRequests(UUID.fromString(workerId.getId()), 1);
 
         assertEquals(ROWS_AMOUNT, requests.size());
 
-        List<Request> requests2 = requestService.getOutgoingRequests(workerId.getId(), 2);
+        List<Request> requests2 = requestService.getOutgoingRequests(UUID.fromString(workerId.getId()), 2);
 
         requests.addAll(requests2);
 
@@ -207,7 +208,7 @@ public class RequestServiceTest {
     @Order(6)
     @DisplayName("Test select some trips with pagination")
     public void testSelectSomeTrips() {
-        List<Trip> trips = accommodationDestinationTripService.getSomeTrips(workerId.getId(), 1);
+        List<Trip> trips = accommodationDestinationTripService.getSomeTrips(UUID.fromString(workerId.getId()), 1);
 
         assertEquals(ROWS_AMOUNT, trips.size());
     }

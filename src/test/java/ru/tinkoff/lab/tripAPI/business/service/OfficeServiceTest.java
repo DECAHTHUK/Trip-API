@@ -13,6 +13,8 @@ import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.Office;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
@@ -39,7 +41,7 @@ public class OfficeServiceTest {
     @Order(1)
     @DisplayName("Test if newly created office gets returned from db")
     public void getOfficeTest() {
-        Office officeFromDB = officeService.getOffice(office.getId());
+        Office officeFromDB = officeService.getOffice(UUID.fromString(office.getId()));
         assertEquals(office.getAddress(), officeFromDB.getAddress());
         assertEquals(office.getDescription(), officeFromDB.getDescription());
     }
@@ -52,7 +54,7 @@ public class OfficeServiceTest {
         office.setDescription("lalala");
         officeService.updateOffice(office);
 
-        Office updatedOffice = officeService.getOffice(office.getId());
+        Office updatedOffice = officeService.getOffice(UUID.fromString(office.getId()));
 
         assertEquals(office.getAddress(), updatedOffice.getAddress());
         assertEquals(office.getDescription(), updatedOffice.getDescription());
@@ -62,11 +64,11 @@ public class OfficeServiceTest {
     @Order(3)
     @DisplayName("Test office is getting deleted")
     public void deleteOfficeTest() {
-        assertNotNull(officeService.getOffice(office.getId()));
+        assertNotNull(officeService.getOffice(UUID.fromString(office.getId())));
 
-        officeService.deleteOffice(office.getId());
+        officeService.deleteOffice(UUID.fromString(office.getId()));
 
-        ResponseStatusException thrown = assertThrows(ResponseStatusException.class, () -> officeService.getOffice(office.getId()));
+        ResponseStatusException thrown = assertThrows(ResponseStatusException.class, () -> officeService.getOffice(UUID.fromString(office.getId())));
 
         assertEquals(HttpStatus.NOT_FOUND + " \"Office with id = " + office.getId() + " was not found\"", thrown.getMessage());
     }

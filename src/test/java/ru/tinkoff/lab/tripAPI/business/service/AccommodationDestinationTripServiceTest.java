@@ -14,6 +14,7 @@ import ru.tinkoff.lab.tripAPI.business.enums.TripStatus;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
@@ -87,7 +88,7 @@ public class AccommodationDestinationTripServiceTest {
     @Order(1)
     @DisplayName("Test if newly created accommodation is returned from db")
     public void getAccommodationTest() {
-        Accommodation accommodationFromDB = accommodationDestinationTripService.getAccommodation(accommodation1.getId());
+        Accommodation accommodationFromDB = accommodationDestinationTripService.getAccommodation(UUID.fromString(accommodation1.getId()));
 
         assertEquals(accommodation1.getAddress(), accommodationFromDB.getAddress());
         assertEquals(accommodation1.getCheckinTime(), accommodationFromDB.getCheckinTime());
@@ -102,7 +103,7 @@ public class AccommodationDestinationTripServiceTest {
         accommodation1.setAddress("updated");
         accommodationDestinationTripService.updateAccommodation(accommodation1);
 
-        Accommodation newAccom = accommodationDestinationTripService.getAccommodation(accommodation1.getId());
+        Accommodation newAccom = accommodationDestinationTripService.getAccommodation(UUID.fromString(accommodation1.getId()));
         assertEquals("updated", newAccom.getAddress());
         accommodation1.setAddress("Zolotenko 24");
     }
@@ -111,7 +112,7 @@ public class AccommodationDestinationTripServiceTest {
     @Order(3)
     @DisplayName("Test if newly created destination is returned from db")
     public void getDestinationTest() {
-        Destination destination = accommodationDestinationTripService.getDestination(destinationDto.getId());
+        Destination destination = accommodationDestinationTripService.getDestination(UUID.fromString(destinationDto.getId()));
 
         assertEquals(destination.getDescription(), destinationDto.getDescription());
         assertEquals(destination.getOffice().getId(), destinationDto.getOfficeId());
@@ -123,7 +124,7 @@ public class AccommodationDestinationTripServiceTest {
     @DisplayName("Test if destination is getting updated")
     public void testUpdateDestination_shouldChangeOffices() {
         Destination destinationFromDb =
-                accommodationDestinationTripService.getDestination(destinationDto.getId());
+                accommodationDestinationTripService.getDestination(UUID.fromString(destinationDto.getId()));
 
         Office officeFromDestination = destinationFromDb.getOffice();
 
@@ -131,7 +132,7 @@ public class AccommodationDestinationTripServiceTest {
         accommodationDestinationTripService.updateDestination(destinationDto);
 
         destinationFromDb =
-                accommodationDestinationTripService.getDestination(destinationDto.getId());
+                accommodationDestinationTripService.getDestination(UUID.fromString(destinationDto.getId()));
 
         Office officeFromDestinationUpdated = destinationFromDb.getOffice();
 
@@ -143,11 +144,11 @@ public class AccommodationDestinationTripServiceTest {
     @Order(5)
     @DisplayName("Test if newly created trip is returned from db")
     public void testGetTrip() {
-        Trip tripFromDb = accommodationDestinationTripService.getTrip(tripDto.getId());
+        Trip tripFromDb = accommodationDestinationTripService.getTrip(UUID.fromString(tripDto.getId()));
 
-        assertEquals(accommodationDestinationTripService.getDestination(tripDto.getDestinationId()),
+        assertEquals(accommodationDestinationTripService.getDestination(UUID.fromString(tripDto.getDestinationId())),
                 tripFromDb.getDestination());
-        assertEquals(accommodationDestinationTripService.getAccommodation(tripDto.getAccommodationId()),
+        assertEquals(accommodationDestinationTripService.getAccommodation(UUID.fromString(tripDto.getAccommodationId())),
                 tripFromDb.getAccommodation());
         assertEquals(tripDto.getTripStatus(), tripFromDb.getTripStatus());
     }
@@ -156,10 +157,10 @@ public class AccommodationDestinationTripServiceTest {
     @Order(6)
     @DisplayName("Test if trip is getting updated")
     public void testUpdateTrip_shouldChangeAccommodationAndStatus() {
-        Trip tripFromDb = accommodationDestinationTripService.getTrip(tripDto.getId());
+        Trip tripFromDb = accommodationDestinationTripService.getTrip(UUID.fromString(tripDto.getId()));
 
         Accommodation accommodationFromTrip = tripFromDb.getAccommodation();
-        Accommodation accommodation = accommodationDestinationTripService.getAccommodation(accommodation1.getId());
+        Accommodation accommodation = accommodationDestinationTripService.getAccommodation(UUID.fromString(accommodation1.getId()));
         System.out.println(accommodation);
         assertEquals(accommodation1, accommodationFromTrip);
 
@@ -170,7 +171,7 @@ public class AccommodationDestinationTripServiceTest {
         tripDto.setTripStatus(TripStatus.valueOf("PENDING"));
         accommodationDestinationTripService.updateTrip(tripDto);
 
-        tripFromDb = accommodationDestinationTripService.getTrip(tripDto.getId());
+        tripFromDb = accommodationDestinationTripService.getTrip(UUID.fromString(tripDto.getId()));
 
         assertEquals(accommodation2, tripFromDb.getAccommodation());
         assertEquals(TripStatus.PENDING, tripFromDb.getTripStatus());

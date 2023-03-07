@@ -19,7 +19,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@PropertySource("/application.yaml")
+@PropertySource("classpath:application.yaml")
 public class AccommodationDestinationTripService {
 
     private final AccommodationDestinationTripMapper mapper;
@@ -38,12 +38,12 @@ public class AccommodationDestinationTripService {
         }
     }
 
-    public void deleteAccommodation(String uuid) {
-        mapper.deleteAccommodation(UUID.fromString(uuid));
+    public void deleteAccommodation(UUID uuid) {
+        mapper.deleteAccommodation(uuid);
     }
 
-    public Accommodation getAccommodation(String uuid) {
-        Accommodation accommodation = mapper.selectAccommodation(UUID.fromString(uuid));
+    public Accommodation getAccommodation(UUID uuid) {
+        Accommodation accommodation = mapper.selectAccommodation(uuid);
         if (accommodation == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Accommodation with id = " + uuid + " was not found");
         }
@@ -65,16 +65,16 @@ public class AccommodationDestinationTripService {
         }
     }
 
-    public Destination getDestination(String uuid) {
-        Destination destination = mapper.selectDestination(UUID.fromString(uuid));
+    public Destination getDestination(UUID uuid) {
+        Destination destination = mapper.selectDestination(uuid);
         if (destination == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Destination with id = " + uuid + " was not found");
         }
         return destination;
     }
 
-    public void deleteDestination(String uuid) {
-        mapper.deleteDestination(UUID.fromString(uuid));
+    public void deleteDestination(UUID uuid) {
+        mapper.deleteDestination(uuid);
     }
 
     public void updateDestination(DestinationDto destinationDto) {
@@ -92,23 +92,23 @@ public class AccommodationDestinationTripService {
         }
     }
 
-    public Trip getTrip(String uuid) {
-        Trip trip = mapper.selectTrip(UUID.fromString(uuid));
+    public Trip getTrip(UUID uuid) {
+        Trip trip = mapper.selectTrip(uuid);
         if (trip == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Trip with id = " + uuid + " was not found");
         }
         return trip;
     }
 
-    public List<Trip> getSomeTrips(String userId, int page) {
-        return mapper.selectSomeTrips(UUID.fromString(userId), page * ROWS_AMOUNT - ROWS_AMOUNT, ROWS_AMOUNT);
+    public List<Trip> getSomeTrips(UUID userId, int page) {
+        return mapper.selectSomeTrips(userId, page * ROWS_AMOUNT - ROWS_AMOUNT, ROWS_AMOUNT);
     }
 
     public void updateTrip(TripDto tripDto) {
         mapper.updateTrip(tripDto);
     }
 
-    public void deleteTrip(String uuid) {
-        mapper.deleteTrip(UUID.fromString(uuid));
+    public void deleteTrip(UUID uuid) {
+        mapper.deleteTrip(uuid);
     }
 }
