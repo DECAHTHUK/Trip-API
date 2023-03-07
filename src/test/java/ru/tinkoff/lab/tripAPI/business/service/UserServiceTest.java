@@ -27,18 +27,19 @@ public class UserServiceTest {
     @Autowired
     UserService userService;
 
-    User user = new User("email@mail.ru",
-            "12345678",
-            "John",
-            "Smith",
-            "USER",
-            "salt");
+    User user;
 
-    Id bossId = new Id();
-    Id subordinateId = new Id();
+    Id bossId;
+    Id subordinateId;
 
     @BeforeAll
     public void init() {
+        user = new User("email@mail.ru",
+                "12345678",
+                "John",
+                "Smith",
+                "USER",
+                "salt");
         Id userId = userService.createUser(user);
         user.setId(userId.getId());
 

@@ -32,29 +32,35 @@ public class AccommodationDestinationTripServiceTest {
     @Autowired
     OfficeService officeService;
 
-    DestinationDto destinationDto = new DestinationDto("Description", "Seat place 8");
-    Office office1 = new Office("Street 15", "Fine");
-    Office office2 = new Office("Street new", "Updated");
+    DestinationDto destinationDto;
+    Office office1;
+    Office office2;
 
-    TripDto tripDto = new TripDto();
+    TripDto tripDto;
 
     //TODO ask about this timestamp quirk
-    Accommodation accommodation1 = new Accommodation(
-            "Zolotenko 24",
-            new Timestamp(2022 - 1901, 12, 12, 12, 0, 0, 0),
-            new Timestamp(2022 - 1901, 12, 15, 15, 0, 0, 0),
-            "booking.com/DEJDNkdsmdneuwij12893hd"
-    );
+    Accommodation accommodation1;
 
-    Accommodation accommodation2 = new Accommodation(
-            "Updated address",
-            new Timestamp(2022 - 1901, 12, 12, 12, 0, 0, 0),
-            new Timestamp(2022 - 1901, 12, 15, 15, 0, 0, 0),
-            "booking.com/DEJDNkdsmdneuwij12893hd"
-    );
+    Accommodation accommodation2;
 
     @BeforeAll
     public void init() {
+        destinationDto = new DestinationDto("Description", "Seat place 8");
+        tripDto = new TripDto();
+        office1 = new Office("Street 15", "Fine");
+        office2 = new Office("Street new", "Updated");
+        accommodation1 = new Accommodation(
+                "Zolotenko 24",
+                new Timestamp(2022 - 1901, 12, 12, 12, 0, 0, 0),
+                new Timestamp(2022 - 1901, 12, 15, 15, 0, 0, 0),
+                "booking.com/DEJDNkdsmdneuwij12893hd"
+        );
+        accommodation2 = new Accommodation(
+                "Updated address",
+                new Timestamp(2022 - 1901, 12, 12, 12, 0, 0, 0),
+                new Timestamp(2022 - 1901, 12, 15, 15, 0, 0, 0),
+                "booking.com/DEJDNkdsmdneuwij12893hd"
+        );
         // init accommodations
         Id accommodationId1 = accommodationDestinationTripService.createAccommodation(accommodation1);
         accommodation1.setId(accommodationId1.getId());

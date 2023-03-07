@@ -34,6 +34,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class UserControllerTest {
 
+    ObjectMapper mapper = new ObjectMapper();
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -60,12 +62,12 @@ public class UserControllerTest {
         RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(new ObjectMapper().writeValueAsString(user));
+                .content(mapper.writeValueAsString(user));
 
         MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
         String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
 
-        Id id = new ObjectMapper().readValue(responseBodyPost, Id.class);
+        Id id = mapper.readValue(responseBodyPost, Id.class);
         assertNotNull(id);
         user.setId(id.getId());
         user.setSubordinates(List.of());
@@ -78,7 +80,7 @@ public class UserControllerTest {
         MvcResult mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
         String responseBodyGet = mvcResultGet.getResponse().getContentAsString();
 
-        User userFromRequest = new ObjectMapper().readValue(responseBodyGet, User.class);
+        User userFromRequest = mapper.readValue(responseBodyGet, User.class);
         assertEquals(user, userFromRequest);
     }
 
@@ -90,12 +92,12 @@ public class UserControllerTest {
         RequestBuilder requestBuilderPostUser = MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(new ObjectMapper().writeValueAsString(subUser));
+                .content(mapper.writeValueAsString(subUser));
 
         MvcResult mvcResultPost = mockMvc.perform(requestBuilderPostUser).andReturn();
         String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
 
-        Id id = new ObjectMapper().readValue(responseBodyPost, Id.class);
+        Id id = mapper.readValue(responseBodyPost, Id.class);
         assertNotNull(id);
         subUser.setId(id.getId());
         subUser.setSubordinates(List.of());
@@ -108,7 +110,7 @@ public class UserControllerTest {
         MvcResult mvcResultGetSubUser = mockMvc.perform(requestBuilderGetSubUser).andReturn();
         String responseBodyGetSubUser = mvcResultGetSubUser.getResponse().getContentAsString();
 
-        User userFromRequest = new ObjectMapper().readValue(responseBodyGetSubUser, User.class);
+        User userFromRequest = mapper.readValue(responseBodyGetSubUser, User.class);
         assertEquals(subUser, userFromRequest);
         assertEquals(0, user.getSubordinates().size());
 
@@ -126,7 +128,7 @@ public class UserControllerTest {
         String responseBodyGetUser = mvcResultGetUser.getResponse().getContentAsString();
 
         //Testing if relations were created successfully
-        User bossUser = new ObjectMapper().readValue(responseBodyGetUser, User.class);
+        User bossUser = mapper.readValue(responseBodyGetUser, User.class);
         assertNotNull(bossUser.getSubordinates());
         assertNotEquals(0,
                 bossUser.getSubordinates()
@@ -153,7 +155,7 @@ public class UserControllerTest {
         String responseBodyGetUser = mvcResultGet.getResponse().getContentAsString();
 
         //Taking result of deleting
-        User userFromRequest = new ObjectMapper().readValue(responseBodyGetUser, User.class);
+        User userFromRequest = mapper.readValue(responseBodyGetUser, User.class);
         assertNotNull(userFromRequest);
         assertEquals(0, userFromRequest.getSubordinates().size());
     }
@@ -170,7 +172,7 @@ public class UserControllerTest {
 
         RequestBuilder requestBuilderPut = MockMvcRequestBuilders.put("/users")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(new ObjectMapper().writeValueAsString(user));
+                .content(mapper.writeValueAsString(user));
 
         mockMvc.perform(requestBuilderPut);
 
@@ -181,7 +183,7 @@ public class UserControllerTest {
         MvcResult mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
         String responseBodyGet = mvcResultGet.getResponse().getContentAsString();
 
-        User userFromRequest = new ObjectMapper().readValue(responseBodyGet, User.class);
+        User userFromRequest = mapper.readValue(responseBodyGet, User.class);
         assertEquals("Lyosha", userFromRequest.getFirstName());
         assertEquals("Talanov", userFromRequest.getSecondName());
         assertEquals("admin", userFromRequest.getUserRole());
@@ -194,7 +196,7 @@ public class UserControllerTest {
         mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
         ResponseStatusException exception = (ResponseStatusException) mvcResultGet.getResolvedException();
 
-        assert exception != null;
+        assertNotNull(exception);
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
     }
 }

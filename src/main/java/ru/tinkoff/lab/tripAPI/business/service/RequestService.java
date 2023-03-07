@@ -21,9 +21,6 @@ public class RequestService {
 
     private static final int ROWS_AMOUNT = 5;
 
-    private static final Pattern UUID_REGEX =
-            Pattern.compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
-
     public int getRowsAmount() {
         return ROWS_AMOUNT;
     }
@@ -49,11 +46,8 @@ public class RequestService {
                 UUID.fromString(bossId), page * ROWS_AMOUNT - ROWS_AMOUNT, ROWS_AMOUNT);
     }
 
-    //TODO ask if we need to check for valid uuid as down below
+    //TODO do we have to change type of workerId to uuid?
     public List<Request> getOutgoingRequests(String workerId, int page) {
-        if (!UUID_REGEX.matcher(workerId).matches()) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Incorrect UUID format for string + " + workerId);
-        }
         return requestMapper.selectOutgoingRequests(
                 UUID.fromString(workerId), page * ROWS_AMOUNT - ROWS_AMOUNT, ROWS_AMOUNT);
     }

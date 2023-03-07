@@ -26,10 +26,11 @@ public class OfficeServiceTest {
     @Autowired
     OfficeService officeService;
 
-    Office office = new Office("Lenina 78", "Cool office from Tinkoff");
+    Office office;
 
     @BeforeAll
     public void createOffice() {
+        office = new Office("Lenina 78", "Cool office from Tinkoff");
         Id officeId = officeService.createOffice(office);
         office.setId(officeId.getId());
     }

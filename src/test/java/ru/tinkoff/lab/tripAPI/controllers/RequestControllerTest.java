@@ -35,13 +35,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @AutoConfigureMybatis
-@WebMvcTest(controllers = RequestController.class)
+@WebMvcTest(controllers = {RequestController.class, UserController.class})
 @Import({RequestService.class, OfficeService.class, UserService.class,
         AccommodationDestinationTripService.class, UuidTypeHandler.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class RequestControllerTest {
+
+    ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
     OfficeService officeService;
@@ -107,12 +109,12 @@ public class RequestControllerTest {
                 .post("/requests")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(new ObjectMapper().writeValueAsString(requestDto));
+                .content(mapper.writeValueAsString(requestDto));
 
         MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
         String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
 
-        Id requestId = new ObjectMapper().readValue(responseBodyPost, Id.class);
+        Id requestId = mapper.readValue(responseBodyPost, Id.class);
         assertNotNull(requestId);
         requestDto.setId(requestId.getId());
 
@@ -124,7 +126,7 @@ public class RequestControllerTest {
         MvcResult mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
         String responseBodyGet = mvcResultGet.getResponse().getContentAsString();
 
-        Request requestFromResponse = new ObjectMapper().readValue(responseBodyGet, Request.class);
+        Request requestFromResponse = mapper.readValue(responseBodyGet, Request.class);
         assertNotNull(requestFromResponse);
         assertEquals(requestDto.getId(), requestFromResponse.getId());
     }
@@ -138,7 +140,7 @@ public class RequestControllerTest {
         RequestBuilder requestBuilderPut = MockMvcRequestBuilders
                 .put("/requests")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(new ObjectMapper().writeValueAsString(requestDto));
+                .content(mapper.writeValueAsString(requestDto));
 
         mockMvc.perform(requestBuilderPut);
 
@@ -150,7 +152,7 @@ public class RequestControllerTest {
         MvcResult mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
         String responseBodyGet = mvcResultGet.getResponse().getContentAsString();
 
-        Request updatedRequest = new ObjectMapper().readValue(responseBodyGet, Request.class);
+        Request updatedRequest = mapper.readValue(responseBodyGet, Request.class);
         assertNotNull(updatedRequest);
         assertEquals(RequestStatus.APPROVED, updatedRequest.getRequestStatus());
 
@@ -163,7 +165,7 @@ public class RequestControllerTest {
         mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
         ResponseStatusException exception = (ResponseStatusException) mvcResultGet.getResolvedException();
 
-        assert exception != null;
+        assertNotNull(exception);
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
     }
 }

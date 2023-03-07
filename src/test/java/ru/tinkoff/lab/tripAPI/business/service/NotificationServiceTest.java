@@ -46,41 +46,45 @@ public class NotificationServiceTest {
     @Autowired
     OfficeService officeService;
 
-    NotificationDto notificationDto = new NotificationDto();
+    NotificationDto notificationDto;
 
-    Timestamp timestampStart = new Timestamp(2020 - 1901, 12, 12, 12, 0, 0, 0);
-    Timestamp timestampEnd = new Timestamp(2020 - 1901, 12, 15, 15, 0, 0, 0);
+    Timestamp timestampStart;
+    Timestamp timestampEnd;
 
     Integer unwatchedNotifications = 0;
 
     Id workerId;
     Id bossId;
 
-    List<RequestDto> requestDtos = List.of(
-            new RequestDto(RequestStatus.PENDING, "Just a request", "Nothing",
-                    timestampStart, timestampEnd, "New Orlean",
-                    "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
-            new RequestDto(RequestStatus.AWAIT_CHANGES, "Request with await", "Nothing",
-                    timestampStart, timestampEnd, "New Orlean",
-                    "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
-            new RequestDto(RequestStatus.PENDING, "Request 3", "Nothing",
-                    timestampStart, timestampEnd, "New Orlean",
-                    "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
-            new RequestDto(RequestStatus.PENDING, "Request with late start date",
-                    "Nothing", timestampEnd, timestampEnd, "New Orlean",
-                    "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
-            new RequestDto(RequestStatus.PENDING, "Request 5",
-                    "Nothing", timestampStart, timestampEnd, "New Orlean",
-                    "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
-            new RequestDto(RequestStatus.PENDING, "Request 6",
-                    "Nothing", timestampStart, timestampEnd, "New Orlean",
-                    "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
-            new RequestDto(RequestStatus.PENDING, "Request 7 with late start date",
-                    "Nothing", timestampEnd, timestampEnd, "New Orlean",
-                    "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"));
+    List<RequestDto> requestDtos;
 
     @BeforeAll
     public void init() {
+        notificationDto = new NotificationDto();
+        timestampStart = new Timestamp(2020 - 1901, 12, 12, 12, 0, 0, 0);
+        timestampEnd = new Timestamp(2020 - 1901, 12, 15, 15, 0, 0, 0);
+        requestDtos = List.of(
+                new RequestDto(RequestStatus.PENDING, "Just a request", "Nothing",
+                        timestampStart, timestampEnd, "New Orlean",
+                        "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
+                new RequestDto(RequestStatus.AWAIT_CHANGES, "Request with await", "Nothing",
+                        timestampStart, timestampEnd, "New Orlean",
+                        "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
+                new RequestDto(RequestStatus.PENDING, "Request 3", "Nothing",
+                        timestampStart, timestampEnd, "New Orlean",
+                        "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
+                new RequestDto(RequestStatus.PENDING, "Request with late start date",
+                        "Nothing", timestampEnd, timestampEnd, "New Orlean",
+                        "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
+                new RequestDto(RequestStatus.PENDING, "Request 5",
+                        "Nothing", timestampStart, timestampEnd, "New Orlean",
+                        "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
+                new RequestDto(RequestStatus.PENDING, "Request 6",
+                        "Nothing", timestampStart, timestampEnd, "New Orlean",
+                        "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
+                new RequestDto(RequestStatus.PENDING, "Request 7 with late start date",
+                        "Nothing", timestampEnd, timestampEnd, "New Orlean",
+                        "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"));
         User user = new User("email@mail.ru",
                 "12345678",
                 "John",

@@ -32,6 +32,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class OfficeControllerTest {
 
+    ObjectMapper mapper = new ObjectMapper();
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -45,12 +47,12 @@ public class OfficeControllerTest {
         RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/offices")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(new ObjectMapper().writeValueAsString(office));
+                .content(mapper.writeValueAsString(office));
 
         MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
         String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
 
-        Id id = new ObjectMapper().readValue(responseBodyPost, Id.class);
+        Id id = mapper.readValue(responseBodyPost, Id.class);
         assertNotNull(id);
         office.setId(id.getId());
 
@@ -62,7 +64,7 @@ public class OfficeControllerTest {
         MvcResult mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
         String responseBodyGet = mvcResultGet.getResponse().getContentAsString();
 
-        Office officeFromRequest = new ObjectMapper().readValue(responseBodyGet, Office.class);
+        Office officeFromRequest = mapper.readValue(responseBodyGet, Office.class);
         assertEquals(office, officeFromRequest);
     }
 
@@ -75,7 +77,7 @@ public class OfficeControllerTest {
         office.setDescription("updated description");
         RequestBuilder requestBuilderPut = MockMvcRequestBuilders.put("/offices")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(new ObjectMapper().writeValueAsString(office));
+                .content(mapper.writeValueAsString(office));
 
         mockMvc.perform(requestBuilderPut);
 
@@ -87,7 +89,7 @@ public class OfficeControllerTest {
         MvcResult mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
         String responseBodyGet = mvcResultGet.getResponse().getContentAsString();
 
-        Office officeFromRequest = new ObjectMapper().readValue(responseBodyGet, Office.class);
+        Office officeFromRequest = mapper.readValue(responseBodyGet, Office.class);
         assertEquals("updated address", officeFromRequest.getAddress());
         assertEquals("updated description", officeFromRequest.getDescription());
 
@@ -101,7 +103,7 @@ public class OfficeControllerTest {
         mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
         ResponseStatusException exception = (ResponseStatusException) mvcResultGet.getResolvedException();
 
-        assert exception != null;
+        assertNotNull(exception);
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
     }
 }

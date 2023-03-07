@@ -38,6 +38,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class AccommodationDestinationTripControllerTest {
 
+    ObjectMapper mapper = new ObjectMapper();
+
     @Autowired
     OfficeService officeService;
 
@@ -65,12 +67,12 @@ public class AccommodationDestinationTripControllerTest {
                 .post("/accommodations")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(new ObjectMapper().writeValueAsString(accommodation));
+                .content(mapper.writeValueAsString(accommodation));
 
         MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
         String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
 
-        Id id = new ObjectMapper().readValue(responseBodyPost, Id.class);
+        Id id = mapper.readValue(responseBodyPost, Id.class);
         assertNotNull(id);
         accommodation.setId(id.getId());
 
@@ -100,12 +102,12 @@ public class AccommodationDestinationTripControllerTest {
                 .post("/destinations")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(new ObjectMapper().writeValueAsString(destinationDto));
+                .content(mapper.writeValueAsString(destinationDto));
 
         MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
         String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
 
-        Id id = new ObjectMapper().readValue(responseBodyPost, Id.class);
+        Id id = mapper.readValue(responseBodyPost, Id.class);
         assertNotNull(id);
         destinationDto.setId(id.getId());
 
@@ -117,7 +119,7 @@ public class AccommodationDestinationTripControllerTest {
         MvcResult mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
         String responseBodyGet = mvcResultGet.getResponse().getContentAsString();
 
-        Destination destination = new ObjectMapper().readValue(responseBodyGet, Destination.class);
+        Destination destination = mapper.readValue(responseBodyGet, Destination.class);
         assertNotNull(destination);
     }
 
@@ -134,12 +136,12 @@ public class AccommodationDestinationTripControllerTest {
                 .post("/trips")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(new ObjectMapper().writeValueAsString(tripDto));
+                .content(mapper.writeValueAsString(tripDto));
 
         MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
         String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
 
-        Id id = new ObjectMapper().readValue(responseBodyPost, Id.class);
+        Id id = mapper.readValue(responseBodyPost, Id.class);
         assertNotNull(id);
         tripDto.setId(id.getId());
 
@@ -151,7 +153,7 @@ public class AccommodationDestinationTripControllerTest {
         MvcResult mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
         String responseBodyGet = mvcResultGet.getResponse().getContentAsString();
 
-        Trip trip = new ObjectMapper().readValue(responseBodyGet, Trip.class);
+        Trip trip = mapper.readValue(responseBodyGet, Trip.class);
         assertNotNull(trip);
     }
 
@@ -164,7 +166,7 @@ public class AccommodationDestinationTripControllerTest {
         RequestBuilder requestBuilderPut = MockMvcRequestBuilders
                 .put("/trips")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(new ObjectMapper().writeValueAsString(tripDto));
+                .content(mapper.writeValueAsString(tripDto));
 
         mockMvc.perform(requestBuilderPut);
 
@@ -176,7 +178,7 @@ public class AccommodationDestinationTripControllerTest {
         MvcResult mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
         String responseBodyGet = mvcResultGet.getResponse().getContentAsString();
 
-        Trip tripFromRequest = new ObjectMapper().readValue(responseBodyGet, Trip.class);
+        Trip tripFromRequest = mapper.readValue(responseBodyGet, Trip.class);
         assertNotNull(tripFromRequest);
         assertEquals(tripDto.getTripStatus(), tripFromRequest.getTripStatus());
 
@@ -190,7 +192,7 @@ public class AccommodationDestinationTripControllerTest {
         mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
         ResponseStatusException exception = (ResponseStatusException) mvcResultGet.getResolvedException();
 
-        assert exception != null;
+        assertNotNull(exception);
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
     }
 
@@ -204,7 +206,7 @@ public class AccommodationDestinationTripControllerTest {
         RequestBuilder requestBuilderPut = MockMvcRequestBuilders
                 .put("/destinations")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(new ObjectMapper().writeValueAsString(destinationDto));
+                .content(mapper.writeValueAsString(destinationDto));
 
         mockMvc.perform(requestBuilderPut);
 
@@ -231,7 +233,7 @@ public class AccommodationDestinationTripControllerTest {
         mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
         ResponseStatusException exception = (ResponseStatusException) mvcResultGet.getResolvedException();
 
-        assert exception != null;
+        assertNotNull(exception);
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
     }
 
@@ -246,7 +248,7 @@ public class AccommodationDestinationTripControllerTest {
         RequestBuilder requestBuilderPut = MockMvcRequestBuilders
                 .put("/accommodations")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(new ObjectMapper().writeValueAsString(accommodation));
+                .content(mapper.writeValueAsString(accommodation));
 
         mockMvc.perform(requestBuilderPut);
 
@@ -271,7 +273,7 @@ public class AccommodationDestinationTripControllerTest {
         mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
         ResponseStatusException exception = (ResponseStatusException) mvcResultGet.getResolvedException();
 
-        assert exception != null;
+        assertNotNull(exception);
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
     }
 }

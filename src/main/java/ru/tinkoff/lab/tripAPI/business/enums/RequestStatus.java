@@ -1,15 +1,19 @@
 package ru.tinkoff.lab.tripAPI.business.enums;
 
 public enum RequestStatus {
-    APPROVED("APPROVED"),
-    PENDING("PENDING"),
-    AWAIT_CHANGES("AWAIT_CHANGES"),
-    DECLINED("DECLINED");
+    APPROVED,
+    PENDING,
+    AWAIT_CHANGES,
+    DECLINED;
 
     String status;
 
     RequestStatus(String status) {
         this.status = status;
+    }
+
+    RequestStatus() {
+
     }
 
     void setStatus(String status) {
