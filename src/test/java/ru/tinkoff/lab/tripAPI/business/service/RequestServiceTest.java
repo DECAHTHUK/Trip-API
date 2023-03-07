@@ -4,6 +4,7 @@ import org.junit.jupiter.api.*;
 import org.junit.runner.RunWith;
 import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
@@ -30,6 +31,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class RequestServiceTest {
+    @Value("${pagination}")
+    private int ROWS_AMOUNT;
+
     @Autowired
     RequestService requestService;
 
@@ -169,7 +173,7 @@ public class RequestServiceTest {
     public void getIncomingRequestsTest() {
         List<Request> requests = requestService.getIncomingRequests(bossId.getId(), 1);
 
-        assertEquals(requestService.getRowsAmount(), requests.size());
+        assertEquals(ROWS_AMOUNT, requests.size());
 
         List<Request> requests2 = requestService.getIncomingRequests(bossId.getId(), 2);
 
@@ -188,7 +192,7 @@ public class RequestServiceTest {
     public void getOutgoingRequestsTest() {
         List<Request> requests = requestService.getOutgoingRequests(workerId.getId(), 1);
 
-        assertEquals(requestService.getRowsAmount(), requests.size());
+        assertEquals(ROWS_AMOUNT, requests.size());
 
         List<Request> requests2 = requestService.getOutgoingRequests(workerId.getId(), 2);
 
@@ -205,6 +209,6 @@ public class RequestServiceTest {
     public void testSelectSomeTrips() {
         List<Trip> trips = accommodationDestinationTripService.getSomeTrips(workerId.getId(), 1);
 
-        assertEquals(accommodationDestinationTripService.getRowsAmount(), trips.size());
+        assertEquals(ROWS_AMOUNT, trips.size());
     }
 }

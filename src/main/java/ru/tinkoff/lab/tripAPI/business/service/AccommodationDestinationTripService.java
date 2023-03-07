@@ -1,6 +1,8 @@
 package ru.tinkoff.lab.tripAPI.business.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -17,15 +19,13 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@PropertySource("/application.yaml")
 public class AccommodationDestinationTripService {
 
     private final AccommodationDestinationTripMapper mapper;
 
-    private static final int ROWS_AMOUNT = 5;
-
-    public int getRowsAmount() {
-        return ROWS_AMOUNT;
-    }
+    @Value("${pagination}")
+    private int ROWS_AMOUNT;
 
     /**
      * Accommodation service
