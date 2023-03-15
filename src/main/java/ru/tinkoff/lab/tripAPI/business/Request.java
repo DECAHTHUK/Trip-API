@@ -11,25 +11,23 @@ import java.sql.Timestamp;
 public class Request {
     private String id;
 
-    private Trip trip;
-
     private RequestStatus requestStatus;
 
     private String description;
 
-    private User worker;
+    private String workerFirstName;
 
-    private Office office;
+    private String workerSecondName;
+
+    private String workerEmail;
+
+    private Destination destination;
 
     private String comment;
 
     private Timestamp startDate;
 
     private Timestamp endDate;
-
-    private String transportTo;
-
-    private String transportFrom;
 
     private String ticketsUrl;
 }

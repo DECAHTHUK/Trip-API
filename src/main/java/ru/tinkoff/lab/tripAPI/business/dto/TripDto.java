@@ -15,9 +15,12 @@ public class TripDto {
 
     private String destinationId;
 
-    public TripDto(TripStatus tripStatus, String accommodationId, String destinationId) {
+    private String requestId;
+
+    public TripDto(TripStatus tripStatus, String accommodationId, String destinationId, String requestId) {
         this.tripStatus = tripStatus;
         this.accommodationId = accommodationId;
         this.destinationId = destinationId;
+        this.requestId = requestId;
     }
 }

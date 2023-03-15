@@ -6,6 +6,7 @@ import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.tinkoff.lab.tripAPI.business.*;
 import ru.tinkoff.lab.tripAPI.business.dto.DestinationDto;
@@ -30,6 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@DirtiesContext
 public class NotificationServiceTest {
 
     @Autowired
@@ -66,26 +68,19 @@ public class NotificationServiceTest {
         timestampEnd = new Timestamp(2020 - 1901, 12, 15, 15, 0, 0, 0);
         requestDtos = List.of(
                 new RequestDto(RequestStatus.PENDING, "Just a request", "Nothing",
-                        timestampStart, timestampEnd, "New Orlean",
-                        "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
+                        timestampStart, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"),
                 new RequestDto(RequestStatus.AWAIT_CHANGES, "Request with await", "Nothing",
-                        timestampStart, timestampEnd, "New Orlean",
-                        "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
+                        timestampStart, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"),
                 new RequestDto(RequestStatus.PENDING, "Request 3", "Nothing",
-                        timestampStart, timestampEnd, "New Orlean",
-                        "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
+                        timestampStart, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"),
                 new RequestDto(RequestStatus.PENDING, "Request with late start date",
-                        "Nothing", timestampEnd, timestampEnd, "New Orlean",
-                        "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
+                        "Nothing", timestampEnd, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"),
                 new RequestDto(RequestStatus.PENDING, "Request 5",
-                        "Nothing", timestampStart, timestampEnd, "New Orlean",
-                        "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
+                        "Nothing", timestampStart, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"),
                 new RequestDto(RequestStatus.PENDING, "Request 6",
-                        "Nothing", timestampStart, timestampEnd, "New Orlean",
-                        "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
+                        "Nothing", timestampStart, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"),
                 new RequestDto(RequestStatus.PENDING, "Request 7 with late start date",
-                        "Nothing", timestampEnd, timestampEnd, "New Orlean",
-                        "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"));
+                        "Nothing", timestampEnd, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"));
         User user = new User("email@mail.ru",
                 "12345678",
                 "John",
@@ -123,8 +118,7 @@ public class NotificationServiceTest {
         Id tripId = accommodationDestinationTripService.createTrip(tripDto);
 
         for (RequestDto requestDto : requestDtos) {
-            requestDto.setOfficeId(officeId.getId());
-            requestDto.setTripId(tripId.getId());
+            requestDto.setDestinationId(destinationId.getId());
             requestDto.setWorkerId(workerId.getId());
             Id requestId = requestService.createRequest(requestDto);
             requestDto.setId(requestId.getId());
@@ -160,7 +154,7 @@ public class NotificationServiceTest {
 
     @Test
     @Order(3)
-    @DisplayName("Test get notification by it's id")
+    @DisplayName("Test get notification by its id")
     public void getNotificationTest() {
         Notification notification = notificationService.getNotificationById(UUID.fromString(notificationDto.getId()));
         assertNotNull(notification);

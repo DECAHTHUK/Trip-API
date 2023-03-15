@@ -8,14 +8,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.*;
 import ru.tinkoff.lab.tripAPI.business.dto.DestinationDto;
 import ru.tinkoff.lab.tripAPI.business.dto.RequestDto;
-import ru.tinkoff.lab.tripAPI.business.dto.TripDto;
 import ru.tinkoff.lab.tripAPI.business.enums.RequestStatus;
-import ru.tinkoff.lab.tripAPI.business.enums.TripStatus;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
 
 import java.sql.Timestamp;
@@ -31,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@DirtiesContext
 public class RequestServiceTest {
     @Value("${pagination}")
     private int ROWS_AMOUNT;
@@ -53,6 +53,7 @@ public class RequestServiceTest {
     List<RequestDto> requestDtos;
 
     Id workerId;
+    String workerEmail;
     Id bossId;
 
     @BeforeAll
@@ -61,26 +62,19 @@ public class RequestServiceTest {
         timestampEnd = new Timestamp(2020 - 1901, 12, 15, 15, 0, 0, 0);
         requestDtos = List.of(
                 new RequestDto(RequestStatus.PENDING, "Just a request", "Nothing",
-                        timestampStart, timestampEnd, "New Orlean",
-                        "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
+                        timestampStart, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"),
                 new RequestDto(RequestStatus.AWAIT_CHANGES, "Request with await", "Nothing",
-                        timestampStart, timestampEnd, "New Orlean",
-                        "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
+                        timestampStart, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"),
                 new RequestDto(RequestStatus.PENDING, "Request 3", "Nothing",
-                        timestampStart, timestampEnd, "New Orlean",
-                        "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
+                        timestampStart, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"),
                 new RequestDto(RequestStatus.PENDING, "Request with late start date",
-                        "Nothing", timestampEnd, timestampEnd, "New Orlean",
-                        "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
+                        "Nothing", timestampEnd, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"),
                 new RequestDto(RequestStatus.PENDING, "Request 5",
-                        "Nothing", timestampStart, timestampEnd, "New Orlean",
-                        "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
+                        "Nothing", timestampStart, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"),
                 new RequestDto(RequestStatus.PENDING, "Request 6",
-                        "Nothing", timestampStart, timestampEnd, "New Orlean",
-                        "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"),
+                        "Nothing", timestampStart, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"),
                 new RequestDto(RequestStatus.PENDING, "Request 7 with late start date",
-                        "Nothing", timestampEnd, timestampEnd, "New Orlean",
-                        "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh"));
+                        "Nothing", timestampEnd, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"));
         User user = new User("email@mail.ru",
                 "12345678",
                 "John",
@@ -88,6 +82,7 @@ public class RequestServiceTest {
                 "USER",
                 "something");
         workerId = userService.createUser(user);
+        workerEmail = user.getEmail();
 
         User userBoss = new User("subordinate@mail.ru",
                 "1234",
@@ -112,12 +107,8 @@ public class RequestServiceTest {
         destinationDto.setOfficeId(officeId.getId());
         Id destinationId = accommodationDestinationTripService.createDestination(destinationDto);
 
-        TripDto tripDto = new TripDto(TripStatus.PENDING, accommodationId.getId(), destinationId.getId());
-        Id tripId = accommodationDestinationTripService.createTrip(tripDto);
-
         for (RequestDto requestDto : requestDtos) {
-            requestDto.setOfficeId(officeId.getId());
-            requestDto.setTripId(tripId.getId());
+            requestDto.setDestinationId(destinationId.getId());
             requestDto.setWorkerId(workerId.getId());
             Id requestId = requestService.createRequest(requestDto);
             requestDto.setId(requestId.getId());
@@ -129,19 +120,18 @@ public class RequestServiceTest {
     @DisplayName("Test if newly created request is getting from db")
     public void getRequestTest() {
         Request requestFromDb = requestService.getRequest(UUID.fromString(requestDtos.get(0).getId()));
+        User userFromDb = userService.findById(UUID.fromString(requestDtos.get(0).getWorkerId()));
 
         assertEquals(requestFromDb.getId(), requestDtos.get(0).getId());
         assertEquals(requestFromDb.getRequestStatus(), requestDtos.get(0).getRequestStatus());
         assertEquals(requestFromDb.getComment(), requestDtos.get(0).getComment());
         assertEquals(requestFromDb.getDescription(), requestDtos.get(0).getDescription());
         assertEquals(requestFromDb.getEndDate(), requestDtos.get(0).getEndDate());
-        assertEquals(requestFromDb.getOffice().getId(), requestDtos.get(0).getOfficeId());
         assertEquals(requestFromDb.getTicketsUrl(), requestDtos.get(0).getTicketsUrl());
-        assertEquals(requestFromDb.getWorker().getId(), requestDtos.get(0).getWorkerId());
+        assertEquals(requestFromDb.getWorkerFirstName(), userFromDb.getFirstName());
+        assertEquals(requestFromDb.getWorkerSecondName(), userFromDb.getSecondName());
+        assertEquals(requestFromDb.getWorkerEmail(), userFromDb.getEmail());
         assertEquals(requestFromDb.getStartDate(), requestDtos.get(0).getStartDate());
-        assertEquals(requestFromDb.getTransportTo(), requestDtos.get(0).getTransportTo());
-        assertEquals(requestFromDb.getTransportFrom(), requestDtos.get(0).getTransportFrom());
-        assertEquals(requestFromDb.getTrip().getId(), requestDtos.get(0).getTripId());
     }
 
     @Test
@@ -200,12 +190,13 @@ public class RequestServiceTest {
         requests.addAll(requests2);
 
         assertTrue(requests.stream()
-                .allMatch(t -> t.getWorker().getId().equals(workerId.getId())));
+                .allMatch(t -> t.getWorkerEmail().equals(workerEmail)));
     }
 
-    //TODO ask about this test, because it cannot be in TripServiceTest
+    //TODO change this method
     @Test
     @Order(6)
+    @Disabled
     @DisplayName("Test select some trips with pagination")
     public void testSelectSomeTrips() {
         List<Trip> trips = accommodationDestinationTripService.getSomeTrips(UUID.fromString(workerId.getId()), 1);

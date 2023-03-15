@@ -10,7 +10,7 @@ public class Notification {
 
     private boolean watched;
 
-    private User user;
+    private String userId;
 
     public Notification() {
         this.watched = false;

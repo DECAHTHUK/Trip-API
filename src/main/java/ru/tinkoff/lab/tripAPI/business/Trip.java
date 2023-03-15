@@ -15,4 +15,6 @@ public class Trip {
     private Accommodation accommodation;
 
     private Destination destination;
+
+    private String requestId;
 }

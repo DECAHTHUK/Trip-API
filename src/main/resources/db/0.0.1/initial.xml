@@ -111,7 +111,6 @@
             <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="trip_id" type="UUID"/>
             <column name="status" type="VARCHAR(36)">
                 <constraints nullable="false"/>
             </column>
@@ -119,14 +118,15 @@
             <column name="worker_id" type="UUID">
                 <constraints foreignKeyName="fk_request_user" references="users(id)" nullable="false"/>
             </column>
+            <column name="destination_id" type="UUID">
+                <constraints foreignKeyName="fk_request_destination" references="destination(id)" nullable="false"/>
+            </column>
             <column name="office_id" type="UUID">
                 <constraints foreignKeyName="fk_request_office" references="office(id)"/>
             </column>
             <column name="comment" type="TEXT"/>
             <column name="start_date" type="TIMESTAMPTZ"/>
             <column name="end_date" type="TIMESTAMPTZ"/>
-            <column name="transport_to" type="VARCHAR(150)"/>
-            <column name="transport_from" type="VARCHAR(150)"/>
             <column name="tickets" type="TEXT"/>
         </createTable>
         
@@ -142,16 +142,15 @@
                 <constraints foreignKeyName="fk_trip_accommodation" references="accommodation(id)"/>
             </column>
             <column name="destination_id" type="UUID">
-                <constraints foreignKeyName="fk_trip_destination" references="destination(id)"/>
+                <constraints foreignKeyName="fk_trip_destination" references="destination(id)" nullable="false"/>
+            </column>
+            <column name="request_id" type="UUID">
+                <constraints foreignKeyName="fk_trip_request" references="request(id)" nullable="false"/>
             </column>
         </createTable>
 
         <addForeignKeyConstraint baseTableName="notification" baseColumnNames="request_id"
                                  constraintName="fk_notification_request" referencedTableName="request"
-                                 referencedColumnNames="id"/>
-
-        <addForeignKeyConstraint baseTableName="request" baseColumnNames="trip_id"
-                                 constraintName="fk_request_trip" referencedTableName="trip"
                                  referencedColumnNames="id"/>
 
     </changeSet>

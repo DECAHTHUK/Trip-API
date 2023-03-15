@@ -23,12 +23,7 @@ public interface NotificationMapper {
 
     @Results(value = {
             @Result(property = "id", column = "notification_id"),
-            @Result(property = "user.id", column = "boss_id"),
-            @Result(property = "user.email", column = "b_email"),
-            @Result(property = "user.firstName", column = "b_first_name"),
-            @Result(property = "user.secondName", column = "b_second_name"),
-            @Result(property = "user.password", column = "b_password"),
-            @Result(property = "user.userRole", column = "b_user_role"),
+            @Result(property = "userId", column = "boss_id"),
             @Result(property = "request.id", column = "request_id"),
             @Result(property = "request.requestStatus", column = "status"),
             @Result(property = "request.startDate", column = "start_date"),
@@ -63,33 +58,26 @@ public interface NotificationMapper {
             @Result(property = "watched", column = "watched")
     })
     @Select("""
-            SELECT n.id as notification_id, n.watched,
-            b.id as boss_id, b.email as b_email, b.password as b_password, b.first_name as b_first_name, b.second_name as b_second_name, b.user_role as b_user_role,
+            SELECT n.id as notification_id, n.watched, n.user_id as boss_id,
+            u.id as worker_id, u.email, u.password, u.first_name, u.second_name, u.user_role,
             r.id as request_id, r.status, r.description, r.comment, r.start_date, r.end_date, r.transport_to, r.transport_from, r.tickets,
             t.id as trip_id, t.trip_status, a.id as accom_id, a.address, a.checkin_time, a.checkout_time, a.booking_tickets,
             d.id as dest_id, d.description as destination_description, d.seat_place,
-            u.id as worker_id, u.email, u.password, u.first_name, u.second_name, u.user_role,
             o.id as office_id, o.address as office_address, o.description as office_description
             FROM notification n
             JOIN request r ON n.request_id = r.id
-            JOIN users u ON r.worker_id = u.id
             JOIN office o ON r.office_id = o.id
             JOIN trip t ON r.trip_id = t.id
             JOIN accommodation a ON t.accommodation_id = a.id
             JOIN destination d ON t.destination_id = d.id
-            JOIN users b ON n.user_id = b.id
+            JOIN users u ON r.worker_id = u.id
             WHERE n.id = '${notificationId}' AND n.watched=false;
             """)
     Notification selectNotification(@Param("notificationId") UUID notificationId);
 
     @Results(value = {
             @Result(property = "id", column = "notification_id"),
-            @Result(property = "user.id", column = "boss_id"),
-            @Result(property = "user.email", column = "b_email"),
-            @Result(property = "user.firstName", column = "b_first_name"),
-            @Result(property = "user.secondName", column = "b_second_name"),
-            @Result(property = "user.password", column = "b_password"),
-            @Result(property = "user.userRole", column = "b_user_role"),
+            @Result(property = "userId", column = "boss_id"),
             @Result(property = "request.id", column = "request_id"),
             @Result(property = "request.requestStatus", column = "status"),
             @Result(property = "request.startDate", column = "start_date"),
@@ -124,8 +112,7 @@ public interface NotificationMapper {
             @Result(property = "watched", column = "watched")
     })
     @Select("""
-            SELECT n.id as notification_id, n.watched,
-            b.id as boss_id, b.email as b_email, b.password as b_password, b.first_name as b_first_name, b.second_name as b_second_name, b.user_role as b_user_role,
+            SELECT n.id as notification_id, n.watched, n.user_id as boss_id,
             r.id as request_id, r.status, r.description, r.comment, r.start_date, r.end_date, r.transport_to, r.transport_from, r.tickets,
             t.id as trip_id, t.trip_status, a.id as accom_id, a.address, a.checkin_time, a.checkout_time, a.booking_tickets,
             d.id as dest_id, d.description as destination_description, d.seat_place,
@@ -138,7 +125,6 @@ public interface NotificationMapper {
             JOIN trip t ON r.trip_id = t.id
             JOIN accommodation a ON t.accommodation_id = a.id
             JOIN destination d ON t.destination_id = d.id
-            JOIN users b ON n.user_id = b.id
             WHERE n.user_id = '${userId}' AND n.watched=false;
             """)
     List<Notification> selectUnwatchedNotifications(@Param("userId") UUID userId);
