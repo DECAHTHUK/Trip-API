@@ -19,13 +19,18 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.*;
 import ru.tinkoff.lab.tripAPI.business.dto.DestinationDto;
+import ru.tinkoff.lab.tripAPI.business.dto.RequestDto;
 import ru.tinkoff.lab.tripAPI.business.dto.TripDto;
+import ru.tinkoff.lab.tripAPI.business.enums.RequestStatus;
 import ru.tinkoff.lab.tripAPI.business.enums.TripStatus;
 import ru.tinkoff.lab.tripAPI.business.service.AccommodationDestinationTripService;
 import ru.tinkoff.lab.tripAPI.business.service.OfficeService;
+import ru.tinkoff.lab.tripAPI.business.service.RequestService;
+import ru.tinkoff.lab.tripAPI.business.service.UserService;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -33,7 +38,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @RunWith(SpringRunner.class)
 @AutoConfigureMybatis
 @WebMvcTest(controllers = AccommodationDestinationTripController.class)
-@Import({AccommodationDestinationTripService.class, UuidTypeHandler.class, OfficeService.class})
+@Import({AccommodationDestinationTripService.class, UuidTypeHandler.class, OfficeService.class,
+        RequestService.class, UserService.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -42,6 +48,12 @@ public class AccommodationDestinationTripControllerTest {
 
 
     ObjectMapper mapper = new ObjectMapper();
+
+    @Autowired
+    UserService userService;
+
+    @Autowired
+    RequestService requestService;
 
     @Autowired
     OfficeService officeService;
@@ -58,6 +70,19 @@ public class AccommodationDestinationTripControllerTest {
 
     DestinationDto destinationDto = new DestinationDto("Zarechnaya 7", "9");
     Office office = new Office("Avenue 10", "Cool office");
+
+    RequestDto requestDto = new RequestDto(RequestStatus.APPROVED, "Approved request",
+            "Nothing",
+            new Timestamp(2020 - 1901, 12, 12, 12, 0, 0, 0),
+            new Timestamp(2020 - 1901, 12, 15, 12, 0, 0, 0),
+            "https:/somesite.com/JAOwe7IW78daAw1idh");
+
+    User worker = new User("email@mail.ru",
+            "12345678",
+            "John",
+            "Smith",
+            "USER",
+            "something");
 
     TripDto tripDto = new TripDto();
 
@@ -130,9 +155,19 @@ public class AccommodationDestinationTripControllerTest {
     @Order(3)
     @DisplayName("Test if newly created trip gets returned")
     public void testCreateGetTrip() throws Exception {
+        Id workerId = userService.createUser(worker);
+        worker.setId(workerId.getId());
+
+        requestDto.setDestinationId(destinationDto.getId());
+        requestDto.setWorkerId(worker.getId());
+
+        Id requestId = requestService.createRequest(requestDto);
+        requestDto.setId(requestId.getId());
+
         tripDto.setTripStatus(TripStatus.PENDING);
         tripDto.setAccommodationId(accommodation.getId());
         tripDto.setDestinationId(destinationDto.getId());
+        tripDto.setRequestId(requestDto.getId());
 
         //Testing post trip method
         RequestBuilder requestBuilderPost = MockMvcRequestBuilders
@@ -201,7 +236,7 @@ public class AccommodationDestinationTripControllerTest {
 
     @Test
     @Order(5)
-    @DisplayName("Test if trip gets updated and deleted")
+    @DisplayName("Test if destination gets updated and deleted")
     public void testUpdateDeleteDestination() throws Exception {
         destinationDto.setDescription("New description");
         destinationDto.setSeatPlace("New seat place");
@@ -226,6 +261,7 @@ public class AccommodationDestinationTripControllerTest {
         assertEquals(destinationDto.getDescription(), destinationFromRequest.getDescription());
         assertEquals(destinationDto.getSeatPlace(), destinationFromRequest.getSeatPlace());
 
+        requestService.deleteRequest(UUID.fromString(requestDto.getId()));
         //Testing delete method
         RequestBuilder requestBuilderDelete = MockMvcRequestBuilders
                 .delete("/destinations/" + destinationDto.getId());

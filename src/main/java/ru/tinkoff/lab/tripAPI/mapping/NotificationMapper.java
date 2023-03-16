@@ -30,48 +30,27 @@ public interface NotificationMapper {
             @Result(property = "request.endDate", column = "end_date"),
             @Result(property = "request.comment", column = "comment"),
             @Result(property = "request.description", column = "description"),
-            @Result(property = "request.transportTo", column = "transport_to"),
-            @Result(property = "request.transportFrom", column = "transport_from"),
             @Result(property = "request.ticketsUrl", column = "tickets"),
-            @Result(property = "request.trip.id", column = "trip_id"),
-            @Result(property = "request.trip.tripStatus", column = "trip_status"),
-            @Result(property = "request.trip.accommodation.id", column = "accom_id"),
-            @Result(property = "request.trip.accommodation.address", column = "address"),
-            @Result(property = "request.trip.accommodation.checkinTime", column = "checkin_time"),
-            @Result(property = "request.trip.accommodation.checkoutTime", column = "checkout_time"),
-            @Result(property = "request.trip.accommodation.bookingUrl", column = "booking_tickets"),
-            @Result(property = "request.trip.destination.id", column = "dest_id"),
-            @Result(property = "request.trip.destination.description", column = "destination_description"),
-            @Result(property = "request.trip.destination.seatPlace", column = "seat_place"),
-            @Result(property = "request.trip.destination.office.id", column = "office_id"),
-            @Result(property = "request.trip.destination.office.address", column = "office_address"),
-            @Result(property = "request.trip.destination.office.description", column = "office_description"),
-            @Result(property = "request.worker.id", column = "worker_id"),
-            @Result(property = "request.worker.email", column = "email"),
-            @Result(property = "request.worker.password", column = "password"),
-            @Result(property = "request.worker.firstName", column = "first_name"),
-            @Result(property = "request.worker.secondName", column = "second_name"),
-            @Result(property = "request.worker.userRole", column = "user_role"),
-            @Result(property = "request.office.id", column = "office_id"),
-            @Result(property = "request.office.address", column = "office_address"),
-            @Result(property = "request.office.description", column = "office_description"),
+            @Result(property = "request.workerEmail", column = "email"),
+            @Result(property = "request.workerFirstName", column = "first_name"),
+            @Result(property = "request.workerSecondName", column = "second_name"),
+            @Result(property = "request.destination.office.id", column = "office_id"),
+            @Result(property = "request.destination.office.address", column = "office_address"),
+            @Result(property = "request.destination.office.description", column = "office_description"),
             @Result(property = "watched", column = "watched")
     })
     @Select("""
             SELECT n.id as notification_id, n.watched, n.user_id as boss_id,
-            u.id as worker_id, u.email, u.password, u.first_name, u.second_name, u.user_role,
-            r.id as request_id, r.status, r.description, r.comment, r.start_date, r.end_date, r.transport_to, r.transport_from, r.tickets,
-            t.id as trip_id, t.trip_status, a.id as accom_id, a.address, a.checkin_time, a.checkout_time, a.booking_tickets,
+            r.id as request_id, r.status, r.description, r.comment, r.start_date, r.end_date, r.tickets,
             d.id as dest_id, d.description as destination_description, d.seat_place,
+            u.email, u.first_name, u.second_name,
             o.id as office_id, o.address as office_address, o.description as office_description
             FROM notification n
-            JOIN request r ON n.request_id = r.id
-            JOIN office o ON r.office_id = o.id
-            JOIN trip t ON r.trip_id = t.id
-            JOIN accommodation a ON t.accommodation_id = a.id
-            JOIN destination d ON t.destination_id = d.id
-            JOIN users u ON r.worker_id = u.id
-            WHERE n.id = '${notificationId}' AND n.watched=false;
+            JOIN request r on n.request_id = r.id
+            JOIN users u on r.worker_id = u.id
+            JOIN destination d on r.destination_id = d.id
+            JOIN office o on d.office_id = o.id
+            WHERE n.id = '${notificationId}';
             """)
     Notification selectNotification(@Param("notificationId") UUID notificationId);
 
@@ -84,47 +63,26 @@ public interface NotificationMapper {
             @Result(property = "request.endDate", column = "end_date"),
             @Result(property = "request.comment", column = "comment"),
             @Result(property = "request.description", column = "description"),
-            @Result(property = "request.transportTo", column = "transport_to"),
-            @Result(property = "request.transportFrom", column = "transport_from"),
             @Result(property = "request.ticketsUrl", column = "tickets"),
-            @Result(property = "request.trip.id", column = "trip_id"),
-            @Result(property = "request.trip.tripStatus", column = "trip_status"),
-            @Result(property = "request.trip.accommodation.id", column = "accom_id"),
-            @Result(property = "request.trip.accommodation.address", column = "address"),
-            @Result(property = "request.trip.accommodation.checkinTime", column = "checkin_time"),
-            @Result(property = "request.trip.accommodation.checkoutTime", column = "checkout_time"),
-            @Result(property = "request.trip.accommodation.bookingUrl", column = "booking_tickets"),
-            @Result(property = "request.trip.destination.id", column = "dest_id"),
-            @Result(property = "request.trip.destination.description", column = "destination_description"),
-            @Result(property = "request.trip.destination.seatPlace", column = "seat_place"),
-            @Result(property = "request.trip.destination.office.id", column = "office_id"),
-            @Result(property = "request.trip.destination.office.address", column = "office_address"),
-            @Result(property = "request.trip.destination.office.description", column = "office_description"),
-            @Result(property = "request.worker.id", column = "worker_id"),
-            @Result(property = "request.worker.email", column = "email"),
-            @Result(property = "request.worker.password", column = "password"),
-            @Result(property = "request.worker.firstName", column = "first_name"),
-            @Result(property = "request.worker.secondName", column = "second_name"),
-            @Result(property = "request.worker.userRole", column = "user_role"),
-            @Result(property = "request.office.id", column = "office_id"),
-            @Result(property = "request.office.address", column = "office_address"),
-            @Result(property = "request.office.description", column = "office_description"),
+            @Result(property = "request.workerEmail", column = "email"),
+            @Result(property = "request.workerFirstName", column = "first_name"),
+            @Result(property = "request.workerSecondName", column = "second_name"),
+            @Result(property = "request.destination.office.id", column = "office_id"),
+            @Result(property = "request.destination.office.address", column = "office_address"),
+            @Result(property = "request.destination.office.description", column = "office_description"),
             @Result(property = "watched", column = "watched")
     })
     @Select("""
             SELECT n.id as notification_id, n.watched, n.user_id as boss_id,
-            r.id as request_id, r.status, r.description, r.comment, r.start_date, r.end_date, r.transport_to, r.transport_from, r.tickets,
-            t.id as trip_id, t.trip_status, a.id as accom_id, a.address, a.checkin_time, a.checkout_time, a.booking_tickets,
+            r.id as request_id, r.status, r.description, r.comment, r.start_date, r.end_date, r.tickets,
             d.id as dest_id, d.description as destination_description, d.seat_place,
-            u.id as worker_id, u.email, u.password, u.first_name, u.second_name, u.user_role,
+            u.email, u.first_name, u.second_name,
             o.id as office_id, o.address as office_address, o.description as office_description
             FROM notification n
-            JOIN request r ON n.request_id = r.id
-            JOIN users u ON r.worker_id = u.id
-            JOIN office o ON r.office_id = o.id
-            JOIN trip t ON r.trip_id = t.id
-            JOIN accommodation a ON t.accommodation_id = a.id
-            JOIN destination d ON t.destination_id = d.id
+            JOIN request r on n.request_id = r.id
+            JOIN users u on r.worker_id = u.id
+            JOIN destination d on r.destination_id = d.id
+            JOIN office o on d.office_id = o.id
             WHERE n.user_id = '${userId}' AND n.watched=false;
             """)
     List<Notification> selectUnwatchedNotifications(@Param("userId") UUID userId);

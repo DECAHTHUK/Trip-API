@@ -872,8 +872,9 @@ components:
           $ref: '#/components/schemas/Request'
         watched:
           type: boolean
-        user:
-          $ref: '#/components/schemas/User'
+        userId:
+          type: string
+          format: uuid
 
     Transportation:
       type: object
@@ -917,24 +918,24 @@ components:
           $ref: '#/components/schemas/Accommodation'
         destination:
           $ref: '#/components/schemas/Destination'
+        requestId:
+          type: string
+          format: uuid
 
 
     Request:
       type: object
       required:
-        - tripId
         - status
         - worker
-        - officeId
         - startDate
         - endDate
+        - destination
       properties:
         id:
           type: string
           format: uuid
-        trip:
-          $ref: '#/components/schemas/Trip'
-        status:
+        requestStatus:
           type: string
           enum:
             - approved
@@ -943,10 +944,14 @@ components:
             - declined
         description:
           type: string
-        worker:
-          $ref: '#/components/schemas/User'
-        office:
-          $ref: '#/components/schemas/Office'
+        workerFirstName:
+          type: string
+        workerSecondName:
+          type: string
+        workerEmail:
+          type: string
+        destination:
+          $ref: '#/components/schemas/Destination'
         comment:
           type: string
         startDate:
@@ -957,11 +962,7 @@ components:
           type: string
           format: date
           example: "2021-01-30T08:30:00Z"
-        transportTo:
-          type: string
-        transportFrom:
-          type: string
-        tickets:
+        ticketsUrl:
           type: string
           format: url
 
@@ -1017,10 +1018,7 @@ components:
         id:
           type: string
           format: uuid
-        tripId:
-          type: string
-          format: uuid
-        status:
+        requestStatus:
           type: string
           enum:
             - approved
@@ -1032,7 +1030,7 @@ components:
         workerId:
           type: string
           format: uuid
-        officeId:
+        destinationId:
           type: string
           format: uuid
         comment:
@@ -1045,11 +1043,7 @@ components:
           type: string
           format: date
           example: "2021-01-30T08:30:00Z"
-        transportTo:
-          type: string
-        transportFrom:
-          type: string
-        tickets:
+        ticketsUrl:
           type: string
           format: url
 
@@ -1070,6 +1064,9 @@ components:
           type: string
           format: uuid
         destinationId:
+          type: string
+          format: uuid
+        requestId:
           type: string
           format: uuid
 

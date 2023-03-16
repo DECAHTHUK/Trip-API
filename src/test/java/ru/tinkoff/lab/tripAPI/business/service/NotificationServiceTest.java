@@ -12,9 +12,7 @@ import ru.tinkoff.lab.tripAPI.business.*;
 import ru.tinkoff.lab.tripAPI.business.dto.DestinationDto;
 import ru.tinkoff.lab.tripAPI.business.dto.NotificationDto;
 import ru.tinkoff.lab.tripAPI.business.dto.RequestDto;
-import ru.tinkoff.lab.tripAPI.business.dto.TripDto;
 import ru.tinkoff.lab.tripAPI.business.enums.RequestStatus;
-import ru.tinkoff.lab.tripAPI.business.enums.TripStatus;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
 
 import java.sql.Timestamp;
@@ -50,6 +48,8 @@ public class NotificationServiceTest {
     OfficeService officeService;
 
     NotificationDto notificationDto;
+    DestinationDto destinationDto;
+    Office office;
 
     Timestamp timestampStart;
     Timestamp timestampEnd;
@@ -59,28 +59,13 @@ public class NotificationServiceTest {
     Id workerId;
     Id bossId;
 
-    List<RequestDto> requestDtos;
+    RequestDto firstRequest, secondRequest;
 
     @BeforeAll
     public void init() {
         notificationDto = new NotificationDto();
         timestampStart = new Timestamp(2020 - 1901, 12, 12, 12, 0, 0, 0);
         timestampEnd = new Timestamp(2020 - 1901, 12, 15, 15, 0, 0, 0);
-        requestDtos = List.of(
-                new RequestDto(RequestStatus.PENDING, "Just a request", "Nothing",
-                        timestampStart, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"),
-                new RequestDto(RequestStatus.AWAIT_CHANGES, "Request with await", "Nothing",
-                        timestampStart, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"),
-                new RequestDto(RequestStatus.PENDING, "Request 3", "Nothing",
-                        timestampStart, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"),
-                new RequestDto(RequestStatus.PENDING, "Request with late start date",
-                        "Nothing", timestampEnd, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"),
-                new RequestDto(RequestStatus.PENDING, "Request 5",
-                        "Nothing", timestampStart, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"),
-                new RequestDto(RequestStatus.PENDING, "Request 6",
-                        "Nothing", timestampStart, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"),
-                new RequestDto(RequestStatus.PENDING, "Request 7 with late start date",
-                        "Nothing", timestampEnd, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"));
         User user = new User("email@mail.ru",
                 "12345678",
                 "John",
@@ -100,33 +85,38 @@ public class NotificationServiceTest {
         userBoss.setId(bossId.getId());
         userService.createRelation(UUID.fromString(bossId.getId()), UUID.fromString(workerId.getId()));
 
-        Accommodation accommodation = new Accommodation(
-                "Zolotenko 24",
-                new Timestamp(2022 - 1901, 12, 12, 12, 0, 0, 0),
-                new Timestamp(2022 - 1901, 12, 15, 15, 0, 0, 0),
-                "booking.com/DEJDNkdsmdneuwij12893hd"
-        );
-        Id accommodationId = accommodationDestinationTripService.createAccommodation(accommodation);
+        firstRequest = new RequestDto(RequestStatus.PENDING, "Request 7 with late start date",
+                "Nothing", timestampEnd, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh");
 
-        Office office = new Office("Street 15", "Fine");
+        firstRequest.setWorkerId(user.getId());
+        office = new Office("Street 15", "Fine");
         Id officeId = officeService.createOffice(office);
-        DestinationDto destinationDto = new DestinationDto("Description", "Seat place 8");
-        destinationDto.setOfficeId(officeId.getId());
+        office.setId(officeId.getId());
+        destinationDto = new DestinationDto("Description", "Seat place 8");
+        destinationDto.setOfficeId(office.getId());
         Id destinationId = accommodationDestinationTripService.createDestination(destinationDto);
+        destinationDto.setId(destinationId.getId());
+        firstRequest.setDestinationId(destinationDto.getId());
 
-        TripDto tripDto = new TripDto(TripStatus.PENDING, accommodationId.getId(), destinationId.getId());
-        Id tripId = accommodationDestinationTripService.createTrip(tripDto);
+        secondRequest = new RequestDto(RequestStatus.PENDING, "Request 2",
+                "Nothing", timestampEnd, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh");
+        secondRequest.setWorkerId(user.getId());
+        secondRequest.setDestinationId(destinationDto.getId());
+        Id secondRequestId = requestService.createRequest(secondRequest);
+        secondRequest.setId(secondRequestId.getId());
 
-        for (RequestDto requestDto : requestDtos) {
-            requestDto.setDestinationId(destinationId.getId());
-            requestDto.setWorkerId(workerId.getId());
-            Id requestId = requestService.createRequest(requestDto);
-            requestDto.setId(requestId.getId());
-            notificationDto.setUserId(bossId.getId());
-            notificationDto.setRequestId(requestId.getId());
-            Id notificationId = notificationService.createNotification(notificationDto);
-            notificationDto.setId(notificationId.getId());
-        }
+        Id firstRequestId = requestService.createRequest(firstRequest);
+        firstRequest.setId(firstRequestId.getId());
+
+        notificationDto.setRequestId(firstRequestId.getId());
+        notificationDto.setUserId(userBoss.getId());
+        Id notificationId = notificationService.createNotification(notificationDto);
+        notificationDto.setId(notificationId.getId());
+
+        notificationDto.setRequestId(secondRequestId.getId());
+        notificationDto.setUserId(userBoss.getId());
+        Id notificationId2 = notificationService.createNotification(notificationDto);
+        notificationDto.setId(notificationId2.getId());
     }
 
     @Test

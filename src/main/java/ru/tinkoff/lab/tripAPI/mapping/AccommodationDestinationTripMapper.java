@@ -95,7 +95,7 @@ public interface AccommodationDestinationTripMapper {
     @Select("""
             INSERT INTO trip
             (trip_status, accommodation_id, destination_id, request_id)
-            VALUES (#{tripStatus}, uuid(#{accommodationId}), uuid(#{destinationId}), uuid(#{request_id})) RETURNING id;
+            VALUES (#{tripStatus}, uuid(#{accommodationId}), uuid(#{destinationId}), uuid(#{requestId})) RETURNING id;
             """)
     Id insertTrip(TripDto tripDto) throws RuntimeException;
 

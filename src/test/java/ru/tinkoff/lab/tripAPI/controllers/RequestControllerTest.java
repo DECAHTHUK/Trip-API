@@ -60,17 +60,10 @@ public class RequestControllerTest {
     RequestDto requestDto = new RequestDto(RequestStatus.PENDING, "Just a request", "Nothing",
             new Timestamp(2020 - 1901, 12, 12, 12, 0, 0, 0),
             new Timestamp(2020 - 1901, 12, 15, 15, 0, 0, 0),
-            "New Orlean", "Chebarkyl", "https:/somesite.com/JAOwe7IW78daAw1idh");
+            "https:/somesite.com/JAOwe7IW78daAw1idh");
 
-    Accommodation accommodation = new Accommodation(
-            "Republic street 28",
-            new Timestamp(2022 - 1901, 12, 12, 12, 0, 0, 0),
-            new Timestamp(2022 - 1901, 12, 15, 15, 0, 0, 0),
-            "booking.com/DEJDNkdsmdneuwij12893hd"
-    );
     Office office = new Office("Avenue 10", "Cool office");
     DestinationDto destinationDto = new DestinationDto("Zarechnaya 7", "9");
-    TripDto tripDto = new TripDto();
 
     User worker = new User(
             "rs_xdm@inst.com",
@@ -90,19 +83,11 @@ public class RequestControllerTest {
         destinationDto.setOfficeId(officeId.getId());
         Id destinationId = service.createDestination(destinationDto);
         destinationDto.setId(destinationId.getId());
-        Id accommodationId = service.createAccommodation(accommodation);
-        accommodation.setId(accommodationId.getId());
-        tripDto.setTripStatus(TripStatus.PENDING);
-        tripDto.setDestinationId(destinationId.getId());
-        tripDto.setAccommodationId(accommodationId.getId());
-        Id tripId = service.createTrip(tripDto);
-        tripDto.setId(tripId.getId());
         Id workerId = userService.createUser(worker);
         worker.setId(workerId.getId());
         // Adding new data to requestDto
-        requestDto.setOfficeId(officeId.getId());
-        requestDto.setTripId(tripId.getId());
         requestDto.setWorkerId(workerId.getId());
+        requestDto.setDestinationId(destinationDto.getId());
 
         // Testing post method
         RequestBuilder requestBuilderPost = MockMvcRequestBuilders

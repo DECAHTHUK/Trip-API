@@ -10,11 +10,14 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.tinkoff.lab.tripAPI.business.*;
 import ru.tinkoff.lab.tripAPI.business.dto.DestinationDto;
+import ru.tinkoff.lab.tripAPI.business.dto.RequestDto;
 import ru.tinkoff.lab.tripAPI.business.dto.TripDto;
+import ru.tinkoff.lab.tripAPI.business.enums.RequestStatus;
 import ru.tinkoff.lab.tripAPI.business.enums.TripStatus;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -22,7 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @RunWith(SpringRunner.class)
 @MybatisTest
-@Import({AccommodationDestinationTripService.class, OfficeService.class, UuidTypeHandler.class})
+@Import({AccommodationDestinationTripService.class, OfficeService.class, RequestService.class,
+        UserService.class, UuidTypeHandler.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -30,10 +34,16 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 public class AccommodationDestinationTripServiceTest {
 
     @Autowired
+    UserService userService;
+
+    @Autowired
     AccommodationDestinationTripService accommodationDestinationTripService;
 
     @Autowired
     OfficeService officeService;
+
+    @Autowired
+    RequestService requestService;
 
     DestinationDto destinationDto;
     Office office1;
@@ -44,8 +54,18 @@ public class AccommodationDestinationTripServiceTest {
 
     Accommodation accommodation2;
 
+    RequestDto requestDto;
+
+    Timestamp timestampStart;
+    Timestamp timestampEnd;
+
+    User worker;
+
     @BeforeAll
     public void init() {
+        timestampStart = new Timestamp(2020 - 1901, 12, 12, 12, 0, 0, 0);
+        timestampEnd = new Timestamp(2020 - 1901, 12, 15, 15, 0, 0, 0);
+
         destinationDto = new DestinationDto("Description", "Seat place 8");
         tripDto = new TripDto();
         office1 = new Office("Street 15", "Fine");
@@ -62,6 +82,14 @@ public class AccommodationDestinationTripServiceTest {
                 new Timestamp(2022 - 1901, 12, 15, 15, 0, 0, 0),
                 "booking.com/DEJDNkdsmdneuwij12893hd"
         );
+        worker = new User("email@mail.ru",
+                "12345678",
+                "John",
+                "Smith",
+                "USER",
+                "something");
+        requestDto = new RequestDto(RequestStatus.APPROVED, "Approved request",
+                "Nothing", timestampEnd, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh");
         // init accommodations
         Id accommodationId1 = accommodationDestinationTripService.createAccommodation(accommodation1);
         accommodation1.setId(accommodationId1.getId());
@@ -77,10 +105,20 @@ public class AccommodationDestinationTripServiceTest {
         Id destinationId = accommodationDestinationTripService.createDestination(destinationDto);
         destinationDto.setId(destinationId.getId());
 
+        Id workerId = userService.createUser(worker);
+        worker.setId(workerId.getId());
+
+        requestDto.setWorkerId(worker.getId());
+        requestDto.setDestinationId(destinationId.getId());
+
+        Id requestId = requestService.createRequest(requestDto);
+        requestDto.setId(requestId.getId());
+
         //init trip
         tripDto.setAccommodationId(accommodationId1.getId());
         tripDto.setDestinationId(destinationId.getId());
         tripDto.setTripStatus(TripStatus.COMPLETED);
+        tripDto.setRequestId(requestDto.getId());
         tripDto.setId(accommodationDestinationTripService.createTrip(tripDto).getId());
     }
 
@@ -150,7 +188,11 @@ public class AccommodationDestinationTripServiceTest {
                 tripFromDb.getDestination());
         assertEquals(accommodationDestinationTripService.getAccommodation(UUID.fromString(tripDto.getAccommodationId())),
                 tripFromDb.getAccommodation());
+        assertEquals(tripDto.getRequestId(), tripFromDb.getRequestId());
         assertEquals(tripDto.getTripStatus(), tripFromDb.getTripStatus());
+
+//        List<Trip> trips = accommodationDestinationTripService.getSomeTrips(UUID.fromString(worker.getId()), 1);
+//        assertEquals(1, trips.size());
     }
 
     @Test
