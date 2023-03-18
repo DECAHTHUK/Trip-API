@@ -63,8 +63,6 @@
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="address" type="TEXT"/>
-            <column name="checkin_time" type="TIMESTAMPTZ"/>
-            <column name="checkout_time" type="TIMESTAMPTZ"/>
             <column name="booking_tickets" type="TEXT"/>
         </createTable>
 

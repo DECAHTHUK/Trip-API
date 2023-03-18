@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.Request;
 import ru.tinkoff.lab.tripAPI.business.dto.RequestDto;
-import ru.tinkoff.lab.tripAPI.business.dto.TripDto;
+import ru.tinkoff.lab.tripAPI.business.dto.RequestStatusChangeDto;
 import ru.tinkoff.lab.tripAPI.business.enums.RequestStatus;
 import ru.tinkoff.lab.tripAPI.business.service.RequestService;
 
@@ -39,17 +39,17 @@ public class RequestController {
     }
 
     @PutMapping("/{uuid}/approve")
-    public void approveRequest(@PathVariable UUID uuid, @RequestBody TripDto tripDto, @RequestBody String comment, @RequestBody UUID approverId) {
-        requestService.approveRequest(uuid, tripDto, comment, approverId);
+    public Id approveRequest(@PathVariable UUID uuid, @RequestBody RequestStatusChangeDto requestStatusChangeDto) {
+        return requestService.approveRequest(uuid, requestStatusChangeDto);
     }
 
     @PutMapping("/{uuid}/send-for-editing")
-    public void sendRequestForEditing(@PathVariable UUID uuid, @RequestBody String comment, @RequestBody UUID approverId) {
-        requestService.changeStatus(uuid, RequestStatus.AWAIT_CHANGES, comment, approverId);
+    public void sendRequestForEditing(@PathVariable UUID uuid, @RequestBody RequestStatusChangeDto requestStatusChangeDto) {
+        requestService.changeStatus(uuid, RequestStatus.AWAIT_CHANGES, requestStatusChangeDto);
     }
 
     @PutMapping("/{uuid}/decline")
-    public void declineRequest(@PathVariable UUID uuid, @RequestBody String comment, @RequestBody UUID approverId) {
-        requestService.changeStatus(uuid, RequestStatus.DECLINED, comment, approverId);
+    public void declineRequest(@PathVariable UUID uuid, @RequestBody RequestStatusChangeDto requestStatusChangeDto) {
+        requestService.changeStatus(uuid, RequestStatus.DECLINED, requestStatusChangeDto);
     }
 }

@@ -18,26 +18,21 @@ public interface AccommodationDestinationTripMapper {
     @Result(property = "id", column = "id")
     @Select("""
             INSERT INTO accommodation
-            (address, checkin_time, checkout_time, booking_tickets)
-            VALUES (#{address}, #{checkinTime}, #{checkoutTime}, #{bookingUrl}) RETURNING id;
+            (address, booking_tickets)
+            VALUES (#{address}, #{bookingUrl}) RETURNING id;
             """)
     Id insertAccommodation(Accommodation accommodation) throws RuntimeException;
 
-    @Results(value = {
-            @Result(property = "checkinTime", column = "checkin_time"),
-            @Result(property = "checkoutTime", column = "checkout_time"),
-            @Result(property = "bookingUrl", column = "booking_tickets")
-    })
+    @Result(property = "bookingUrl", column = "booking_tickets")
     @Select("""
-            SELECT id, address, checkin_time, checkout_time, booking_tickets
+            SELECT id, address, booking_tickets
             FROM accommodation WHERE id = '${accommodationId}';
             """)
     Accommodation selectAccommodation(@Param("accommodationId") UUID accommodationId);
 
     @Update("""
             UPDATE accommodation
-            SET address=#{address}, checkin_time=#{checkinTime}, checkout_time=#{checkoutTime},
-            booking_tickets=#{bookingUrl}
+            SET address=#{address}, booking_tickets=#{bookingUrl}
             WHERE id = uuid(#{id});
             """)
     void updateAccommodation(Accommodation accommodation);
@@ -104,8 +99,6 @@ public interface AccommodationDestinationTripMapper {
             @Result(property = "requestId", column = "request_id"),
             @Result(property = "accommodation.id", column = "accom_id"),
             @Result(property = "accommodation.address", column = "address"),
-            @Result(property = "accommodation.checkinTime", column = "checkin_time"),
-            @Result(property = "accommodation.checkoutTime", column = "checkout_time"),
             @Result(property = "accommodation.bookingUrl", column = "booking_tickets"),
             @Result(property = "destination.id", column = "dest_id"),
             @Result(property = "destination.description", column = "destination_description"),
@@ -117,7 +110,7 @@ public interface AccommodationDestinationTripMapper {
 
     @Select("""
             SELECT t.id, t.trip_status, t.request_id,
-            	a.id as accom_id, a.address, a.checkin_time, a.checkout_time, a.booking_tickets,
+            	a.id as accom_id, a.address, a.booking_tickets,
             	d.id as dest_id, d.description as destination_description, d.seat_place,
             	o.id as office_id, o.address as office_address, o.description as office_description
             FROM trip t
@@ -134,8 +127,6 @@ public interface AccommodationDestinationTripMapper {
             @Result(property = "requestId", column = "request_id"),
             @Result(property = "accommodation.id", column = "accom_id"),
             @Result(property = "accommodation.address", column = "address"),
-            @Result(property = "accommodation.checkinTime", column = "checkin_time"),
-            @Result(property = "accommodation.checkoutTime", column = "checkout_time"),
             @Result(property = "accommodation.bookingUrl", column = "booking_tickets"),
             @Result(property = "destination.id", column = "dest_id"),
             @Result(property = "destination.description", column = "destination_description"),
@@ -145,7 +136,7 @@ public interface AccommodationDestinationTripMapper {
             @Result(property = "destination.office.description", column = "office_description")
     })
     @Select("""
-            SELECT t.id as trip_id, t.trip_status, t.request_id, a.id as accom_id, a.address, a.checkin_time, a.checkout_time, a.booking_tickets,
+            SELECT t.id as trip_id, t.trip_status, t.request_id, a.id as accom_id, a.address, a.booking_tickets,
             d.id as dest_id, d.description as destination_description, d.seat_place,
             o.id as office_id, o.address as office_address, o.description as office_description
             FROM request r
@@ -167,9 +158,24 @@ public interface AccommodationDestinationTripMapper {
             """)
     void updateTrip(TripDto tripDto);
 
+    @Update("""
+            UPDATE trip
+            SET trip_status='CANCELED'
+            WHERE id = '${tripId}';
+            """)
+    void cancelTrip(@Param("tripId") UUID tripId);
+
+    @Update("""
+            UPDATE trip
+            SET trip_status='COMPLETED'
+            WHERE id = '${tripId}';
+            """)
+    void completeTrip(@Param("tripId") UUID tripId);
+
     @Delete("""
             DELETE FROM trip
             WHERE id = '${tripId}';
             """)
     void deleteTrip(@Param("tripId") UUID tripId);
+
 }

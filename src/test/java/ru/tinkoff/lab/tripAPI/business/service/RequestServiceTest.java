@@ -108,8 +108,6 @@ public class RequestServiceTest {
 
         Accommodation accommodation = new Accommodation(
                 "Zolotenko 24",
-                new Timestamp(2022 - 1901, 12, 12, 12, 0, 0, 0),
-                new Timestamp(2022 - 1901, 12, 15, 15, 0, 0, 0),
                 "booking.com/DEJDNkdsmdneuwij12893hd"
         );
         Id accommodationId = accommodationDestinationTripService.createAccommodation(accommodation);
@@ -221,4 +219,5 @@ public class RequestServiceTest {
 
         assertEquals(ROWS_AMOUNT, trips.size());
     }
+
 }

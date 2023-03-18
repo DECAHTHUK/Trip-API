@@ -108,6 +108,10 @@ public class AccommodationDestinationTripService {
         mapper.updateTrip(tripDto);
     }
 
+    public void cancelTrip(UUID uuid) {mapper.cancelTrip(uuid);}
+
+    public void completeTrip(UUID uuid) {mapper.completeTrip(uuid);}
+
     public void deleteTrip(UUID uuid) {
         mapper.deleteTrip(uuid);
     }

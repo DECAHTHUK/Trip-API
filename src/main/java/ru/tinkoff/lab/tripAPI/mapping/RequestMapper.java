@@ -29,6 +29,7 @@ public interface RequestMapper {
     @Results(value = {
             @Result(property = "id", column = "request_id"),
             @Result(property = "requestStatus", column = "status"),
+            @Result(property = "approverId", column = "approver_id"),
             @Result(property = "startDate", column = "start_date"),
             @Result(property = "endDate", column = "end_date"),
             @Result(property = "ticketsUrl", column = "tickets"),
@@ -42,7 +43,7 @@ public interface RequestMapper {
 
     })
     @Select("""
-            SELECT r.id as request_id, r.status, r.description, r.comment, r.start_date, r.end_date, r.tickets,
+            SELECT r.id as request_id, r.status, r.description, r.comment, r.approver_id, r.start_date, r.end_date, r.tickets,
             d.id as dest_id, d.description as destination_description, d.seat_place,
             u.email, u.first_name, u.second_name,
             o.id as office_id, o.address as office_address, o.description as office_description
@@ -79,6 +80,7 @@ public interface RequestMapper {
     @Results(value = {
             @Result(property = "id", column = "request_id"),
             @Result(property = "requestStatus", column = "status"),
+            @Result(property = "approverId", column = "approver_id"),
             @Result(property = "startDate", column = "start_date"),
             @Result(property = "endDate", column = "end_date"),
             @Result(property = "ticketsUrl", column = "tickets"),
@@ -92,7 +94,7 @@ public interface RequestMapper {
 
     })
     @Select("""
-            SELECT r.id as request_id, r.status, r.description, r.comment, r.start_date, r.end_date, r.tickets,
+            SELECT r.id as request_id, r.status, r.description, r.comment, r.approver_id, r.start_date, r.end_date, r.tickets,
             d.id as dest_id, d.description as destination_description, d.seat_place,
             u.email, u.first_name, u.second_name,
             o.id as office_id, o.address as office_address, o.description as office_description
@@ -110,6 +112,7 @@ public interface RequestMapper {
     @Results(value = {
             @Result(property = "id", column = "request_id"),
             @Result(property = "requestStatus", column = "status"),
+            @Result(property = "approverId", column = "approver_id"),
             @Result(property = "startDate", column = "start_date"),
             @Result(property = "endDate", column = "end_date"),
             @Result(property = "ticketsUrl", column = "tickets"),
@@ -123,7 +126,7 @@ public interface RequestMapper {
 
     })
     @Select("""
-            SELECT r.id as request_id, r.status, r.description, r.comment, r.start_date, r.end_date, r.tickets,
+            SELECT r.id as request_id, r.status, r.description, r.comment, r.approver_id, r.start_date, r.end_date, r.tickets,
             d.id as dest_id, d.description as destination_description, d.seat_place,
             u.email, u.first_name, u.second_name,
             o.id as office_id, o.address as office_address, o.description as office_description

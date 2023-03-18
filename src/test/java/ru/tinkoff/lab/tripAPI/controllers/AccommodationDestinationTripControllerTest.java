@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -22,10 +23,7 @@ import ru.tinkoff.lab.tripAPI.business.dto.DestinationDto;
 import ru.tinkoff.lab.tripAPI.business.dto.RequestDto;
 import ru.tinkoff.lab.tripAPI.business.dto.TripDto;
 import ru.tinkoff.lab.tripAPI.business.enums.TripStatus;
-import ru.tinkoff.lab.tripAPI.business.service.AccommodationDestinationTripService;
-import ru.tinkoff.lab.tripAPI.business.service.OfficeService;
-import ru.tinkoff.lab.tripAPI.business.service.RequestService;
-import ru.tinkoff.lab.tripAPI.business.service.UserService;
+import ru.tinkoff.lab.tripAPI.business.service.*;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
 
 import java.sql.Timestamp;
@@ -38,11 +36,12 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @AutoConfigureMybatis
 @WebMvcTest(controllers = AccommodationDestinationTripController.class)
 @Import({AccommodationDestinationTripService.class, UuidTypeHandler.class, OfficeService.class,
-        RequestService.class, UserService.class})
+        RequestService.class, NotificationService.class, UserService.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestPropertySource("/application.yaml")
+@DirtiesContext
 public class AccommodationDestinationTripControllerTest {
 
 
@@ -62,8 +61,6 @@ public class AccommodationDestinationTripControllerTest {
 
     Accommodation accommodation = new Accommodation(
             "Republic street 28",
-            new Timestamp(2022 - 1901, 12, 12, 12, 0, 0, 0),
-            new Timestamp(2022 - 1901, 12, 15, 15, 0, 0, 0),
             "booking.com/DEJDNkdsmdneuwij12893hd"
     );
 

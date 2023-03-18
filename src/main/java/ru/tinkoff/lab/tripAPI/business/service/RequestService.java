@@ -13,8 +13,9 @@ import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.Request;
 import ru.tinkoff.lab.tripAPI.business.dto.NotificationDto;
 import ru.tinkoff.lab.tripAPI.business.dto.RequestDto;
-import ru.tinkoff.lab.tripAPI.business.dto.TripDto;
+import ru.tinkoff.lab.tripAPI.business.dto.RequestStatusChangeDto;
 import ru.tinkoff.lab.tripAPI.business.enums.RequestStatus;
+import ru.tinkoff.lab.tripAPI.business.enums.TripStatus;
 import ru.tinkoff.lab.tripAPI.mapping.RequestMapper;
 import ru.tinkoff.lab.tripAPI.mapping.UserRelationMapper;
 
@@ -49,7 +50,7 @@ public class RequestService {
             for (String id : userRelationMapper.selectApproversIds(UUID.fromString(requestDto.getWorkerId()))) {
                 notificationDtoList.add(new NotificationDto(requestId.getId(), false, id));
             }
-            notificationService.createMultipleNotifications(notificationDtoList);
+            if (!notificationDtoList.isEmpty()) notificationService.createMultipleNotifications(notificationDtoList);
             transactionManager.commit(transactionStatus);
             return requestId;
         } catch (RuntimeException e) {
@@ -87,7 +88,7 @@ public class RequestService {
                 for (String id : userRelationMapper.selectApproversIds(UUID.fromString(requestDto.getWorkerId()))) {
                     notificationDtoList.add(new NotificationDto(requestDto.getId(), false, id));
                 }
-                notificationService.createMultipleNotifications(notificationDtoList);
+                if (!notificationDtoList.isEmpty()) notificationService.createMultipleNotifications(notificationDtoList);
             } else {
                 notificationService.createNotification(new NotificationDto(requestDto.getId(), false, approverId));
             }
@@ -103,15 +104,18 @@ public class RequestService {
         requestMapper.deleteRequest(id);
     }
 
-    public void changeStatus(UUID requestId, RequestStatus status, String comment, UUID approverId) {
-        requestMapper.updateRequestStatus(requestId, status, comment, approverId);
+    public void changeStatus(UUID requestId, RequestStatus status, RequestStatusChangeDto requestStatusChangeDto) {
+        requestMapper.updateRequestStatus(requestId, status, requestStatusChangeDto.getComment(),
+                UUID.fromString(requestStatusChangeDto.getApproverId()));
     }
 
-    public Id approveRequest(UUID uuid, TripDto tripDto, String comment, UUID approverId) {
+    public Id approveRequest(UUID uuid, RequestStatusChangeDto requestStatusChangeDto) {
+        requestStatusChangeDto.getTripDto().setTripStatus(TripStatus.PENDING);
         TransactionStatus transactionStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
         try {
-            requestMapper.updateRequestStatus(uuid, RequestStatus.APPROVED, comment, approverId);
-            Id tripId = accommodationDestinationTripService.createTrip(tripDto);
+            requestMapper.updateRequestStatus(uuid, RequestStatus.APPROVED,
+                    requestStatusChangeDto.getComment(), UUID.fromString(requestStatusChangeDto.getApproverId()));
+            Id tripId = accommodationDestinationTripService.createTrip(requestStatusChangeDto.getTripDto());
             transactionManager.commit(transactionStatus);
             return tripId;
         } catch (RuntimeException e) {

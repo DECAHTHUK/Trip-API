@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 @RunWith(SpringRunner.class)
 @MybatisTest
 @Import({AccommodationDestinationTripService.class, OfficeService.class, RequestService.class,
-        UserService.class, UuidTypeHandler.class})
+        UserService.class, NotificationService.class, UuidTypeHandler.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -70,14 +70,10 @@ public class AccommodationDestinationTripServiceTest {
         office2 = new Office("Street new", "Updated");
         accommodation1 = new Accommodation(
                 "Zolotenko 24",
-                new Timestamp(2022 - 1901, 12, 12, 12, 0, 0, 0),
-                new Timestamp(2022 - 1901, 12, 15, 15, 0, 0, 0),
                 "booking.com/DEJDNkdsmdneuwij12893hd"
         );
         accommodation2 = new Accommodation(
                 "Updated address",
-                new Timestamp(2022 - 1901, 12, 12, 12, 0, 0, 0),
-                new Timestamp(2022 - 1901, 12, 15, 15, 0, 0, 0),
                 "booking.com/DEJDNkdsmdneuwij12893hd"
         );
         worker = new User("email@mail.ru",
@@ -127,8 +123,6 @@ public class AccommodationDestinationTripServiceTest {
         Accommodation accommodationFromDB = accommodationDestinationTripService.getAccommodation(UUID.fromString(accommodation1.getId()));
 
         assertEquals(accommodation1.getAddress(), accommodationFromDB.getAddress());
-        assertEquals(accommodation1.getCheckinTime(), accommodationFromDB.getCheckinTime());
-        assertEquals(accommodation1.getCheckoutTime(), accommodationFromDB.getCheckoutTime());
         assertEquals(accommodation1.getBookingUrl(), accommodationFromDB.getBookingUrl());
     }
 

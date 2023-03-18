@@ -42,11 +42,11 @@ public class UserService {
         userMapper.deleteUser(id);
     }
 
-    public void createRelation(UUID bossId, UUID userId) {
-        userRelationMapper.insertUserRelation(bossId, userId);
+    public void createRelation(UUID approverId, UUID userId) {
+        userRelationMapper.insertUserRelation(approverId, userId);
     }
 
-    public void deleteRelation(UUID bossId, UUID userId) {
-        userRelationMapper.deleteUserRelation(bossId, userId);
+    public void deleteRelation(UUID approverId, UUID userId) {
+        userRelationMapper.deleteUserRelation(approverId, userId);
     }
 }

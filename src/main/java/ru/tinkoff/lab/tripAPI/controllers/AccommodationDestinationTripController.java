@@ -86,4 +86,9 @@ public class AccommodationDestinationTripController {
     public void deleteTrip(@PathVariable UUID uuid) {
         service.deleteTrip(uuid);
     }
+
+    @PutMapping("/trips/{uuid}/cancel")
+    public void cancelTrip(@PathVariable UUID uuid) {
+
+    }
 }

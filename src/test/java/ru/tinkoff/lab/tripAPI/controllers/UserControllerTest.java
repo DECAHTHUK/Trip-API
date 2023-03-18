@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -19,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.User;
 import ru.tinkoff.lab.tripAPI.business.service.AccommodationDestinationTripService;
+import ru.tinkoff.lab.tripAPI.business.service.NotificationService;
 import ru.tinkoff.lab.tripAPI.business.service.RequestService;
 import ru.tinkoff.lab.tripAPI.business.service.UserService;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
@@ -30,10 +32,12 @@ import static org.junit.jupiter.api.Assertions.*;
 @RunWith(SpringRunner.class)
 @AutoConfigureMybatis
 @WebMvcTest(controllers = UserController.class)
-@Import({UserService.class, UuidTypeHandler.class, RequestService.class, AccommodationDestinationTripService.class})
+@Import({UserService.class, UuidTypeHandler.class, NotificationService.class,
+        RequestService.class, AccommodationDestinationTripService.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@DirtiesContext
 public class UserControllerTest {
 
     ObjectMapper mapper = new ObjectMapper();
