@@ -15,4 +15,10 @@ public class NotificationDto {
     public NotificationDto() {
         this.watched = false;
     }
+
+    public NotificationDto(String requestId, boolean watched, String userId) {
+        this.requestId = requestId;
+        this.watched = watched;
+        this.userId = userId;
+    }
 }

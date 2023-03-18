@@ -25,6 +25,8 @@ public class Request {
 
     private String comment;
 
+    private String approverId;
+
     private Timestamp startDate;
 
     private Timestamp endDate;

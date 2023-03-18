@@ -21,7 +21,6 @@ import ru.tinkoff.lab.tripAPI.business.*;
 import ru.tinkoff.lab.tripAPI.business.dto.DestinationDto;
 import ru.tinkoff.lab.tripAPI.business.dto.RequestDto;
 import ru.tinkoff.lab.tripAPI.business.dto.TripDto;
-import ru.tinkoff.lab.tripAPI.business.enums.RequestStatus;
 import ru.tinkoff.lab.tripAPI.business.enums.TripStatus;
 import ru.tinkoff.lab.tripAPI.business.service.AccommodationDestinationTripService;
 import ru.tinkoff.lab.tripAPI.business.service.OfficeService;
@@ -71,7 +70,7 @@ public class AccommodationDestinationTripControllerTest {
     DestinationDto destinationDto = new DestinationDto("Zarechnaya 7", "9");
     Office office = new Office("Avenue 10", "Cool office");
 
-    RequestDto requestDto = new RequestDto(RequestStatus.APPROVED, "Approved request",
+    RequestDto requestDto = new RequestDto("Approved request",
             "Nothing",
             new Timestamp(2020 - 1901, 12, 12, 12, 0, 0, 0),
             new Timestamp(2020 - 1901, 12, 15, 12, 0, 0, 0),

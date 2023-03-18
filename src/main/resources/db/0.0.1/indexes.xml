@@ -14,7 +14,7 @@
         </createIndex>
         
         <createIndex tableName="users_relations" indexName="idx_users_relations">
-            <column name="boss_id"/>
+            <column name="approver_id"/>
             <column name="user_id"/>
         </createIndex>
 

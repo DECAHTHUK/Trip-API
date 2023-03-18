@@ -19,9 +19,6 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.*;
 import ru.tinkoff.lab.tripAPI.business.dto.DestinationDto;
 import ru.tinkoff.lab.tripAPI.business.dto.RequestDto;
-import ru.tinkoff.lab.tripAPI.business.dto.TripDto;
-import ru.tinkoff.lab.tripAPI.business.enums.RequestStatus;
-import ru.tinkoff.lab.tripAPI.business.enums.TripStatus;
 import ru.tinkoff.lab.tripAPI.business.service.AccommodationDestinationTripService;
 import ru.tinkoff.lab.tripAPI.business.service.OfficeService;
 import ru.tinkoff.lab.tripAPI.business.service.RequestService;
@@ -57,7 +54,7 @@ public class RequestControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    RequestDto requestDto = new RequestDto(RequestStatus.PENDING, "Just a request", "Nothing",
+    RequestDto requestDto = new RequestDto("Just a request", "Nothing",
             new Timestamp(2020 - 1901, 12, 12, 12, 0, 0, 0),
             new Timestamp(2020 - 1901, 12, 15, 15, 0, 0, 0),
             "https:/somesite.com/JAOwe7IW78daAw1idh");
@@ -120,7 +117,7 @@ public class RequestControllerTest {
     @Order(2)
     @DisplayName("Test if request get updated and deleted")
     public void testUpdateDeleteRequest() throws Exception {
-        requestDto.setRequestStatus(RequestStatus.APPROVED);
+        requestDto.setDescription("Updated");
         // Updating request
         RequestBuilder requestBuilderPut = MockMvcRequestBuilders
                 .put("/requests")
@@ -139,7 +136,7 @@ public class RequestControllerTest {
 
         Request updatedRequest = mapper.readValue(responseBodyGet, Request.class);
         assertNotNull(updatedRequest);
-        assertEquals(RequestStatus.APPROVED, updatedRequest.getRequestStatus());
+        assertEquals("Updated", updatedRequest.getDescription());
 
         // Deleting request
         RequestBuilder requestBuilderDelete = MockMvcRequestBuilders

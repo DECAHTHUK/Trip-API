@@ -48,7 +48,7 @@ public interface UserMapper {
             SELECT u.id, u.email, u.password, u.first_name, u.second_name, u.user_role
             FROM users_relations as r
             JOIN users as u on u.id = r.user_id
-            WHERE r.boss_id = '${uuid}';
+            WHERE r.approver_id = '${uuid}';
             """)
     User selectSubordinates(@Param("uuid") UUID uuid);
 

@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.*;
 import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.Request;
 import ru.tinkoff.lab.tripAPI.business.dto.RequestDto;
+import ru.tinkoff.lab.tripAPI.business.enums.RequestStatus;
 
 import java.util.List;
 import java.util.UUID;
@@ -19,7 +20,7 @@ public interface RequestMapper {
     @Select("""
             INSERT INTO request(status, description, worker_id, destination_id, comment,
             	start_date, end_date, tickets)
-            	VALUES (#{requestStatus}, #{description}, uuid(#{workerId}),
+            	VALUES ('PENDING', #{description}, uuid(#{workerId}),
             	       uuid(#{destinationId}), #{comment}, #{startDate}, #{endDate}, #{ticketsUrl})
             	RETURNING id;
             """)
@@ -55,12 +56,19 @@ public interface RequestMapper {
 
     @Update("""
             UPDATE request
-            SET status=#{requestStatus}, description=#{description},
+            SET status='PENDING', description=#{description},
             worker_id=uuid(#{workerId}), destination_id=uuid(#{destinationId}), comment=#{comment},
             start_date=#{startDate}, end_date=#{endDate}, tickets=#{ticketsUrl}
             WHERE id = uuid(#{id});
             """)
     void updateRequest(RequestDto requestDto);
+
+    @Update("""
+            UPDATE request
+            SET status=#{status}, comment=#{comment}, approver_id='${approverId}'
+            WHERE id = '${requestId}';
+            """)
+    void updateRequestStatus(@Param("requestId") UUID requestId, RequestStatus status, String comment, @Param("approverId") UUID approverId);
 
     @Delete("""
             DELETE FROM request
@@ -92,11 +100,11 @@ public interface RequestMapper {
             JOIN users u on r.worker_id = u.id
             JOIN destination d on r.destination_id = d.id
             JOIN office o on d.office_id = o.id
-            WHERE u.id in (SELECT user_id FROM users_relations WHERE boss_id = '${bossId}')
+            WHERE u.id in (SELECT user_id FROM users_relations WHERE approver_id = '${approverId}')
             AND r.status = 'PENDING'
             ORDER BY r.start_date OFFSET #{offset} ROWS FETCH NEXT #{rows} ROWS ONLY;
             """)
-    List<Request> selectIncomingRequests(@Param("bossId") UUID bossId, int offset, int rows);
+    List<Request> selectIncomingRequests(@Param("approverId") UUID approverId, int offset, int rows);
 
     //TODO ask if we need requests with all statuses
     @Results(value = {

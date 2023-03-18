@@ -12,12 +12,10 @@ import ru.tinkoff.lab.tripAPI.business.*;
 import ru.tinkoff.lab.tripAPI.business.dto.DestinationDto;
 import ru.tinkoff.lab.tripAPI.business.dto.RequestDto;
 import ru.tinkoff.lab.tripAPI.business.dto.TripDto;
-import ru.tinkoff.lab.tripAPI.business.enums.RequestStatus;
 import ru.tinkoff.lab.tripAPI.business.enums.TripStatus;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
 
 import java.sql.Timestamp;
-import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -88,7 +86,7 @@ public class AccommodationDestinationTripServiceTest {
                 "Smith",
                 "USER",
                 "something");
-        requestDto = new RequestDto(RequestStatus.APPROVED, "Approved request",
+        requestDto = new RequestDto("Pending request",
                 "Nothing", timestampEnd, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh");
         // init accommodations
         Id accommodationId1 = accommodationDestinationTripService.createAccommodation(accommodation1);

@@ -12,7 +12,6 @@ import ru.tinkoff.lab.tripAPI.business.*;
 import ru.tinkoff.lab.tripAPI.business.dto.DestinationDto;
 import ru.tinkoff.lab.tripAPI.business.dto.NotificationDto;
 import ru.tinkoff.lab.tripAPI.business.dto.RequestDto;
-import ru.tinkoff.lab.tripAPI.business.enums.RequestStatus;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
 
 import java.sql.Timestamp;
@@ -85,7 +84,7 @@ public class NotificationServiceTest {
         userBoss.setId(bossId.getId());
         userService.createRelation(UUID.fromString(bossId.getId()), UUID.fromString(workerId.getId()));
 
-        firstRequest = new RequestDto(RequestStatus.PENDING, "Request 7 with late start date",
+        firstRequest = new RequestDto("Request 7 with late start date",
                 "Nothing", timestampEnd, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh");
 
         firstRequest.setWorkerId(user.getId());
@@ -98,7 +97,7 @@ public class NotificationServiceTest {
         destinationDto.setId(destinationId.getId());
         firstRequest.setDestinationId(destinationDto.getId());
 
-        secondRequest = new RequestDto(RequestStatus.PENDING, "Request 2",
+        secondRequest = new RequestDto("Request 2",
                 "Nothing", timestampEnd, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh");
         secondRequest.setWorkerId(user.getId());
         secondRequest.setDestinationId(destinationDto.getId());

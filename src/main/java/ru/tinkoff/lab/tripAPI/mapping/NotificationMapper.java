@@ -21,9 +21,31 @@ public interface NotificationMapper {
             """)
     Id insertNotification(NotificationDto notificationDto) throws RuntimeException;
 
+    @Update("""
+            UPDATE notification
+            SET watched='true'
+            WHERE id='${notificationId}';
+            """)
+    void updateNotificationToWatched(@Param("notificationId") UUID notificationId);
+
+    @Insert({
+            "<script>",
+            "INSERT INTO notification",
+            "(request_id, watched, user_id)",
+            "VALUES" +
+                    "<foreach item='element' collection='notifications' open='' separator=',' close=''>" +
+                    "(" +
+                        "uuid(#{element.requestId,jdbcType=VARCHAR}),",
+                        "#{element.watched,jdbcType=BOOLEAN},",
+                        "uuid(#{element.userId,jdbcType=VARCHAR})" +
+                    ")" +
+                    "</foreach>",
+            "</script>"})
+    void insertMultipleNotifications(@Param("notifications") List<NotificationDto> notifications);
+
     @Results(value = {
             @Result(property = "id", column = "notification_id"),
-            @Result(property = "userId", column = "boss_id"),
+            @Result(property = "userId", column = "approver_id"),
             @Result(property = "request.id", column = "request_id"),
             @Result(property = "request.requestStatus", column = "status"),
             @Result(property = "request.startDate", column = "start_date"),
@@ -40,7 +62,7 @@ public interface NotificationMapper {
             @Result(property = "watched", column = "watched")
     })
     @Select("""
-            SELECT n.id as notification_id, n.watched, n.user_id as boss_id,
+            SELECT n.id as notification_id, n.watched, n.user_id as approver_id,
             r.id as request_id, r.status, r.description, r.comment, r.start_date, r.end_date, r.tickets,
             d.id as dest_id, d.description as destination_description, d.seat_place,
             u.email, u.first_name, u.second_name,
@@ -56,7 +78,7 @@ public interface NotificationMapper {
 
     @Results(value = {
             @Result(property = "id", column = "notification_id"),
-            @Result(property = "userId", column = "boss_id"),
+            @Result(property = "userId", column = "approver_id"),
             @Result(property = "request.id", column = "request_id"),
             @Result(property = "request.requestStatus", column = "status"),
             @Result(property = "request.startDate", column = "start_date"),
@@ -73,7 +95,7 @@ public interface NotificationMapper {
             @Result(property = "watched", column = "watched")
     })
     @Select("""
-            SELECT n.id as notification_id, n.watched, n.user_id as boss_id,
+            SELECT n.id as notification_id, n.watched, n.user_id as approver_id,
             r.id as request_id, r.status, r.description, r.comment, r.start_date, r.end_date, r.tickets,
             d.id as dest_id, d.description as destination_description, d.seat_place,
             u.email, u.first_name, u.second_name,

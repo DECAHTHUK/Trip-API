@@ -19,7 +19,19 @@ public class NotificationService {
     private final NotificationMapper notificationMapper;
 
     public Id createNotification(NotificationDto notificationDto) {
-        return notificationMapper.insertNotification(notificationDto);
+        try {
+            return notificationMapper.insertNotification(notificationDto);
+        } catch (RuntimeException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    public void createMultipleNotifications(List<NotificationDto> notifications) {
+        try {
+            notificationMapper.insertMultipleNotifications(notifications);
+        } catch (RuntimeException e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
     }
 
     public Notification getNotificationById(UUID uuid) {
@@ -28,6 +40,10 @@ public class NotificationService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Notification with id = " + uuid + " was not found");
         }
         return notification;
+    }
+
+    public void markNotificationAsWatched(UUID uuid) {
+        notificationMapper.updateNotificationToWatched(uuid);
     }
 
     public List<Notification> getUnwatchedNotifications(UUID uuid) {

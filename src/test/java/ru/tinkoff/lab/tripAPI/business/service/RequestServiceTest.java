@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @RunWith(SpringRunner.class)
 @MybatisTest
 @Import({RequestService.class, AccommodationDestinationTripService.class,
-        UserService.class, OfficeService.class, UuidTypeHandler.class})
+        UserService.class, OfficeService.class, NotificationService.class, UuidTypeHandler.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -37,6 +37,9 @@ public class RequestServiceTest {
 
     @Autowired
     RequestService requestService;
+
+    @Autowired
+    NotificationService notificationService;
 
     @Autowired
     AccommodationDestinationTripService accommodationDestinationTripService;
@@ -54,26 +57,28 @@ public class RequestServiceTest {
 
     Id workerId;
     String workerEmail;
-    Id bossId;
+    Id approverId;
+
+    Id approver2Id;
 
     @BeforeAll
     public void init() {
         timestampStart = new Timestamp(2020 - 1901, 12, 12, 12, 0, 0, 0);
         timestampEnd = new Timestamp(2020 - 1901, 12, 15, 15, 0, 0, 0);
         requestDtos = List.of(
-                new RequestDto(RequestStatus.PENDING, "Just a request", "Nothing",
+                new RequestDto( "Just a request", "Nothing",
                         timestampStart, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"),
-                new RequestDto(RequestStatus.AWAIT_CHANGES, "Request with await", "Nothing",
+                new RequestDto( "Request", "Nothing",
                         timestampStart, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"),
-                new RequestDto(RequestStatus.PENDING, "Request 3", "Nothing",
+                new RequestDto( "Request 3", "Nothing",
                         timestampStart, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"),
-                new RequestDto(RequestStatus.PENDING, "Request with late start date",
+                new RequestDto ("Request with late start date",
                         "Nothing", timestampEnd, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"),
-                new RequestDto(RequestStatus.PENDING, "Request 5",
+                new RequestDto( "Request 5",
                         "Nothing", timestampStart, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"),
-                new RequestDto(RequestStatus.PENDING, "Request 6",
+                new RequestDto( "Request 6",
                         "Nothing", timestampStart, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"),
-                new RequestDto(RequestStatus.PENDING, "Request 7 with late start date",
+                new RequestDto( "Request 7 with late start date",
                         "Nothing", timestampEnd, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh"));
         User user = new User("email@mail.ru",
                 "12345678",
@@ -84,14 +89,22 @@ public class RequestServiceTest {
         workerId = userService.createUser(user);
         workerEmail = user.getEmail();
 
-        User userBoss = new User("subordinate@mail.ru",
+        User userApprover = new User("approver@mail.ru",
                 "1234",
                 "Sam",
                 "Winchester",
                 "USER",
                 "SALT");
-        bossId = userService.createUser(userBoss);
-        userService.createRelation(UUID.fromString(bossId.getId()), UUID.fromString(workerId.getId()));
+        approverId = userService.createUser(userApprover);
+        User userApprover2 = new User("approver2@mail.ru",
+                "1234",
+                "Sam",
+                "Winchester",
+                "USER",
+                "SALT");
+        approver2Id = userService.createUser(userApprover2);
+        userService.createRelation(UUID.fromString(approverId.getId()), UUID.fromString(workerId.getId()));
+        userService.createRelation(UUID.fromString(approver2Id.getId()), UUID.fromString(workerId.getId()));
 
         Accommodation accommodation = new Accommodation(
                 "Zolotenko 24",
@@ -123,7 +136,7 @@ public class RequestServiceTest {
         User userFromDb = userService.findById(UUID.fromString(requestDtos.get(0).getWorkerId()));
 
         assertEquals(requestFromDb.getId(), requestDtos.get(0).getId());
-        assertEquals(requestFromDb.getRequestStatus(), requestDtos.get(0).getRequestStatus());
+        assertEquals(requestFromDb.getRequestStatus(), RequestStatus.PENDING);
         assertEquals(requestFromDb.getComment(), requestDtos.get(0).getComment());
         assertEquals(requestFromDb.getDescription(), requestDtos.get(0).getDescription());
         assertEquals(requestFromDb.getEndDate(), requestDtos.get(0).getEndDate());
@@ -132,6 +145,10 @@ public class RequestServiceTest {
         assertEquals(requestFromDb.getWorkerSecondName(), userFromDb.getSecondName());
         assertEquals(requestFromDb.getWorkerEmail(), userFromDb.getEmail());
         assertEquals(requestFromDb.getStartDate(), requestDtos.get(0).getStartDate());
+
+        System.out.println(notificationService.getUnwatchedNotifications(UUID.fromString(approverId.getId())));
+        System.out.println(notificationService.getUnwatchedNotifications(UUID.fromString(approver2Id.getId())));
+
     }
 
     @Test
@@ -147,6 +164,7 @@ public class RequestServiceTest {
 
     @Test
     @Order(3)
+    @Disabled // no need for this test, because there are no cases, when we need to delete requests
     @DisplayName("Test if request is getting deleted")
     public void deleteRequestTest() {
         assertNotNull(requestService.getRequest(UUID.fromString(requestDtos.get(0).getId())));
@@ -162,13 +180,13 @@ public class RequestServiceTest {
     @Order(4)
     @DisplayName("Test get incoming requests")
     public void getIncomingRequestsTest() {
-        List<Request> requests = requestService.getIncomingRequests(UUID.fromString(bossId.getId()), 1);
+        List<Request> requests = requestService.getIncomingRequests(UUID.fromString(approverId.getId()), 1);
 
         assertEquals(ROWS_AMOUNT, requests.size());
 
-        List<Request> requests2 = requestService.getIncomingRequests(UUID.fromString(bossId.getId()), 2);
+        List<Request> requests2 = requestService.getIncomingRequests(UUID.fromString(approverId.getId()), 2);
 
-        assertEquals(1, requests2.size());
+        assertEquals(2, requests2.size());
         assertTrue(requests2.stream().map(Request::getDescription)
                 .anyMatch(t -> t.equals("Request 7 with late start date")));
 

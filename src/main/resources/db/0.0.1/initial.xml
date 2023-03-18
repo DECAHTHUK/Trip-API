@@ -35,8 +35,8 @@
 
         <!--USER_RELATIONS -->
         <createTable tableName="users_relations">
-            <column name="boss_id" type="UUID">
-                <constraints foreignKeyName="fk_user_boss" references="users(id)" nullable="false"/>
+            <column name="approver_id" type="UUID">
+                <constraints foreignKeyName="fk_user_approver" references="users(id)" nullable="false"/>
             </column>
             <column name="user_id" type="UUID">
                 <constraints foreignKeyName="fk_user_sub" references="users(id)" nullable="false"/>
@@ -125,6 +125,9 @@
                 <constraints foreignKeyName="fk_request_office" references="office(id)"/>
             </column>
             <column name="comment" type="TEXT"/>
+            <column name="approver_id" type="UUID">
+                <constraints foreignKeyName="fk_request_approver" references="users(id)" nullable="true"/>
+            </column>
             <column name="start_date" type="TIMESTAMPTZ"/>
             <column name="end_date" type="TIMESTAMPTZ"/>
             <column name="tickets" type="TEXT"/>
