@@ -168,8 +168,8 @@ public class RequestControllerTest {
 
     @Test
     @Order(2)
-    @DisplayName("Test if request get updated and deleted")
-    public void testUpdateDeleteRequest() throws Exception {
+    @DisplayName("Test if request get updated")
+    public void testUpdateRequest() throws Exception {
         requestDto.setDescription("Updated");
         // Updating request
         RequestBuilder requestBuilderPut = MockMvcRequestBuilders
@@ -191,19 +191,7 @@ public class RequestControllerTest {
         assertNotNull(updatedRequest);
         assertEquals("Updated", updatedRequest.getDescription());
 
-        // NO NEED IN TESTING DELETE(MOREOVER VIOLATES FK)
-        // Deleting request
-        /*RequestBuilder requestBuilderDelete = MockMvcRequestBuilders
-                .delete("/requests/" + requestDto.getId());
-
-        mockMvc.perform(requestBuilderDelete);
-
-        mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
-        ResponseStatusException exception = (ResponseStatusException) mvcResultGet.getResolvedException();
-
-        assertNotNull(exception);
-        assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());*/
-
+        assertEquals(RequestStatus.PENDING, updatedRequest.getRequestStatus());
 
         //test if NEW notifications are created
         List<Notification> notifications1 = notificationService
@@ -241,18 +229,69 @@ public class RequestControllerTest {
         assertNotEquals(notificationToWatch.getId(), notifications1.get(0).getId());
     }
 
-    /*
-    Руся, напиши тесты для остальных ендпоинтов до теста на аппрув.
-    Тест4: sendRequestForEditing, declineRequest(проверка что меянется статус)
-    Тест5: updateRequest и проверка, пришла ли нотификация ТОЛЬКО челу,
-     который указан как approverId в теле реквеста(ну и проверка что меняется статус на PENDING)
-    Тест6: оставшийся тест на approve
-    По желанию можно написать тесты на getUnwatchedNotifications из юзер контроллера,
-    А также /{uuid}/trips-at/{page} из юзер контроллера. Но это все необязательно, уверен в исправной работе
-    Если что не так-пиши.
-     */
     @Test
     @Order(4)
+    @DisplayName("Send request for editing test + decline request test")
+    public void testSendForEditingAndDecline() throws Exception {
+        Accommodation accommodation = new Accommodation("Zayarskaya 29",
+                "http://notALocalHost/reservation/oewjfoi2j3f98p32fh2h382yh9832");
+        Id accommodationId = accommodationDestinationTripService.createAccommodation(accommodation);
+        accommodation.setId(accommodationId.getId());
+
+        TripDto tripDto = new TripDto(null, accommodationId.getId(), destinationDto.getId(),
+                requestId.getId());
+
+        RequestStatusChangeDto requestStatusChangeDto =
+                new RequestStatusChangeDto(approverId.getId(), tripDto, "Change it!!");
+
+        // Send For Editing test
+        RequestBuilder requestBuilderPut = MockMvcRequestBuilders
+                .put("/requests/" + requestId.getId() + "/send-for-editing")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(mapper.writeValueAsString(requestStatusChangeDto));
+
+        mockMvc.perform(requestBuilderPut);
+
+        Request requestFromDb = requestService.getRequest(UUID.fromString(requestId.getId()));
+        assertEquals(RequestStatus.AWAIT_CHANGES, requestFromDb.getRequestStatus());
+
+        // Decline test
+        requestBuilderPut = MockMvcRequestBuilders
+                .put("/requests/" + requestId.getId() + "/decline")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(mapper.writeValueAsString(requestStatusChangeDto));
+        mockMvc.perform(requestBuilderPut);
+
+        requestFromDb = requestService.getRequest(UUID.fromString(requestId.getId()));
+        assertEquals(RequestStatus.DECLINED, requestFromDb.getRequestStatus());
+    }
+
+    @Test
+    @Order(5)
+    @DisplayName("Update and check notification test")
+    public void testUpdateAndCheckNotification() throws Exception {
+        Request request = requestService.getRequest(UUID.fromString(requestDto.getId()));
+        assertEquals(RequestStatus.DECLINED, request.getRequestStatus());
+        assertNotNull(request.getApproverId());
+        requestDto.setComment("New comment");
+
+        RequestBuilder requestBuilderPut = MockMvcRequestBuilders
+                .put("/requests")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(mapper.writeValueAsString(requestDto));
+        mockMvc.perform(requestBuilderPut);
+
+        request = requestService.getRequest(UUID.fromString(requestDto.getId()));
+        assertEquals(RequestStatus.PENDING, request.getRequestStatus());
+        List<Notification> notifications = notificationService.getUnwatchedNotifications(UUID.fromString(request.getApproverId()));
+        assertEquals(2, notifications.size());
+
+        List<Notification> notificationsForSecondApprover = notificationService.getUnwatchedNotifications(UUID.fromString(approver2Id.getId()));
+        assertEquals(2, notificationsForSecondApprover.size());
+    }
+
+    @Test
+    @Order(6)
     @DisplayName("Test approve endpoint")
     public void testApproveRequest() throws Exception {
         // Creating TripDto and Accomodation
