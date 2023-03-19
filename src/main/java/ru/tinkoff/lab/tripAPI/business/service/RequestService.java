@@ -43,7 +43,7 @@ public class RequestService {
 
     public Id createRequest(RequestDto requestDto) {
         TransactionStatus transactionStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
-        Id requestId = new Id();
+        Id requestId;
         try {
             requestId = requestMapper.insertRequest(requestDto);
             List<NotificationDto> notificationDtoList = new ArrayList<>();
@@ -83,13 +83,7 @@ public class RequestService {
             requestMapper.updateRequest(requestDto);
 
             String approverId = getRequest(UUID.fromString(requestDto.getId())).getApproverId();
-            if (approverId == null || approverId.isEmpty()) {
-                List<NotificationDto> notificationDtoList = new ArrayList<>();
-                for (String id : userRelationMapper.selectApproversIds(UUID.fromString(requestDto.getWorkerId()))) {
-                    notificationDtoList.add(new NotificationDto(requestDto.getId(), false, id));
-                }
-                if (!notificationDtoList.isEmpty()) notificationService.createMultipleNotifications(notificationDtoList);
-            } else {
+            if (approverId != null && !approverId.isEmpty()) {
                 notificationService.createNotification(new NotificationDto(requestDto.getId(), false, approverId));
             }
 
@@ -111,6 +105,9 @@ public class RequestService {
 
     public Id approveRequest(UUID uuid, RequestStatusChangeDto requestStatusChangeDto) {
         requestStatusChangeDto.getTripDto().setTripStatus(TripStatus.PENDING);
+        if (requestStatusChangeDto.getTripDto() == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "RequestStatusChangeDto MUST have valid TripDto in body when approving request");
+        }
         TransactionStatus transactionStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
         try {
             requestMapper.updateRequestStatus(uuid, RequestStatus.APPROVED,

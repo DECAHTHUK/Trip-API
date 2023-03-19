@@ -208,16 +208,4 @@ public class RequestServiceTest {
         assertTrue(requests.stream()
                 .allMatch(t -> t.getWorkerEmail().equals(workerEmail)));
     }
-
-    //TODO change this method
-    @Test
-    @Order(6)
-    @Disabled
-    @DisplayName("Test select some trips with pagination")
-    public void testSelectSomeTrips() {
-        List<Trip> trips = accommodationDestinationTripService.getSomeTrips(UUID.fromString(workerId.getId()), 1);
-
-        assertEquals(ROWS_AMOUNT, trips.size());
-    }
-
 }

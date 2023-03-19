@@ -16,6 +16,7 @@ import ru.tinkoff.lab.tripAPI.business.enums.TripStatus;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -183,8 +184,8 @@ public class AccommodationDestinationTripServiceTest {
         assertEquals(tripDto.getRequestId(), tripFromDb.getRequestId());
         assertEquals(tripDto.getTripStatus(), tripFromDb.getTripStatus());
 
-//        List<Trip> trips = accommodationDestinationTripService.getSomeTrips(UUID.fromString(worker.getId()), 1);
-//        assertEquals(1, trips.size());
+        List<Trip> trips = accommodationDestinationTripService.getSomeTrips(UUID.fromString(worker.getId()), 1);
+        assertEquals(1, trips.size());
     }
 
     @Test

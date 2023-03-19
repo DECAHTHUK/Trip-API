@@ -139,11 +139,11 @@ public interface AccommodationDestinationTripMapper {
             SELECT t.id as trip_id, t.trip_status, t.request_id, a.id as accom_id, a.address, a.booking_tickets,
             d.id as dest_id, d.description as destination_description, d.seat_place,
             o.id as office_id, o.address as office_address, o.description as office_description
-            FROM request r
-            JOIN trip t on r.trip_id = t.id
-            JOIN office o on r.office_id = o.id
+            FROM trip t
+            JOIN request r on t.request_id = r.id
             JOIN accommodation a on t.accommodation_id = a.id
             JOIN destination d on t.destination_id = d.id
+            JOIN office o on d.office_id = o.id
             WHERE r.worker_id = '${userId}'
             ORDER BY r.start_date OFFSET #{offset} ROWS FETCH NEXT #{rows} ROWS ONLY;
             """)
