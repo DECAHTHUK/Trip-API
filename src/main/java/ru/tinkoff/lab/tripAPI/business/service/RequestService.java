@@ -5,9 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.support.DefaultTransactionDefinition;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.Request;
@@ -36,13 +34,11 @@ public class RequestService {
 
     private final AccommodationDestinationTripService accommodationDestinationTripService;
 
-    private final PlatformTransactionManager transactionManager;
-
     @Value("${pagination}")
     private int ROWS_AMOUNT;
 
+    @Transactional
     public Id createRequest(RequestDto requestDto) {
-        TransactionStatus transactionStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
         Id requestId;
         try {
             requestId = requestMapper.insertRequest(requestDto);
@@ -51,10 +47,8 @@ public class RequestService {
                 notificationDtoList.add(new NotificationDto(requestId.getId(), false, id));
             }
             if (!notificationDtoList.isEmpty()) notificationService.createMultipleNotifications(notificationDtoList);
-            transactionManager.commit(transactionStatus);
             return requestId;
         } catch (RuntimeException e) {
-            transactionManager.rollback(transactionStatus);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
@@ -77,8 +71,8 @@ public class RequestService {
                 workerId, page * ROWS_AMOUNT - ROWS_AMOUNT, ROWS_AMOUNT);
     }
 
+    @Transactional
     public void updateRequest(RequestDto requestDto) {
-        TransactionStatus transactionStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
         try {
             requestMapper.updateRequest(requestDto);
 
@@ -86,10 +80,7 @@ public class RequestService {
             if (approverId != null && !approverId.isEmpty()) {
                 notificationService.createNotification(new NotificationDto(requestDto.getId(), false, approverId));
             }
-
-            transactionManager.commit(transactionStatus);
         } catch (RuntimeException e) {
-            transactionManager.rollback(transactionStatus);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
@@ -103,20 +94,17 @@ public class RequestService {
                 UUID.fromString(requestStatusChangeDto.getApproverId()));
     }
 
+    @Transactional
     public Id approveRequest(UUID uuid, RequestStatusChangeDto requestStatusChangeDto) {
         requestStatusChangeDto.getTripDto().setTripStatus(TripStatus.PENDING);
         if (requestStatusChangeDto.getTripDto() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "RequestStatusChangeDto MUST have valid TripDto in body when approving request");
         }
-        TransactionStatus transactionStatus = transactionManager.getTransaction(new DefaultTransactionDefinition());
         try {
             requestMapper.updateRequestStatus(uuid, RequestStatus.APPROVED,
                     requestStatusChangeDto.getComment(), UUID.fromString(requestStatusChangeDto.getApproverId()));
-            Id tripId = accommodationDestinationTripService.createTrip(requestStatusChangeDto.getTripDto());
-            transactionManager.commit(transactionStatus);
-            return tripId;
+            return accommodationDestinationTripService.createTrip(requestStatusChangeDto.getTripDto());
         } catch (RuntimeException e) {
-            transactionManager.rollback(transactionStatus);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
         }
     }
