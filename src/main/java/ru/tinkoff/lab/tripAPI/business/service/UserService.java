@@ -1,7 +1,9 @@
 package ru.tinkoff.lab.tripAPI.business.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.User;
 import ru.tinkoff.lab.tripAPI.mapping.UserMapper;
@@ -20,27 +22,31 @@ public class UserService {
         try {
             return userMapper.insertUser(user);
         } catch (RuntimeException e) {
-            return null;
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,  e.getMessage());
         }
     }
 
-    public User findById(String userId) {
-        return userMapper.selectUser(UUID.fromString(userId));
+    public User findById(UUID uuid) {
+        User user = userMapper.selectUser(uuid);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with id = " + uuid + " was not found");
+        }
+        return user;
     }
 
     public void updateUser(User user) {
         userMapper.updateUser(user);
     }
 
-    public void deleteUser(String id) {
-        userMapper.deleteUser(UUID.fromString(id));
+    public void deleteUser(UUID id) {
+        userMapper.deleteUser(id);
     }
 
-    public void createRelation(String bossId, String userId) {
-        userRelationMapper.insertUserRelation(UUID.fromString(bossId), UUID.fromString(userId));
+    public void createRelation(UUID approverId, UUID userId) {
+        userRelationMapper.insertUserRelation(approverId, userId);
     }
 
-    public void deleteRelation(String bossId, String userId) {
-        userRelationMapper.deleteUserRelation(UUID.fromString(bossId), UUID.fromString(userId));
+    public void deleteRelation(UUID approverId, UUID userId) {
+        userRelationMapper.deleteUserRelation(approverId, userId);
     }
 }

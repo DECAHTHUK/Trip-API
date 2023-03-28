@@ -1,18 +1,19 @@
 package ru.tinkoff.lab.tripAPI.business;
 
 import lombok.Data;
-
-import java.sql.Timestamp;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class Accommodation {
     private String id;
 
     private String address;
 
-    private Timestamp checkinTime;
-
-    private Timestamp checkoutTime;
-
     private String bookingUrl;
+
+    public Accommodation(String address, String bookingUrl) {
+        this.address = address;
+        this.bookingUrl = bookingUrl;
+    }
 }

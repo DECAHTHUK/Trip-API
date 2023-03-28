@@ -1,9 +1,11 @@
 package ru.tinkoff.lab.tripAPI.business;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import ru.tinkoff.lab.tripAPI.business.enums.TripStatus;
 
 @Data
+@NoArgsConstructor
 public class Trip {
 
     private String id;
@@ -13,4 +15,6 @@ public class Trip {
     private Accommodation accommodation;
 
     private Destination destination;
+
+    private String requestId;
 }

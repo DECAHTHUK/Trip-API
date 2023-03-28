@@ -2,39 +2,75 @@ package ru.tinkoff.lab.tripAPI.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.tinkoff.lab.tripAPI.business.Id;
-import ru.tinkoff.lab.tripAPI.business.User;
+import ru.tinkoff.lab.tripAPI.business.*;
+import ru.tinkoff.lab.tripAPI.business.service.AccommodationDestinationTripService;
+import ru.tinkoff.lab.tripAPI.business.service.NotificationService;
+import ru.tinkoff.lab.tripAPI.business.service.RequestService;
 import ru.tinkoff.lab.tripAPI.business.service.UserService;
+
+import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
 
-    @PostMapping(value = "/users")
+    private final RequestService requestService;
+
+    private final NotificationService notificationService;
+
+    private final AccommodationDestinationTripService accommodationDestinationTripService;
+
+    @PostMapping("")
     public Id createNewUser(@RequestBody User user) {
         return userService.createUser(user);
     }
 
-    @GetMapping(value = "/users/{uuid}")
-    public User getUserById(@PathVariable String uuid) {
+    @GetMapping("/{uuid}")
+    public User getUserById(@PathVariable UUID uuid) {
         return userService.findById(uuid);
     }
 
-    @PutMapping(value = "/users")
-    public String updateUser(@RequestBody User user) {
+    @PutMapping("")
+    public void updateUser(@RequestBody User user) {
         userService.updateUser(user);
-        return "Success";
     }
 
-    @PostMapping(value = "/users/{boss}/subordinates/{subordinate}")
-    public void createRelation(@PathVariable String boss, @PathVariable String subordinate) {
-        userService.createRelation(boss, subordinate);
+    @DeleteMapping("/{uuid}")
+    public void deleteUserById(@PathVariable UUID uuid) {
+        userService.deleteUser(uuid);
     }
 
-    @DeleteMapping(value = "/users/{boss}/subordinates/{subordinate}")
-    public void deleteRelation(@PathVariable String boss, @PathVariable String subordinate) {
-        userService.deleteRelation(boss, subordinate);
+    @PostMapping("/{approver}/subordinates/{subordinate}")
+    public void createRelation(@PathVariable UUID approver, @PathVariable UUID subordinate) {
+        userService.createRelation(approver, subordinate);
+    }
+
+    @DeleteMapping("/{approver}/subordinates/{subordinate}")
+    public void deleteRelation(@PathVariable UUID approver, @PathVariable UUID subordinate) {
+        userService.deleteRelation(approver, subordinate);
+    }
+
+    @GetMapping("/{uuid}/incoming-requests-at/{page}")
+    public List<Request> getIncomingRequests(@PathVariable UUID uuid, @PathVariable int page) {
+        return requestService.getIncomingRequests(uuid, page);
+    }
+
+    @GetMapping("/{uuid}/outgoing-requests-at/{page}")
+    public List<Request> getOutgoingRequests(@PathVariable UUID uuid, @PathVariable int page) {
+        return requestService.getOutgoingRequests(uuid, page);
+    }
+
+    @GetMapping("/{uuid}/trips-at/{page}")
+    public List<Trip> getSomeTrips(@PathVariable UUID uuid, @PathVariable int page) {
+        return accommodationDestinationTripService.getSomeTrips(uuid, page);
+    }
+
+    @GetMapping("/{uuid}/unwatched-notifications")
+    public List<Notification> getUnwatchedNotifications(@PathVariable UUID uuid) {
+        return notificationService.getUnwatchedNotifications(uuid);
     }
 }

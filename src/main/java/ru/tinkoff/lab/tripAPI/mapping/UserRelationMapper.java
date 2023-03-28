@@ -1,10 +1,8 @@
 package ru.tinkoff.lab.tripAPI.mapping;
 
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.*;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -14,14 +12,19 @@ import java.util.UUID;
 public interface UserRelationMapper {
 
     @Insert("""
-            INSERT INTO users_relations (boss_id, user_id)
-            VALUES ('${bossId}', '${userId}');
+            INSERT INTO users_relations (approver_id, user_id)
+            VALUES ('${approverId}', '${userId}');
             """)
-    void insertUserRelation(@Param("bossId") UUID bossId, @Param("userId") UUID userId);
+    void insertUserRelation(@Param("approverId") UUID approverId, @Param("userId") UUID userId);
 
     @Delete("""
             DELETE FROM users_relations
-            WHERE boss_id = '${bossId}' and user_id = '${userId}';
+            WHERE approver_id = '${approverId}' and user_id = '${userId}';
             """)
-    void deleteUserRelation(@Param("bossId") UUID bossId, @Param("userId") UUID userId);
+    void deleteUserRelation(@Param("approverId") UUID approverId, @Param("userId") UUID userId);
+    
+    @Select("""
+            SELECT approver_id FROM users_relations WHERE user_id='${userId}';
+            """)
+    List<String> selectApproversIds(@Param("userId") UUID userId);
 }

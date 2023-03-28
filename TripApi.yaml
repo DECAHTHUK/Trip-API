@@ -21,8 +21,8 @@ tags:
     description: Endpoints for accommodations
   - name: destinationsEnd
     description: Endpoints for destinations
-  - name: transportationsEnd
-    description: Endpoints for transportations
+  - name: notificationsEnd
+    description: Endpoints for notifications
 
 
 paths:
@@ -255,15 +255,15 @@ paths:
         '500':
           description: Internal server error
 
-  '/users/{boss}/subordinates/{subordinate}':
+  '/users/{approver}/subordinates/{subordinate}':
     post:
       tags:
         - usersEnd
       operationId: createRelation
-      description: Creates a relation for user with id {boss}
+      description: Creates a relation for user with id {approver}
       parameters:
         - in: path
-          name: boss
+          name: approver
           schema:
             type: string
             format: uuid
@@ -290,10 +290,10 @@ paths:
       tags:
         - usersEnd
       operationId: deleteRelation
-      description: Deletes a relation for user with id {boss}
+      description: Deletes a relation for user with id {approver}
       parameters:
         - in: path
-          name: boss
+          name: approver
           schema:
             type: string
             format: uuid
@@ -373,33 +373,6 @@ paths:
         '500':
           description: Internal server error
 
-  '/requests/{uuid}/approve':
-    put:
-      tags:
-        - requestsEnd
-      summary: Изменение статуса заявки на принятый
-      operationId: updateRequestStatus
-      parameters:
-        - in: path
-          name: uuid
-          schema:
-            type: string
-            format: uuid
-          required: true
-      responses:
-        '200':
-          description: Success
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: string
-                description: description
-        '500':
-          description: Internal server error
-
-
   '/requests/{uuid}':
     get:
       tags:
@@ -420,6 +393,109 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Request'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/requests/{uuid}/approve':
+    put:
+      tags:
+        - requestsEnd
+      summary: Подтверждение реквеста с последующим созданием сущности Trip в базе данных(Accommodation и Destination должны создаваться заранее).
+      operationId: approveRequest
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+      requestBody:
+        description: ТрипДто который создастся в бд обязателен
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestStatusChangeDto'
+      responses:
+        '200':
+          description: Success(Id of created Trip)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Id'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/requests/{uuid}/decline':
+    put:
+      tags:
+        - requestsEnd
+      summary: Изменение статуса заявки на DECLINED с добавлением комментария и айди аппрувера
+      operationId: declineRequest
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+      requestBody:
+        description: ТрипДто НЕ нужен
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestStatusChangeDto'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/requests/{uuid}/send-for-editing':
+    put:
+      tags:
+        - requestsEnd
+      summary: Изменение статуса заявки на AWAIT_CHANGES с добавлением комментария и айди аппрувера
+      operationId: sendRequestForEditing
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+      requestBody:
+        description: ТрипДто НЕ нужен
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestStatusChangeDto'
+      responses:
+        '200':
+          description: Success
         '400':
           description: Bad Request
           content:
@@ -500,6 +576,32 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/TripDto'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/trips/{uuid}/cancel':
+    put:
+      tags:
+        - tripsEnd
+      summary: Отмена трипа(complete-аться скорее всего будет автоматически)
+      operationId: cancelTrip
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
       responses:
         '200':
           description: Success
@@ -725,45 +827,20 @@ paths:
         '500':
           description: Internal server error
 
-  '/transportations':
-    post:
-      tags:
-        - transportationsEnd
-      summary: Transportation creation
-      operationId: createNewTransportation
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Transportation'
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Id'
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: string
-                description: description
-        '500':
-          description: Internal server error
+
+  '/notifications/{uuid}/watch':
     put:
       tags:
-        - transportationsEnd
-      summary: Transportation update
-      operationId: updateTransportation
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Transportation'
+        - notificationsEnd
+      summary: Изменение нотификации на просмотренную
+      operationId: markAsWatched
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
       responses:
         '200':
           description: Success
@@ -777,12 +854,12 @@ paths:
         '500':
           description: Internal server error
 
-  '/transportations/{uuid}':
+  '/notifications/{uuid}':
     get:
       tags:
-        - transportationsEnd
-      summary: Get a transportation
-      operationId: getTransportation
+        - notificationsEnd
+      summary: Получение нотификации(вряд ли пригодится)
+      operationId: getNotification
       parameters:
         - in: path
           name: uuid
@@ -796,7 +873,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Transportation'
+                $ref: '#/components/schemas/Notification'
         '400':
           description: Bad Request
           content:
@@ -806,31 +883,6 @@ paths:
                 description: description
         '500':
           description: Internal server error
-    delete:
-      tags:
-        - transportationsEnd
-      summary: Delete a transportation
-      operationId: deleteTransportation
-      parameters:
-        - in: path
-          name: uuid
-          schema:
-            type: string
-            format: uuid
-          required: true
-      responses:
-        '200':
-          description: Success
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                type: string
-                description: description
-        '500':
-          description: Internal server error
-
 
 components:
   schemas:
@@ -872,34 +924,9 @@ components:
           $ref: '#/components/schemas/Request'
         watched:
           type: boolean
-        user:
-          $ref: '#/components/schemas/User'
-
-    Transportation:
-      type: object
-      properties:
-        id:
+        userId:
           type: string
           format: uuid
-        dtype:
-          type: string
-          enum:
-            - plane
-            - train
-        date:
-          type: string
-          format: date
-          example: "2021-01-30T08:30:00Z"
-        from:
-          type: string
-        to:
-          type: string
-        departurePoint:
-          type: string
-        recommendedDateTime:
-          type: string
-          format: date
-          example: "2021-01-30T08:30:00Z"
 
     Trip:
       type: object
@@ -917,24 +944,24 @@ components:
           $ref: '#/components/schemas/Accommodation'
         destination:
           $ref: '#/components/schemas/Destination'
+        requestId:
+          type: string
+          format: uuid
 
 
     Request:
       type: object
       required:
-        - tripId
         - status
         - worker
-        - officeId
         - startDate
         - endDate
+        - destination
       properties:
         id:
           type: string
           format: uuid
-        trip:
-          $ref: '#/components/schemas/Trip'
-        status:
+        requestStatus:
           type: string
           enum:
             - approved
@@ -943,12 +970,19 @@ components:
             - declined
         description:
           type: string
-        worker:
-          $ref: '#/components/schemas/User'
-        office:
-          $ref: '#/components/schemas/Office'
+        workerFirstName:
+          type: string
+        workerSecondName:
+          type: string
+        workerEmail:
+          type: string
+        destination:
+          $ref: '#/components/schemas/Destination'
         comment:
           type: string
+        approverId:
+          type: string
+          format: uuid
         startDate:
           type: string
           format: date
@@ -957,11 +991,7 @@ components:
           type: string
           format: date
           example: "2021-01-30T08:30:00Z"
-        transportTo:
-          type: string
-        transportFrom:
-          type: string
-        tickets:
+        ticketsUrl:
           type: string
           format: url
 
@@ -975,14 +1005,6 @@ components:
           format: uuid
         address:
           type: string
-        checkinTime:
-          type: string
-          format: date
-          example: "2021-01-30T08:30:00Z"
-        checkoutTime:
-          type: string
-          format: date
-          example: "2021-01-30T08:30:00Z"
         bookingUrl:
           type: string
           format: url
@@ -1017,22 +1039,12 @@ components:
         id:
           type: string
           format: uuid
-        tripId:
-          type: string
-          format: uuid
-        status:
-          type: string
-          enum:
-            - approved
-            - pending
-            - awaitChanges
-            - declined
         description:
           type: string
         workerId:
           type: string
           format: uuid
-        officeId:
+        destinationId:
           type: string
           format: uuid
         comment:
@@ -1045,11 +1057,7 @@ components:
           type: string
           format: date
           example: "2021-01-30T08:30:00Z"
-        transportTo:
-          type: string
-        transportFrom:
-          type: string
-        tickets:
+        ticketsUrl:
           type: string
           format: url
 
@@ -1072,6 +1080,9 @@ components:
         destinationId:
           type: string
           format: uuid
+        requestId:
+          type: string
+          format: uuid
 
     DestinationDto:
       type: object
@@ -1086,6 +1097,15 @@ components:
           format: uuid
         seatPlace:
           type: string
+
+    RequestStatusChangeDto:
+      type: object
+      properties:
+        approverId:
+          type: string
+          format: uuid
+        tripDto:
+          $ref: "#/components/schemas/TripDto"
 
     Id:
       type: object
