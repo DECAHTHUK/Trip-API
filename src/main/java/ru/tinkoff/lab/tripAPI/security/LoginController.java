@@ -4,30 +4,29 @@ import jakarta.security.auth.message.AuthException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import ru.tinkoff.lab.tripAPI.security.models.JwtAuthentication;
 import ru.tinkoff.lab.tripAPI.security.models.LoginRequest;
 
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class SecurityTestController {
+public class LoginController {
     private final AuthService authService;
 
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest loginRequest) throws AuthException {
-        System.out.println(loginRequest);
-        System.out.println("IM A NIGGA");
         return authService.login(loginRequest);
     }
 
     @PreAuthorize("hasAuthority('USER')")
-    @GetMapping("hello/user")
+    @GetMapping("/hello/user")
     public String helloUser() {
         final JwtAuthentication authInfo = authService.getAuthInfo();
         return authInfo.getPrincipal().toString();
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("hello/admin")
+    @GetMapping("/hello/admin")
     public String helloAdmin() {
         final JwtAuthentication authInfo = authService.getAuthInfo();
         return authInfo.getPrincipal().toString();

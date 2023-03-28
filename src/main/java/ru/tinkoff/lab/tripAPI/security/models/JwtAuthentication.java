@@ -1,4 +1,4 @@
-package ru.tinkoff.lab.tripAPI.security;
+package ru.tinkoff.lab.tripAPI.security.models;
 
 import lombok.Data;
 import org.springframework.security.core.Authentication;

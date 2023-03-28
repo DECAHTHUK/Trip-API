@@ -8,6 +8,7 @@ import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.User;
 import ru.tinkoff.lab.tripAPI.mapping.UserMapper;
 import ru.tinkoff.lab.tripAPI.mapping.UserRelationMapper;
+import ru.tinkoff.lab.tripAPI.security.utils.PasswordEncoder;
 
 import java.util.UUID;
 
@@ -18,14 +19,20 @@ public class UserService {
 
     private final UserRelationMapper userRelationMapper;
 
+    private final PasswordEncoder passwordEncoder;
+
     public Id createUser(User user) {
         try {
-            System.out.println(user);
+            String salt = passwordEncoder.generateSalt();
+            String password = passwordEncoder.generatePassword(user.getPassword(), salt);
+            user.setSalt(salt);
+            user.setPassword(password);
             return userMapper.insertUser(user);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,  e.getMessage());
         }
     }
+    //TODO: issue: mybatis throws forbidden if something wrong with request(ex. if user already exists in db)
 
     public User findById(UUID uuid) {
         User user = userMapper.selectUser(uuid);

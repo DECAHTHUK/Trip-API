@@ -42,7 +42,7 @@ public interface UserMapper {
             @Result(property = "userRole", column = "user_role")
     })
     @Select("""
-            SELECT u.id, u.email, u.password, u.first_name, u.second_name, u.user_role
+            SELECT u.id, u.email, u.password, u.first_name, u.second_name, u.user_role, u.salt
             FROM users as u
             WHERE u.email = #{email};
             """)

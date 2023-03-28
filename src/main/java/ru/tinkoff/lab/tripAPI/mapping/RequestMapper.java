@@ -108,7 +108,6 @@ public interface RequestMapper {
             """)
     List<Request> selectIncomingRequests(@Param("approverId") UUID approverId, int offset, int rows);
 
-    //TODO ask if we need requests with all statuses
     @Results(value = {
             @Result(property = "id", column = "request_id"),
             @Result(property = "requestStatus", column = "status"),

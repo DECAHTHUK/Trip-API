@@ -1,4 +1,4 @@
-package ru.tinkoff.lab.tripAPI.security;
+package ru.tinkoff.lab.tripAPI.security.utils;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;

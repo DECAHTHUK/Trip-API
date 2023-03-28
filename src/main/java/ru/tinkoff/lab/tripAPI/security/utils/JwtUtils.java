@@ -1,8 +1,9 @@
-package ru.tinkoff.lab.tripAPI.security;
+package ru.tinkoff.lab.tripAPI.security.utils;
 
 import io.jsonwebtoken.Claims;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import ru.tinkoff.lab.tripAPI.security.models.JwtAuthentication;
 import ru.tinkoff.lab.tripAPI.security.models.Role;
 
 import java.util.Set;

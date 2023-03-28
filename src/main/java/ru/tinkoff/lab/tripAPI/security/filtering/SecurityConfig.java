@@ -1,4 +1,4 @@
-package ru.tinkoff.lab.tripAPI.security;
+package ru.tinkoff.lab.tripAPI.security.filtering;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

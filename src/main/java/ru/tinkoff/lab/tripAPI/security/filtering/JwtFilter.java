@@ -1,4 +1,4 @@
-package ru.tinkoff.lab.tripAPI.security;
+package ru.tinkoff.lab.tripAPI.security.filtering;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
@@ -12,6 +12,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.GenericFilterBean;
+import ru.tinkoff.lab.tripAPI.security.models.JwtAuthentication;
+import ru.tinkoff.lab.tripAPI.security.utils.JwtProvider;
+import ru.tinkoff.lab.tripAPI.security.utils.JwtUtils;
 
 import java.io.IOException;
 
