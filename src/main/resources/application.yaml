@@ -3,8 +3,8 @@ spring:
     change-log: classpath:/db/changelog.xml
     enabled: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/postgres
-    username: postgres
+    url: jdbc:postgresql://localhost:5432/testdb
+    username: test
     password: qwerty1234
     driver-class-name: org.postgresql.Driver
 
@@ -20,3 +20,7 @@ mybatis:
   type-handlers-package: ru.tinkoff.lab.tripAPI.mapping.handlers
 
 pagination: 5
+  
+jwt:
+  secret:
+    access: MGJzYm52aGxpMjg5d2s1M3U5OTY5NjViaGNnMjh5ZzEwZGp4ZDZlcXIweGJhcWNueHFkMHM1cWRyaGtyaGNkNGZtemliM3lzZWQzMzdtcjh5cHFxcmlnYzZ5YW4wa2NmMWIwaXBkeHE0anlveGNxdDhvdmY1eXB6czNicHU1MjA=

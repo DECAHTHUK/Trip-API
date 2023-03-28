@@ -36,6 +36,18 @@ public interface UserMapper {
             """)
     User selectUser(@Param("uuid") UUID uuid);
 
+    @Results(value = {
+            @Result(property = "firstName", column = "first_name"),
+            @Result(property = "secondName", column = "second_name"),
+            @Result(property = "userRole", column = "user_role")
+    })
+    @Select("""
+            SELECT u.id, u.email, u.password, u.first_name, u.second_name, u.user_role
+            FROM users as u
+            WHERE u.email = #{email};
+            """)
+    User selectUserByEmail(String email);
+
     /**
      * Additional query for our many-to-many relationship(myBatis works only this way)
      */

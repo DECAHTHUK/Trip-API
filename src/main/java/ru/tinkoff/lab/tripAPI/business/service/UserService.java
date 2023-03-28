@@ -20,6 +20,7 @@ public class UserService {
 
     public Id createUser(User user) {
         try {
+            System.out.println(user);
             return userMapper.insertUser(user);
         } catch (RuntimeException e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,  e.getMessage());
@@ -30,6 +31,14 @@ public class UserService {
         User user = userMapper.selectUser(uuid);
         if (user == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with id = " + uuid + " was not found");
+        }
+        return user;
+    }
+
+    public User findByEmail(String email) {
+        User user = userMapper.selectUserByEmail(email);
+        if (user == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with email = " + email + " was not found");
         }
         return user;
     }

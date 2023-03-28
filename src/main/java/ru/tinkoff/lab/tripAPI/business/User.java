@@ -1,6 +1,5 @@
 package ru.tinkoff.lab.tripAPI.business;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.util.List;
@@ -15,13 +14,10 @@ public class User {
 
     private String password;
 
-    @JsonProperty("first_name")
     private String firstName;
 
-    @JsonProperty("second_name")
     private String secondName;
 
-    @JsonProperty("user_role")
     private String userRole;
 
     private List<User> subordinates;

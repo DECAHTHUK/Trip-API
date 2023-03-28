@@ -8,6 +8,7 @@ import ru.tinkoff.lab.tripAPI.business.service.NotificationService;
 import ru.tinkoff.lab.tripAPI.business.service.RequestService;
 import ru.tinkoff.lab.tripAPI.business.service.UserService;
 
+
 import java.util.List;
 import java.util.UUID;
 
@@ -73,4 +74,5 @@ public class UserController {
     public List<Notification> getUnwatchedNotifications(@PathVariable UUID uuid) {
         return notificationService.getUnwatchedNotifications(uuid);
     }
+    //TODO create multiple relations
 }
