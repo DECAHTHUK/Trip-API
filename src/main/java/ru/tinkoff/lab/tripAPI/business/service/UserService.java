@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.User;
+import ru.tinkoff.lab.tripAPI.exceptions.UserCreateException;
+import ru.tinkoff.lab.tripAPI.exceptions.UserNotFoundException;
 import ru.tinkoff.lab.tripAPI.mapping.UserMapper;
 import ru.tinkoff.lab.tripAPI.mapping.UserRelationMapper;
 
@@ -21,15 +23,15 @@ public class UserService {
     public Id createUser(User user) {
         try {
             return userMapper.insertUser(user);
-        } catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,  e.getMessage());
+        } catch (UserCreateException e) {
+            throw new UserCreateException("Error with creating this user");
         }
     }
 
     public User findById(UUID uuid) {
         User user = userMapper.selectUser(uuid);
         if (user == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with id = " + uuid + " was not found");
+            throw new UserNotFoundException("User with id = " + uuid + " was not found");
         }
         return user;
     }

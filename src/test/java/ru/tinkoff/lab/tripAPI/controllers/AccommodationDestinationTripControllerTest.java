@@ -24,6 +24,9 @@ import ru.tinkoff.lab.tripAPI.business.dto.RequestDto;
 import ru.tinkoff.lab.tripAPI.business.dto.TripDto;
 import ru.tinkoff.lab.tripAPI.business.enums.TripStatus;
 import ru.tinkoff.lab.tripAPI.business.service.*;
+import ru.tinkoff.lab.tripAPI.exceptions.AccommodationNotFoundException;
+import ru.tinkoff.lab.tripAPI.exceptions.DestinationNotFoundException;
+import ru.tinkoff.lab.tripAPI.exceptions.TripNotFoundException;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
 
 import java.sql.Timestamp;
@@ -224,7 +227,7 @@ public class AccommodationDestinationTripControllerTest {
 
         //Trying to get the trip to check if it was deleted
         mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
-        ResponseStatusException exception = (ResponseStatusException) mvcResultGet.getResolvedException();
+        TripNotFoundException exception = (TripNotFoundException) mvcResultGet.getResolvedException();
 
         assertNotNull(exception);
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
@@ -266,7 +269,7 @@ public class AccommodationDestinationTripControllerTest {
 
         //Trying to get the trip to check if it was deleted
         mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
-        ResponseStatusException exception = (ResponseStatusException) mvcResultGet.getResolvedException();
+        DestinationNotFoundException exception = (DestinationNotFoundException) mvcResultGet.getResolvedException();
 
         assertNotNull(exception);
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
@@ -306,7 +309,7 @@ public class AccommodationDestinationTripControllerTest {
 
         //Trying to get the trip to check if it was deleted
         mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
-        ResponseStatusException exception = (ResponseStatusException) mvcResultGet.getResolvedException();
+        AccommodationNotFoundException exception = (AccommodationNotFoundException) mvcResultGet.getResolvedException();
 
         assertNotNull(exception);
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());

@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.Office;
+import ru.tinkoff.lab.tripAPI.exceptions.OfficeNotFoundException;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
 
 import java.util.UUID;
@@ -70,8 +71,8 @@ public class OfficeServiceTest {
 
         officeService.deleteOffice(UUID.fromString(office.getId()));
 
-        ResponseStatusException thrown = assertThrows(ResponseStatusException.class, () -> officeService.getOffice(UUID.fromString(office.getId())));
+        OfficeNotFoundException thrown = assertThrows(OfficeNotFoundException.class, () -> officeService.getOffice(UUID.fromString(office.getId())));
 
-        assertEquals(HttpStatus.NOT_FOUND + " \"Office with id = " + office.getId() + " was not found\"", thrown.getMessage());
+        assertEquals("Office with id = " + office.getId() + " was not found", thrown.getMessage());
     }
 }

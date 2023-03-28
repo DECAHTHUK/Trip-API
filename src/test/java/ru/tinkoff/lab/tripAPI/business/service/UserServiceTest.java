@@ -12,6 +12,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.User;
+import ru.tinkoff.lab.tripAPI.exceptions.UserCreateException;
+import ru.tinkoff.lab.tripAPI.exceptions.UserNotFoundException;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
 
 
@@ -83,16 +85,16 @@ public class UserServiceTest {
 
         userService.deleteUser(UUID.fromString(user.getId()));
 
-        ResponseStatusException thrown = assertThrows(ResponseStatusException.class, () -> userService.findById(UUID.fromString(user.getId())));
+        UserNotFoundException thrown = assertThrows(UserNotFoundException.class, () -> userService.findById(UUID.fromString(user.getId())));
 
-        assertEquals(HttpStatus.NOT_FOUND + " \"User with id = " + user.getId() + " was not found\"", thrown.getMessage());
+        assertEquals("User with id = " + user.getId() + " was not found", thrown.getMessage());
     }
 
     @Test
     @Order(4)
     @DisplayName("Test the email unique constraint")
     public void testCreateUser_whenEmailAlreadyInDatabase_shouldReturnNull() {
-        ResponseStatusException thrown = assertThrows(ResponseStatusException.class, () -> userService.createUser(user));
+        UserCreateException thrown = assertThrows(UserCreateException.class, () -> userService.createUser(user));
         assertEquals(HttpStatus.BAD_REQUEST, thrown.getStatusCode());
     }
 

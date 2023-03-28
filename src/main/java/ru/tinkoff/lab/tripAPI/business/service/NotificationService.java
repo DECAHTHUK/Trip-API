@@ -7,6 +7,8 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.Notification;
 import ru.tinkoff.lab.tripAPI.business.dto.NotificationDto;
+import ru.tinkoff.lab.tripAPI.exceptions.NotificationCreateException;
+import ru.tinkoff.lab.tripAPI.exceptions.NotificationNotFoundException;
 import ru.tinkoff.lab.tripAPI.mapping.NotificationMapper;
 
 import java.util.List;
@@ -21,23 +23,23 @@ public class NotificationService {
     public Id createNotification(NotificationDto notificationDto) {
         try {
             return notificationMapper.insertNotification(notificationDto);
-        } catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        } catch (NotificationCreateException e) {
+            throw new NotificationCreateException(e.getMessage());
         }
     }
 
     public void createMultipleNotifications(List<NotificationDto> notifications) {
         try {
             notificationMapper.insertMultipleNotifications(notifications);
-        } catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        } catch (NotificationCreateException e) {
+            throw new NotificationCreateException(e.getMessage());
         }
     }
 
     public Notification getNotificationById(UUID uuid) {
         Notification notification = notificationMapper.selectNotification(uuid);
         if (notification == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Notification with id = " + uuid + " was not found");
+            throw new NotificationNotFoundException("Notification with id = " + uuid + " was not found");
         }
         return notification;
     }
