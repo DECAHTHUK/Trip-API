@@ -23,6 +23,7 @@ import ru.tinkoff.lab.tripAPI.business.service.AccommodationDestinationTripServi
 import ru.tinkoff.lab.tripAPI.business.service.NotificationService;
 import ru.tinkoff.lab.tripAPI.business.service.RequestService;
 import ru.tinkoff.lab.tripAPI.business.service.UserService;
+import ru.tinkoff.lab.tripAPI.exceptions.UserNotFoundException;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
 
 import java.util.List;
@@ -200,7 +201,7 @@ public class UserControllerTest {
         mockMvc.perform(requestBuilderDelete);
 
         mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
-        ResponseStatusException exception = (ResponseStatusException) mvcResultGet.getResolvedException();
+        UserNotFoundException exception = (UserNotFoundException) mvcResultGet.getResolvedException();
 
         assertNotNull(exception);
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());

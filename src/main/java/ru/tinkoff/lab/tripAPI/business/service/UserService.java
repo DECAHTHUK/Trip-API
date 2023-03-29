@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.User;
+import ru.tinkoff.lab.tripAPI.exceptions.UserCreateException;
+import ru.tinkoff.lab.tripAPI.exceptions.UserNotFoundException;
 import ru.tinkoff.lab.tripAPI.mapping.UserMapper;
 import ru.tinkoff.lab.tripAPI.mapping.UserRelationMapper;
 import ru.tinkoff.lab.tripAPI.security.utils.PasswordEncoder;
@@ -21,6 +23,8 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final PasswordEncoder passwordEncoder;
+
     public Id createUser(User user) {
         try {
             String salt = passwordEncoder.generateSalt();
@@ -28,8 +32,8 @@ public class UserService {
             user.setSalt(salt);
             user.setPassword(password);
             return userMapper.insertUser(user);
-        } catch (Exception e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,  e.getMessage());
+        } catch (UserCreateException e) {
+            throw new UserCreateException("Error with creating this user");
         }
     }
     //TODO: issue: mybatis throws forbidden if something wrong with request(ex. if user already exists in db)
@@ -37,7 +41,7 @@ public class UserService {
     public User findById(UUID uuid) {
         User user = userMapper.selectUser(uuid);
         if (user == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with id = " + uuid + " was not found");
+            throw new UserNotFoundException("User with id = " + uuid + " was not found");
         }
         return user;
     }

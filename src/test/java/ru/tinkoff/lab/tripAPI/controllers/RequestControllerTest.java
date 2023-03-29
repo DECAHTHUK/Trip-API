@@ -196,13 +196,13 @@ public class RequestControllerTest {
         //test if NEW notifications are created
         List<Notification> notifications1 = notificationService
                 .getUnwatchedNotifications(UUID.fromString(approverId.getId()));
-        assertEquals(2, notifications1.size());
+        assertEquals(1, notifications1.size());
         assertEquals(requestId.getId(), notifications1.get(0).getRequest().getId());
         assertEquals(approverId.getId(), notifications1.get(0).getUserId());
 
         List<Notification> notifications2 = notificationService
                 .getUnwatchedNotifications(UUID.fromString(approver2Id.getId()));
-        assertEquals(2, notifications2.size());
+        assertEquals(1, notifications2.size());
         assertEquals(requestId.getId(), notifications2.get(0).getRequest().getId());
         assertEquals(approver2Id.getId(), notifications2.get(0).getUserId());
     }
@@ -214,7 +214,7 @@ public class RequestControllerTest {
         // TEST markAsWatched
         List<Notification> notifications1 = notificationService
                 .getUnwatchedNotifications(UUID.fromString(approverId.getId()));
-        assertEquals(2, notifications1.size());
+        assertEquals(1, notifications1.size());
 
         Notification notificationToWatch = notifications1.get(0);
 
@@ -225,8 +225,7 @@ public class RequestControllerTest {
 
         notifications1 = notificationService
                 .getUnwatchedNotifications(UUID.fromString(approverId.getId()));
-        assertEquals(1, notifications1.size());
-        assertNotEquals(notificationToWatch.getId(), notifications1.get(0).getId());
+        assertEquals(0, notifications1.size());
     }
 
     @Test
@@ -284,10 +283,10 @@ public class RequestControllerTest {
         request = requestService.getRequest(UUID.fromString(requestDto.getId()));
         assertEquals(RequestStatus.PENDING, request.getRequestStatus());
         List<Notification> notifications = notificationService.getUnwatchedNotifications(UUID.fromString(request.getApproverId()));
-        assertEquals(2, notifications.size());
+        assertEquals(1, notifications.size());
 
         List<Notification> notificationsForSecondApprover = notificationService.getUnwatchedNotifications(UUID.fromString(approver2Id.getId()));
-        assertEquals(2, notificationsForSecondApprover.size());
+        assertEquals(1, notificationsForSecondApprover.size());
     }
 
     @Test

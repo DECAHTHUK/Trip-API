@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.Office;
 import ru.tinkoff.lab.tripAPI.business.service.OfficeService;
+import ru.tinkoff.lab.tripAPI.exceptions.OfficeNotFoundException;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -103,7 +104,7 @@ public class OfficeControllerTest {
         mockMvc.perform(requestBuilderDelete);
 
         mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
-        ResponseStatusException exception = (ResponseStatusException) mvcResultGet.getResolvedException();
+        OfficeNotFoundException exception = (OfficeNotFoundException) mvcResultGet.getResolvedException();
 
         assertNotNull(exception);
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
