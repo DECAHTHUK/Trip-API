@@ -15,6 +15,7 @@ import ru.tinkoff.lab.tripAPI.business.User;
 import ru.tinkoff.lab.tripAPI.exceptions.UserCreateException;
 import ru.tinkoff.lab.tripAPI.exceptions.UserNotFoundException;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
+import org.springframework.dao.DuplicateKeyException;
 
 
 import java.util.UUID;
@@ -94,8 +95,8 @@ public class UserServiceTest {
     @Order(4)
     @DisplayName("Test the email unique constraint")
     public void testCreateUser_whenEmailAlreadyInDatabase_shouldReturnNull() {
-        UserCreateException thrown = assertThrows(UserCreateException.class, () -> userService.createUser(user));
-        assertEquals(HttpStatus.BAD_REQUEST, thrown.getStatusCode());
+        DuplicateKeyException thrown = assertThrows(DuplicateKeyException.class, () -> userService.createUser(user));
+        assertTrue(thrown.getMessage().contains("duplicate"));
     }
 
     @Test
