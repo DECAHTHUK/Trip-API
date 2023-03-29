@@ -73,6 +73,33 @@ public class UserControllerTest {
     String userJwt;
     String adminJwt;
 
+    @BeforeAll
+    public void init() throws Exception {
+        // Adding second user to create relations
+        RequestBuilder requestBuilderPostUser = MockMvcRequestBuilders.post("/users")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .content(mapper.writeValueAsString(subUser));
+
+        MvcResult mvcResultPost = mockMvc.perform(requestBuilderPostUser).andReturn();
+        String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
+
+        Id id = mapper.readValue(responseBodyPost, Id.class);
+        assertNotNull(id);
+        subUser.setId(id.getId());
+
+        // getting jwt token
+        RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.TEXT_PLAIN)
+                .content(mapper.writeValueAsString(new LoginRequest(subUser.getEmail(), subUser.getPassword())));
+
+        mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
+        responseBodyPost = mvcResultPost.getResponse().getContentAsString();
+
+        userJwt = responseBodyPost;
+    }
+
     @Test
     @Order(1)
     @DisplayName("Test user gets created and returned")
@@ -119,42 +146,6 @@ public class UserControllerTest {
     @Order(2)
     @DisplayName("Test user relations gets created")
     public void testCreateUserRelation() throws Exception {
-        // Adding second user to create relations
-        RequestBuilder requestBuilderPostUser = MockMvcRequestBuilders.post("/users")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(mapper.writeValueAsString(subUser));
-
-        MvcResult mvcResultPost = mockMvc.perform(requestBuilderPostUser).andReturn();
-        String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
-
-        Id id = mapper.readValue(responseBodyPost, Id.class);
-        assertNotNull(id);
-        subUser.setId(id.getId());
-        subUser.setSubordinates(List.of());
-
-        // getting jwt token
-        RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.TEXT_PLAIN)
-                .content(mapper.writeValueAsString(new LoginRequest(subUser.getEmail(), subUser.getPassword())));
-
-        mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
-        responseBodyPost = mvcResultPost.getResponse().getContentAsString();
-
-        userJwt = responseBodyPost;
-
-        //Testing get request for newly created user
-        RequestBuilder requestBuilderGetSubUser =
-                MockMvcRequestBuilders.get("/users/" + subUser.getId())
-                        .accept(MediaType.APPLICATION_JSON_VALUE)
-                        .header("Authorization", "Bearer " + userJwt);
-
-        MvcResult mvcResultGetSubUser = mockMvc.perform(requestBuilderGetSubUser).andReturn();
-        String responseBodyGetSubUser = mvcResultGetSubUser.getResponse().getContentAsString();
-
-        User userFromRequest = mapper.readValue(responseBodyGetSubUser, User.class);
-        assertEquals(subUser.getEmail(), userFromRequest.getEmail());
         assertEquals(0, user.getSubordinates().size());
 
         // Testing post new relations

@@ -27,6 +27,12 @@ import ru.tinkoff.lab.tripAPI.exceptions.AccommodationNotFoundException;
 import ru.tinkoff.lab.tripAPI.exceptions.DestinationNotFoundException;
 import ru.tinkoff.lab.tripAPI.exceptions.TripNotFoundException;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
+import ru.tinkoff.lab.tripAPI.security.AuthService;
+import ru.tinkoff.lab.tripAPI.security.LoginController;
+import ru.tinkoff.lab.tripAPI.security.filtering.JwtFilter;
+import ru.tinkoff.lab.tripAPI.security.filtering.SecurityConfig;
+import ru.tinkoff.lab.tripAPI.security.models.LoginRequest;
+import ru.tinkoff.lab.tripAPI.security.utils.JwtProvider;
 import ru.tinkoff.lab.tripAPI.security.utils.PasswordEncoder;
 
 import java.sql.Timestamp;
@@ -34,12 +40,13 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @AutoConfigureMybatis
-@WebMvcTest(controllers = AccommodationDestinationTripController.class)
-@Import({AccommodationDestinationTripService.class, UuidTypeHandler.class, OfficeService.class,
-        RequestService.class, NotificationService.class, UserService.class, PasswordEncoder.class})
+@WebMvcTest(controllers = {AccommodationDestinationTripController.class, LoginController.class, UserController.class})
+@Import({UserService.class, UuidTypeHandler.class, NotificationService.class, RequestService.class, AccommodationDestinationTripService.class,
+        PasswordEncoder.class, JwtProvider.class, JwtFilter.class, SecurityConfig.class, AuthService.class, OfficeService.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -83,7 +90,34 @@ public class AccommodationDestinationTripControllerTest {
             "USER",
             "something");
 
+    String workerJwt;
+
     TripDto tripDto = new TripDto();
+
+    @BeforeAll
+    public void init() throws Exception {
+        RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/users")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .content(mapper.writeValueAsString(worker));
+
+        MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
+        String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
+
+        Id workerId = mapper.readValue(responseBodyPost, Id.class);
+        assertNotNull(workerId);
+        worker.setId(workerId.getId());
+
+        //getting worker's jwt token
+        requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.TEXT_PLAIN)
+                .content(mapper.writeValueAsString(new LoginRequest(worker.getEmail(), worker.getPassword())));
+
+        mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
+        responseBodyPost = mvcResultPost.getResponse().getContentAsString();
+        workerJwt = responseBodyPost;
+    }
 
     @Test
     @Order(1)
@@ -94,6 +128,7 @@ public class AccommodationDestinationTripControllerTest {
                 .post("/accommodations")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", "Bearer " + workerJwt)
                 .content(mapper.writeValueAsString(accommodation));
 
         MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
@@ -106,6 +141,7 @@ public class AccommodationDestinationTripControllerTest {
         //Testing get accommodation method
         RequestBuilder requestBuilderGet = MockMvcRequestBuilders
                 .get("/accommodations/" + accommodation.getId())
+                .header("Authorization", "Bearer " + workerJwt)
                 .accept(MediaType.APPLICATION_JSON_VALUE);
 
         MvcResult mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
@@ -129,6 +165,7 @@ public class AccommodationDestinationTripControllerTest {
                 .post("/destinations")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", "Bearer " + workerJwt)
                 .content(mapper.writeValueAsString(destinationDto));
 
         MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
@@ -141,6 +178,7 @@ public class AccommodationDestinationTripControllerTest {
         //Testing newly created destination gets returned
         RequestBuilder requestBuilderGet = MockMvcRequestBuilders
                 .get("/destinations/" + destinationDto.getId())
+                .header("Authorization", "Bearer " + workerJwt)
                 .accept(MediaType.APPLICATION_JSON_VALUE);
 
         MvcResult mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
@@ -154,9 +192,6 @@ public class AccommodationDestinationTripControllerTest {
     @Order(3)
     @DisplayName("Test if newly created trip gets returned")
     public void testCreateGetTrip() throws Exception {
-        Id workerId = userService.createUser(worker);
-        worker.setId(workerId.getId());
-
         requestDto.setDestinationId(destinationDto.getId());
         requestDto.setWorkerId(worker.getId());
 
@@ -173,6 +208,7 @@ public class AccommodationDestinationTripControllerTest {
                 .post("/trips")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", "Bearer " + workerJwt)
                 .content(mapper.writeValueAsString(tripDto));
 
         MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
@@ -185,6 +221,7 @@ public class AccommodationDestinationTripControllerTest {
         //Testing get trip method
         RequestBuilder requestBuilderGet = MockMvcRequestBuilders
                 .get("/trips/" + tripDto.getId())
+                .header("Authorization", "Bearer " + workerJwt)
                 .accept(MediaType.APPLICATION_JSON_VALUE);
 
         MvcResult mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
@@ -196,6 +233,17 @@ public class AccommodationDestinationTripControllerTest {
 
     @Test
     @Order(4)
+    @DisplayName("Testing unauthorized user")
+    public void testUnauthorizedUser() throws Exception {
+        RequestBuilder requestBuilderGet = MockMvcRequestBuilders
+                .get("/trips/" + tripDto.getId())
+                .accept(MediaType.APPLICATION_JSON_VALUE);
+
+        mockMvc.perform(requestBuilderGet).andExpect(status().isForbidden());
+    }
+
+    @Test
+    @Order(4)
     @DisplayName("Test if trip gets updated and deleted")
     public void testUpdateDeleteTrip() throws Exception {
         tripDto.setTripStatus(TripStatus.COMPLETED);
@@ -203,6 +251,7 @@ public class AccommodationDestinationTripControllerTest {
         RequestBuilder requestBuilderPut = MockMvcRequestBuilders
                 .put("/trips")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", "Bearer " + workerJwt)
                 .content(mapper.writeValueAsString(tripDto));
 
         mockMvc.perform(requestBuilderPut);
@@ -210,6 +259,7 @@ public class AccommodationDestinationTripControllerTest {
         //Getting trip to check if it was updated
         RequestBuilder requestBuilderGet = MockMvcRequestBuilders
                 .get("/trips/" + tripDto.getId())
+                .header("Authorization", "Bearer " + workerJwt)
                 .accept(MediaType.APPLICATION_JSON_VALUE);
 
         MvcResult mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
@@ -221,7 +271,8 @@ public class AccommodationDestinationTripControllerTest {
 
         //Testing delete method
         RequestBuilder requestBuilderDelete = MockMvcRequestBuilders
-                .delete("/trips/" + tripDto.getId());
+                .delete("/trips/" + tripDto.getId())
+                .header("Authorization", "Bearer " + workerJwt);
 
         mockMvc.perform(requestBuilderDelete);
 
@@ -243,6 +294,7 @@ public class AccommodationDestinationTripControllerTest {
         RequestBuilder requestBuilderPut = MockMvcRequestBuilders
                 .put("/destinations")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", "Bearer " + workerJwt)
                 .content(mapper.writeValueAsString(destinationDto));
 
         mockMvc.perform(requestBuilderPut);
@@ -250,7 +302,8 @@ public class AccommodationDestinationTripControllerTest {
         //Getting trip to check if it was updated
         RequestBuilder requestBuilderGet = MockMvcRequestBuilders
                 .get("/destinations/" + destinationDto.getId())
-                .accept(MediaType.APPLICATION_JSON_VALUE);
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", "Bearer " + workerJwt);
 
         MvcResult mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
         String responseBodyGet = mvcResultGet.getResponse().getContentAsString();
@@ -263,7 +316,8 @@ public class AccommodationDestinationTripControllerTest {
         requestService.deleteRequest(UUID.fromString(requestDto.getId()));
         //Testing delete method
         RequestBuilder requestBuilderDelete = MockMvcRequestBuilders
-                .delete("/destinations/" + destinationDto.getId());
+                .delete("/destinations/" + destinationDto.getId())
+                .header("Authorization", "Bearer " + workerJwt);
 
         mockMvc.perform(requestBuilderDelete);
 
@@ -286,6 +340,7 @@ public class AccommodationDestinationTripControllerTest {
         RequestBuilder requestBuilderPut = MockMvcRequestBuilders
                 .put("/accommodations")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", "Bearer " + workerJwt)
                 .content(mapper.writeValueAsString(accommodation));
 
         mockMvc.perform(requestBuilderPut);
@@ -293,7 +348,8 @@ public class AccommodationDestinationTripControllerTest {
         //Getting accommodation to check if it was updated
         RequestBuilder requestBuilderGet = MockMvcRequestBuilders
                 .get("/accommodations/" + accommodation.getId())
-                .accept(MediaType.APPLICATION_JSON_VALUE);
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .header("Authorization", "Bearer " + workerJwt);
 
         MvcResult mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
         String responseBodyGet = mvcResultGet.getResponse().getContentAsString();
@@ -303,7 +359,8 @@ public class AccommodationDestinationTripControllerTest {
 
         //Testing delete method
         RequestBuilder requestBuilderDelete = MockMvcRequestBuilders
-                .delete("/accommodations/" + accommodation.getId());
+                .delete("/accommodations/" + accommodation.getId())
+                .header("Authorization", "Bearer " + workerJwt);
 
         mockMvc.perform(requestBuilderDelete);
 

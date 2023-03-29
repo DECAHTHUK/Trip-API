@@ -76,10 +76,8 @@ public class OfficeControllerTest {
     String userJwt;
     String adminJwt;
 
-    @Test
-    @Order(1)
-    @DisplayName("Test office gets created and returned")
-    void testCreateGetOffice() throws Exception {
+    @BeforeAll
+    public void init() throws Exception {
         RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
@@ -125,18 +123,24 @@ public class OfficeControllerTest {
         mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
         responseBodyPost = mvcResultPost.getResponse().getContentAsString();
         userJwt = responseBodyPost;
+    }
+
+    @Test
+    @Order(1)
+    @DisplayName("Test office gets created and returned")
+    void testCreateGetOffice() throws Exception {
 
         // Creating office
-        requestBuilderPost = MockMvcRequestBuilders.post("/offices")
+        RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/offices")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .content(mapper.writeValueAsString(office))
                 .header("Authorization", "Bearer " + adminJwt);
 
-        mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
-        responseBodyPost = mvcResultPost.getResponse().getContentAsString();
+        MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
+        String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
 
-        id = mapper.readValue(responseBodyPost, Id.class);
+        Id id = mapper.readValue(responseBodyPost, Id.class);
         assertNotNull(id);
         office.setId(id.getId());
 

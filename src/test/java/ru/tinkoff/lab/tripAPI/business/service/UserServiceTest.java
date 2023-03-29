@@ -6,10 +6,12 @@ import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.User;
+import ru.tinkoff.lab.tripAPI.exceptions.UserCreateException;
 import ru.tinkoff.lab.tripAPI.exceptions.UserNotFoundException;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
 import org.springframework.dao.DuplicateKeyException;
@@ -93,8 +95,8 @@ public class UserServiceTest {
     @Order(4)
     @DisplayName("Test the email unique constraint")
     public void testCreateUser_whenEmailAlreadyInDatabase_shouldReturnNull() {
-        DuplicateKeyException thrown = assertThrows(DuplicateKeyException.class, () -> userService.createUser(user));
-        assertTrue(thrown.getMessage().contains("duplicate"));
+        UserCreateException thrown = assertThrows(UserCreateException.class, () -> userService.createUser(user));
+        assertEquals(HttpStatus.BAD_REQUEST, thrown.getStatusCode());
     }
 
     @Test
