@@ -3,9 +3,7 @@ package ru.tinkoff.lab.tripAPI.business.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.Accommodation;
 import ru.tinkoff.lab.tripAPI.business.Destination;
 import ru.tinkoff.lab.tripAPI.business.Id;
@@ -34,7 +32,7 @@ public class AccommodationDestinationTripService {
     public Id createAccommodation(Accommodation accommodation) {
         try {
             return mapper.insertAccommodation(accommodation);
-        } catch (AccommodationCreateException e) {
+        } catch (Exception e) {
             throw new AccommodationCreateException(e.getMessage());
         }
     }

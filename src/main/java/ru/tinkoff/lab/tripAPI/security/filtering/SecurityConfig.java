@@ -18,7 +18,6 @@ public class SecurityConfig {
 
     private final JwtFilter jwtFilter;
 
-    //TODO add paths
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
@@ -28,7 +27,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeHttpRequests(
                         authz -> authz
-                                .requestMatchers("/api/auth/login", "/api/auth/token", "/users", "/api/login").permitAll()
+                                .requestMatchers("/users", "/api/login").permitAll()
                                 .anyRequest().authenticated()
                                 .and()
                                 .addFilterAfter(jwtFilter, UsernamePasswordAuthenticationFilter.class))

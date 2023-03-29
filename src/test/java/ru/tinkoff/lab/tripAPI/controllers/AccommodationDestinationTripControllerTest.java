@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.*;
 import ru.tinkoff.lab.tripAPI.business.dto.DestinationDto;
 import ru.tinkoff.lab.tripAPI.business.dto.RequestDto;
@@ -28,6 +27,7 @@ import ru.tinkoff.lab.tripAPI.exceptions.AccommodationNotFoundException;
 import ru.tinkoff.lab.tripAPI.exceptions.DestinationNotFoundException;
 import ru.tinkoff.lab.tripAPI.exceptions.TripNotFoundException;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
+import ru.tinkoff.lab.tripAPI.security.utils.PasswordEncoder;
 
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -39,7 +39,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @AutoConfigureMybatis
 @WebMvcTest(controllers = AccommodationDestinationTripController.class)
 @Import({AccommodationDestinationTripService.class, UuidTypeHandler.class, OfficeService.class,
-        RequestService.class, NotificationService.class, UserService.class})
+        RequestService.class, NotificationService.class, UserService.class, PasswordEncoder.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

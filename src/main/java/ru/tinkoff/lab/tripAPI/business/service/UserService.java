@@ -23,8 +23,6 @@ public class UserService {
 
     private final PasswordEncoder passwordEncoder;
 
-    private final PasswordEncoder passwordEncoder;
-
     public Id createUser(User user) {
         try {
             String salt = passwordEncoder.generateSalt();
@@ -32,8 +30,8 @@ public class UserService {
             user.setSalt(salt);
             user.setPassword(password);
             return userMapper.insertUser(user);
-        } catch (UserCreateException e) {
-            throw new UserCreateException("Error with creating this user");
+        } catch (Exception e) {
+            throw new UserCreateException("Error creating this user: " + e.getMessage());
         }
     }
     //TODO: issue: mybatis throws forbidden if something wrong with request(ex. if user already exists in db)

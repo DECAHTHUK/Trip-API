@@ -1,9 +1,7 @@
 package ru.tinkoff.lab.tripAPI.business.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.Office;
 import ru.tinkoff.lab.tripAPI.exceptions.OfficeCreateException;
@@ -21,7 +19,7 @@ public class OfficeService {
     public Id createOffice(Office office) {
         try {
             return officeMapper.insertOffice(office);
-        } catch (OfficeCreateException e) {
+        } catch (Exception e) {
             throw new OfficeCreateException(e.getMessage());
         }
     }

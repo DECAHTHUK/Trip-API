@@ -46,7 +46,9 @@ public class PasswordEncoder {
     }
 
     public String decodeString(byte[] str) {
-        return new String(str, charset);
+        String out = new String(str, charset);
+        out = out.replaceAll("\u0000", "");
+        return out;
     }
     public byte[] encodeString(String str) {
         return str.getBytes(charset);

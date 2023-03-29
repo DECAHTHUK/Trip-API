@@ -24,6 +24,7 @@ import ru.tinkoff.lab.tripAPI.business.enums.RequestStatus;
 import ru.tinkoff.lab.tripAPI.business.enums.TripStatus;
 import ru.tinkoff.lab.tripAPI.business.service.*;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
+import ru.tinkoff.lab.tripAPI.security.utils.PasswordEncoder;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -35,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @AutoConfigureMybatis
 @WebMvcTest(controllers = {RequestController.class, NotificationController.class})
 @Import({RequestService.class, OfficeService.class, UserService.class,
-        AccommodationDestinationTripService.class, NotificationService.class, UuidTypeHandler.class})
+        AccommodationDestinationTripService.class, NotificationService.class, UuidTypeHandler.class, PasswordEncoder.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

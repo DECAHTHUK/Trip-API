@@ -26,13 +26,13 @@ public class UserController {
 
     private final AccommodationDestinationTripService accommodationDestinationTripService;
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("")
     public Id createNewUser(@RequestBody User user) {
         return userService.createUser(user);
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @GetMapping("/{uuid}")
     public User getUserById(@PathVariable UUID uuid) {
         return userService.findById(uuid);

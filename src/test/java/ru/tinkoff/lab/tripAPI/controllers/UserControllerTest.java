@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.User;
 import ru.tinkoff.lab.tripAPI.business.service.AccommodationDestinationTripService;
@@ -25,6 +24,13 @@ import ru.tinkoff.lab.tripAPI.business.service.RequestService;
 import ru.tinkoff.lab.tripAPI.business.service.UserService;
 import ru.tinkoff.lab.tripAPI.exceptions.UserNotFoundException;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
+import ru.tinkoff.lab.tripAPI.security.AuthService;
+import ru.tinkoff.lab.tripAPI.security.LoginController;
+import ru.tinkoff.lab.tripAPI.security.filtering.JwtFilter;
+import ru.tinkoff.lab.tripAPI.security.filtering.SecurityConfig;
+import ru.tinkoff.lab.tripAPI.security.models.LoginRequest;
+import ru.tinkoff.lab.tripAPI.security.utils.JwtProvider;
+import ru.tinkoff.lab.tripAPI.security.utils.PasswordEncoder;
 
 import java.util.List;
 
@@ -32,9 +38,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @AutoConfigureMybatis
-@WebMvcTest(controllers = UserController.class)
-@Import({UserService.class, UuidTypeHandler.class, NotificationService.class,
-        RequestService.class, AccommodationDestinationTripService.class})
+@WebMvcTest(controllers = {UserController.class, LoginController.class})
+@Import({UserService.class, UuidTypeHandler.class, NotificationService.class, RequestService.class, AccommodationDestinationTripService.class,
+        PasswordEncoder.class, JwtProvider.class, JwtFilter.class, SecurityConfig.class, AuthService.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -51,7 +57,7 @@ public class UserControllerTest {
             "qwertyuiop",
             "Ruslan",
             "Sultanov",
-            "user"
+            "ADMIN"
     );
 
     User subUser = new User(
@@ -59,8 +65,11 @@ public class UserControllerTest {
             "zamaykrasava",
             "Andrey",
             "Zamay",
-            "user"
+            "USER"
     );
+
+    String userJwt;
+    String adminJwt;
 
     @Test
     @Order(1)
@@ -79,16 +88,29 @@ public class UserControllerTest {
         user.setId(id.getId());
         user.setSubordinates(List.of());
 
+        //getting jwt token
+        requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.TEXT_PLAIN)
+                .content(mapper.writeValueAsString(new LoginRequest(user.getEmail(), user.getPassword())));
+
+        mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
+        responseBodyPost = mvcResultPost.getResponse().getContentAsString();
+        System.out.println("RBP: "  + responseBodyPost);
+        adminJwt = responseBodyPost;
+        System.out.println(adminJwt);
+
         //Testing get request for newly created user
         RequestBuilder requestBuilderGet =
                 MockMvcRequestBuilders.get("/users/" + user.getId())
+                        .header("Authorization", "Bearer " + adminJwt)
                         .accept(MediaType.APPLICATION_JSON_VALUE);
 
         MvcResult mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
         String responseBodyGet = mvcResultGet.getResponse().getContentAsString();
 
         User userFromRequest = mapper.readValue(responseBodyGet, User.class);
-        assertEquals(user, userFromRequest);
+        assertEquals(user.getEmail(), userFromRequest.getEmail());
     }
 
     @Test

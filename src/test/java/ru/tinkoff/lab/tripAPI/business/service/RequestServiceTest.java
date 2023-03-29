@@ -16,6 +16,7 @@ import ru.tinkoff.lab.tripAPI.business.dto.DestinationDto;
 import ru.tinkoff.lab.tripAPI.business.dto.RequestDto;
 import ru.tinkoff.lab.tripAPI.business.enums.RequestStatus;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
+import ru.tinkoff.lab.tripAPI.security.utils.PasswordEncoder;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -26,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @RunWith(SpringRunner.class)
 @MybatisTest
 @Import({RequestService.class, AccommodationDestinationTripService.class,
-        UserService.class, OfficeService.class, NotificationService.class, UuidTypeHandler.class})
+        UserService.class, OfficeService.class, NotificationService.class, UuidTypeHandler.class, PasswordEncoder.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

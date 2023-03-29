@@ -6,16 +6,14 @@ import org.mybatis.spring.boot.test.autoconfigure.MybatisTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.context.annotation.Import;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.User;
-import ru.tinkoff.lab.tripAPI.exceptions.UserCreateException;
 import ru.tinkoff.lab.tripAPI.exceptions.UserNotFoundException;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
 import org.springframework.dao.DuplicateKeyException;
+import ru.tinkoff.lab.tripAPI.security.utils.PasswordEncoder;
 
 
 import java.util.UUID;
@@ -24,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @MybatisTest
-@Import({UserService.class, UuidTypeHandler.class})
+@Import({UserService.class, UuidTypeHandler.class, PasswordEncoder.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -51,9 +49,9 @@ public class UserServiceTest {
         user.setId(userId.getId());
 
         bossId = userService.createUser(new User("krutoi1337@gmail.com",
-                "qwertyuio", "Rusya", "Talanov", "user"));
+                "qwertyuio", "Rusya", "Talanov", "ADMIN"));
         subordinateId = userService.createUser(new User("slavakpss@gmail.com",
-                "12345678", "Lyosha", "Sultanov", "user"));
+                "12345678", "Lyosha", "Sultanov", "USER"));
         userService.createRelation(UUID.fromString(bossId.getId()), UUID.fromString(subordinateId.getId()));
     }
 

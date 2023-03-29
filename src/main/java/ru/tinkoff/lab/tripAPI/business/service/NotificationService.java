@@ -1,9 +1,7 @@
 package ru.tinkoff.lab.tripAPI.business.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.Notification;
 import ru.tinkoff.lab.tripAPI.business.dto.NotificationDto;
@@ -23,7 +21,7 @@ public class NotificationService {
     public Id createNotification(NotificationDto notificationDto) {
         try {
             return notificationMapper.insertNotification(notificationDto);
-        } catch (NotificationCreateException e) {
+        } catch (Exception e) {
             throw new NotificationCreateException(e.getMessage());
         }
     }

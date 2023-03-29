@@ -47,7 +47,7 @@ public class RequestService {
             }
             if (!notificationDtoList.isEmpty()) notificationService.createMultipleNotifications(notificationDtoList);
             return requestId;
-        } catch (RequestCreateException e) {
+        } catch (Exception e) {
             throw new RequestCreateException(e.getMessage());
         }
     }
