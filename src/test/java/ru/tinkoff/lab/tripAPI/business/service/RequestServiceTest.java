@@ -134,7 +134,7 @@ public class RequestServiceTest {
         Request requestFromDb = requestService.getRequest(UUID.fromString(requestDtos.get(0).getId()));
         User userFromDb = userService.findById(UUID.fromString(requestDtos.get(0).getWorkerId()));
 
-        assertEquals(requestFromDb.getId(), "dummy");
+        assertEquals(requestFromDb.getId(), requestDtos.get(0).getId());
         assertEquals(requestFromDb.getRequestStatus(), RequestStatus.PENDING);
         assertEquals(requestFromDb.getComment(), requestDtos.get(0).getComment());
         assertEquals(requestFromDb.getDescription(), requestDtos.get(0).getDescription());
