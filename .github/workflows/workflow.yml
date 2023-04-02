@@ -1,0 +1,19 @@
+name: CI
+on: [push, pull]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: 17
+          distribution: 'adopt'
+          cache: gradle
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build
+      - name: Test services
+        run: gradle test --tests 'ru.tinkoff.lab.tripAPI.business.service*'
+
