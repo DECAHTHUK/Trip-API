@@ -17,5 +17,5 @@ jobs:
         with:
           arguments: build -x test
       - name: Test services
-        run: gradle test --tests 'ru.tinkoff.lab.tripAPI.business.service*'
+        run: gradle test --tests 'ru.tinkoff.lab.tripAPI.business.service*' --info
 
