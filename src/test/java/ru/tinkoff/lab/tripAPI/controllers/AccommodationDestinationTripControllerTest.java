@@ -120,7 +120,8 @@ public class AccommodationDestinationTripControllerTest {
         requestBuilderPost = MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(mapper.writeValueAsString(worker));
+                .content(mapper.writeValueAsString(worker))
+                .header("Authorization", "Bearer " + adminJwt);
 
         mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
         String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
