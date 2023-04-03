@@ -89,19 +89,40 @@ public class AccommodationDestinationTripControllerTest {
             "Smith",
             "USER",
             "something");
+    User user = new User(
+            "rs_xdm@inst.com",
+            "qwertyuiop",
+            "Ruslan",
+            "Sultanov",
+            "ADMIN"
+    );
 
     String workerJwt;
+    String adminJwt;
 
     TripDto tripDto = new TripDto();
 
     @BeforeAll
     public void init() throws Exception {
-        RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/users")
+        // Adding user
+        userService.createUser(user);
+
+        // getting jwt token
+        RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.TEXT_PLAIN)
+                .content(mapper.writeValueAsString(new LoginRequest(user.getEmail(), user.getPassword())));
+
+        MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
+
+        adminJwt = mvcResultPost.getResponse().getContentAsString();
+
+        requestBuilderPost = MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
                 .content(mapper.writeValueAsString(worker));
 
-        MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
+        mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
         String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
 
         Id workerId = mapper.readValue(responseBodyPost, Id.class);

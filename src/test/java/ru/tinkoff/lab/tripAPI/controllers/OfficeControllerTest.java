@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.Office;
 import ru.tinkoff.lab.tripAPI.business.User;
@@ -78,28 +77,18 @@ public class OfficeControllerTest {
 
     @BeforeAll
     public void init() throws Exception {
-        RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/users")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(mapper.writeValueAsString(user));
+        // Adding user
+        userService.createUser(user);
 
-        MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
-        String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
-
-        Id id = mapper.readValue(responseBodyPost, Id.class);
-        assertNotNull(id);
-        user.setId(id.getId());
-        user.setSubordinates(List.of());
-
-        //getting admin's jwt token
-        requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
+        // getting jwt token
+        RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.TEXT_PLAIN)
                 .content(mapper.writeValueAsString(new LoginRequest(user.getEmail(), user.getPassword())));
 
-        mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
-        responseBodyPost = mvcResultPost.getResponse().getContentAsString();
-        adminJwt = responseBodyPost;
+        MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
+
+        adminJwt = mvcResultPost.getResponse().getContentAsString();
 
         requestBuilderPost = MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -107,9 +96,9 @@ public class OfficeControllerTest {
                 .content(mapper.writeValueAsString(subUser));
 
         mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
-        responseBodyPost = mvcResultPost.getResponse().getContentAsString();
+        String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
 
-        id = mapper.readValue(responseBodyPost, Id.class);
+        Id id = mapper.readValue(responseBodyPost, Id.class);
         assertNotNull(id);
         subUser.setId(id.getId());
         subUser.setSubordinates(List.of());

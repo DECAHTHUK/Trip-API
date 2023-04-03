@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.User;
 import ru.tinkoff.lab.tripAPI.business.service.AccommodationDestinationTripService;
@@ -54,6 +53,9 @@ public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private UserService userService;
+
     User user = new User(
             "rs_xdm@inst.com",
             "qwertyuiop",
@@ -75,29 +77,18 @@ public class UserControllerTest {
 
     @BeforeAll
     public void init() throws Exception {
-        // Adding second user to create relations
-        RequestBuilder requestBuilderPostUser = MockMvcRequestBuilders.post("/users")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(mapper.writeValueAsString(subUser));
-
-        MvcResult mvcResultPost = mockMvc.perform(requestBuilderPostUser).andReturn();
-        String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
-
-        Id id = mapper.readValue(responseBodyPost, Id.class);
-        assertNotNull(id);
-        subUser.setId(id.getId());
+        // Adding user
+        userService.createUser(user);
 
         // getting jwt token
         RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.TEXT_PLAIN)
-                .content(mapper.writeValueAsString(new LoginRequest(subUser.getEmail(), subUser.getPassword())));
+                .content(mapper.writeValueAsString(new LoginRequest(user.getEmail(), user.getPassword())));
 
-        mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
-        responseBodyPost = mvcResultPost.getResponse().getContentAsString();
+        MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
 
-        userJwt = responseBodyPost;
+        adminJwt = mvcResultPost.getResponse().getContentAsString();
     }
 
     @Test
@@ -107,7 +98,8 @@ public class UserControllerTest {
         RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(mapper.writeValueAsString(user));
+                .content(mapper.writeValueAsString(subUser))
+                .header("Authorization", "Bearer " + adminJwt);
 
         MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
         String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
@@ -125,9 +117,7 @@ public class UserControllerTest {
 
         mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
         responseBodyPost = mvcResultPost.getResponse().getContentAsString();
-        System.out.println("RBP: "  + responseBodyPost);
-        adminJwt = responseBodyPost;
-        System.out.println(adminJwt);
+        userJwt = responseBodyPost;
 
         //Testing get request for newly created user
         RequestBuilder requestBuilderGet =

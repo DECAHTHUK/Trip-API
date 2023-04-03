@@ -89,6 +89,7 @@ public class RequestControllerTest {
     String workerJwt;
     String approverJwt;
     String approver2Jwt;
+    String adminJwt;
 
     @BeforeAll
     public void init() throws Exception {
@@ -113,7 +114,24 @@ public class RequestControllerTest {
                 "Sultanov",
                 "USER"
         );
+        User admin = new User(
+                "rs_xdm3afawf@inst.com",
+                "awfawfawf",
+                "Ruslan",
+                "Sultanov",
+                "ADMIN"
+        );
         // Initialization some data
+        //getting admin jwt
+        RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.TEXT_PLAIN)
+                .content(mapper.writeValueAsString(new LoginRequest(admin.getEmail(), admin.getPassword())));
+
+        MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
+        String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
+        adminJwt = responseBodyPost;
+
         Id officeId = officeService.createOffice(office);
         office.setId(officeId.getId());
         destinationDto.setOfficeId(officeId.getId());
@@ -121,13 +139,14 @@ public class RequestControllerTest {
         Id destinationId = accommodationDestinationTripService.createDestination(destinationDto);
         destinationDto.setId(destinationId.getId());
 
-        RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/users")
+        requestBuilderPost = MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(mapper.writeValueAsString(worker));
+                .content(mapper.writeValueAsString(worker))
+                .header("Authorization", "Bearer " + adminJwt);
 
-        MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
-        String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
+        mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
+        responseBodyPost = mvcResultPost.getResponse().getContentAsString();
 
         workerId = mapper.readValue(responseBodyPost, Id.class);
         assertNotNull(workerId);
@@ -147,7 +166,8 @@ public class RequestControllerTest {
         requestBuilderPost = MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(mapper.writeValueAsString(approver));
+                .content(mapper.writeValueAsString(approver))
+                .header("Authorization", "Bearer " + adminJwt);
 
         mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
         responseBodyPost = mvcResultPost.getResponse().getContentAsString();
@@ -170,7 +190,8 @@ public class RequestControllerTest {
         requestBuilderPost = MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(mapper.writeValueAsString(approver2));
+                .content(mapper.writeValueAsString(approver2))
+                .header("Authorization", "Bearer " + adminJwt);
 
         mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
         responseBodyPost = mvcResultPost.getResponse().getContentAsString();
