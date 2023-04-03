@@ -123,10 +123,13 @@ public class RequestControllerTest {
         );
         // Initialization some data
         //getting admin jwt
+        String tempPas = admin.getPassword();
+        userService.createUser(admin);
+
         RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.TEXT_PLAIN)
-                .content(mapper.writeValueAsString(new LoginRequest(admin.getEmail(), admin.getPassword())));
+                .content(mapper.writeValueAsString(new LoginRequest(admin.getEmail(), tempPas)));
 
         MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
         String responseBodyPost = mvcResultPost.getResponse().getContentAsString();

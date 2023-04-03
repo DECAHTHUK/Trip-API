@@ -105,17 +105,22 @@ public class AccommodationDestinationTripControllerTest {
     @BeforeAll
     public void init() throws Exception {
         // Adding user
+        String tempPas = user.getPassword();
         userService.createUser(user);
 
+        System.out.println(tempPas);
         // getting jwt token
         RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.TEXT_PLAIN)
-                .content(mapper.writeValueAsString(new LoginRequest(user.getEmail(), user.getPassword())));
+                .content(mapper.writeValueAsString(new LoginRequest(user.getEmail(), tempPas)));
 
         MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
+        System.out.println(mvcResultPost.getResponse().getErrorMessage());
+        System.out.println(mvcResultPost.getResponse().getStatus());
 
         adminJwt = mvcResultPost.getResponse().getContentAsString();
+        System.out.println(adminJwt);
 
         requestBuilderPost = MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)

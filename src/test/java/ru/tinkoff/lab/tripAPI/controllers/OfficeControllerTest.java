@@ -78,13 +78,14 @@ public class OfficeControllerTest {
     @BeforeAll
     public void init() throws Exception {
         // Adding user
+        String tempPas = user.getPassword();
         userService.createUser(user);
 
         // getting jwt token
         RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.TEXT_PLAIN)
-                .content(mapper.writeValueAsString(new LoginRequest(user.getEmail(), user.getPassword())));
+                .content(mapper.writeValueAsString(new LoginRequest(user.getEmail(), tempPas)));
 
         MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
 
@@ -93,7 +94,8 @@ public class OfficeControllerTest {
         requestBuilderPost = MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(mapper.writeValueAsString(subUser));
+                .content(mapper.writeValueAsString(subUser))
+                .header("Authorization", "Bearer " + adminJwt);
 
         mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
         String responseBodyPost = mvcResultPost.getResponse().getContentAsString();

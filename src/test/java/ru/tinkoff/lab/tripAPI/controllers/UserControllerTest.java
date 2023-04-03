@@ -77,14 +77,16 @@ public class UserControllerTest {
 
     @BeforeAll
     public void init() throws Exception {
-        // Adding user
-        userService.createUser(user);
+        // Adding admin
+        String tempPas = user.getPassword();
+        user.setSubordinates(List.of());
+        user.setId(userService.createUser(user).getId());
 
         // getting jwt token
         RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.TEXT_PLAIN)
-                .content(mapper.writeValueAsString(new LoginRequest(user.getEmail(), user.getPassword())));
+                .content(mapper.writeValueAsString(new LoginRequest(user.getEmail(), tempPas)));
 
         MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
 
@@ -106,8 +108,8 @@ public class UserControllerTest {
 
         Id id = mapper.readValue(responseBodyPost, Id.class);
         assertNotNull(id);
-        user.setId(id.getId());
-        user.setSubordinates(List.of());
+        subUser.setId(id.getId());
+        subUser.setSubordinates(List.of());
 
         //getting jwt token
         requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
