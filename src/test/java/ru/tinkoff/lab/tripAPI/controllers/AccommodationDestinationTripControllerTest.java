@@ -33,7 +33,7 @@ import ru.tinkoff.lab.tripAPI.security.filtering.JwtFilter;
 import ru.tinkoff.lab.tripAPI.security.filtering.SecurityConfig;
 import ru.tinkoff.lab.tripAPI.security.models.LoginRequest;
 import ru.tinkoff.lab.tripAPI.security.utils.JwtProvider;
-import ru.tinkoff.lab.tripAPI.security.utils.PasswordEncoder;
+import ru.tinkoff.lab.tripAPI.security.utils.JwtUtils;
 
 import java.sql.Timestamp;
 import java.util.UUID;
@@ -46,7 +46,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMybatis
 @WebMvcTest(controllers = {AccommodationDestinationTripController.class, LoginController.class, UserController.class})
 @Import({UserService.class, UuidTypeHandler.class, NotificationService.class, RequestService.class, AccommodationDestinationTripService.class,
-        PasswordEncoder.class, JwtProvider.class, JwtFilter.class, SecurityConfig.class, AuthService.class, OfficeService.class})
+        JwtUtils.class, JwtProvider.class, JwtFilter.class, SecurityConfig.class, AuthService.class, OfficeService.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -87,8 +87,7 @@ public class AccommodationDestinationTripControllerTest {
             "12345678",
             "John",
             "Smith",
-            "USER",
-            "something");
+            "USER");
 
     String workerJwt;
 

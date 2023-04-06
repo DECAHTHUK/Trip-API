@@ -14,8 +14,7 @@ import ru.tinkoff.lab.tripAPI.business.User;
 import ru.tinkoff.lab.tripAPI.exceptions.UserCreateException;
 import ru.tinkoff.lab.tripAPI.exceptions.UserNotFoundException;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
-import org.springframework.dao.DuplicateKeyException;
-import ru.tinkoff.lab.tripAPI.security.utils.PasswordEncoder;
+import ru.tinkoff.lab.tripAPI.security.utils.JwtUtils;
 
 
 import java.util.UUID;
@@ -24,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @MybatisTest
-@Import({UserService.class, UuidTypeHandler.class, PasswordEncoder.class})
+@Import({UserService.class, JwtUtils.class, UuidTypeHandler.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -45,8 +44,7 @@ public class UserServiceTest {
                 "12345678",
                 "John",
                 "Smith",
-                "USER",
-                "salt");
+                "USER");
         Id userId = userService.createUser(user);
         user.setId(userId.getId());
 

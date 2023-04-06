@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.User;
 import ru.tinkoff.lab.tripAPI.business.service.AccommodationDestinationTripService;
@@ -31,7 +30,7 @@ import ru.tinkoff.lab.tripAPI.security.filtering.JwtFilter;
 import ru.tinkoff.lab.tripAPI.security.filtering.SecurityConfig;
 import ru.tinkoff.lab.tripAPI.security.models.LoginRequest;
 import ru.tinkoff.lab.tripAPI.security.utils.JwtProvider;
-import ru.tinkoff.lab.tripAPI.security.utils.PasswordEncoder;
+import ru.tinkoff.lab.tripAPI.security.utils.JwtUtils;
 
 import java.util.List;
 
@@ -42,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMybatis
 @WebMvcTest(controllers = {UserController.class, LoginController.class})
 @Import({UserService.class, UuidTypeHandler.class, NotificationService.class, RequestService.class, AccommodationDestinationTripService.class,
-        PasswordEncoder.class, JwtProvider.class, JwtFilter.class, SecurityConfig.class, AuthService.class})
+        JwtUtils.class, JwtProvider.class, JwtFilter.class, SecurityConfig.class, AuthService.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

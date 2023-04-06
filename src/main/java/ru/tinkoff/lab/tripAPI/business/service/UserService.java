@@ -2,6 +2,7 @@ package ru.tinkoff.lab.tripAPI.business.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.Id;
@@ -10,7 +11,6 @@ import ru.tinkoff.lab.tripAPI.exceptions.UserCreateException;
 import ru.tinkoff.lab.tripAPI.exceptions.UserNotFoundException;
 import ru.tinkoff.lab.tripAPI.mapping.UserMapper;
 import ru.tinkoff.lab.tripAPI.mapping.UserRelationMapper;
-import ru.tinkoff.lab.tripAPI.security.utils.PasswordEncoder;
 
 import java.util.UUID;
 
@@ -25,10 +25,7 @@ public class UserService {
 
     public Id createUser(User user) {
         try {
-            String salt = passwordEncoder.generateSalt();
-            String password = passwordEncoder.generatePassword(user.getPassword(), salt);
-            user.setSalt(salt);
-            user.setPassword(password);
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             return userMapper.insertUser(user);
         } catch (Exception e) {
             throw new UserCreateException("Error creating this user: " + e.getMessage());

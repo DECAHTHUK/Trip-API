@@ -14,7 +14,7 @@ import ru.tinkoff.lab.tripAPI.business.dto.RequestDto;
 import ru.tinkoff.lab.tripAPI.business.dto.TripDto;
 import ru.tinkoff.lab.tripAPI.business.enums.TripStatus;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
-import ru.tinkoff.lab.tripAPI.security.utils.PasswordEncoder;
+import ru.tinkoff.lab.tripAPI.security.utils.JwtUtils;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -25,8 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @RunWith(SpringRunner.class)
 @MybatisTest
-@Import({AccommodationDestinationTripService.class, OfficeService.class, RequestService.class,
-        UserService.class, NotificationService.class, UuidTypeHandler.class, PasswordEncoder.class})
+@Import({AccommodationDestinationTripService.class, OfficeService.class, RequestService.class, JwtUtils.class,
+        UserService.class, NotificationService.class, UuidTypeHandler.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -82,8 +82,7 @@ public class AccommodationDestinationTripServiceTest {
                 "12345678",
                 "John",
                 "Smith",
-                "USER",
-                "something");
+                "USER");
         requestDto = new RequestDto("Pending request",
                 "Nothing", timestampEnd, timestampEnd, "https:/somesite.com/JAOwe7IW78daAw1idh");
         // init accommodations
