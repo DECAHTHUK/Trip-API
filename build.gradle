@@ -39,6 +39,8 @@ dependencies {
 	implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.4.0-b180830.0359'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
+
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
 }
 
 tasks.named('test') {

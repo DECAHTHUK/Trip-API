@@ -53,6 +53,9 @@ public class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private UserService userService;
+
     User user = new User(
             "rs_xdm@inst.com",
             "qwertyuiop",
@@ -74,29 +77,20 @@ public class UserControllerTest {
 
     @BeforeAll
     public void init() throws Exception {
-        // Adding second user to create relations
-        RequestBuilder requestBuilderPostUser = MockMvcRequestBuilders.post("/users")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(mapper.writeValueAsString(subUser));
-
-        MvcResult mvcResultPost = mockMvc.perform(requestBuilderPostUser).andReturn();
-        String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
-
-        Id id = mapper.readValue(responseBodyPost, Id.class);
-        assertNotNull(id);
-        subUser.setId(id.getId());
+        // Adding admin
+        String tempPas = user.getPassword();
+        user.setSubordinates(List.of());
+        user.setId(userService.createUser(user).getId());
 
         // getting jwt token
         RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.TEXT_PLAIN)
-                .content(mapper.writeValueAsString(new LoginRequest(subUser.getEmail(), subUser.getPassword())));
+                .content(mapper.writeValueAsString(new LoginRequest(user.getEmail(), tempPas)));
 
-        mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
-        responseBodyPost = mvcResultPost.getResponse().getContentAsString();
+        MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
 
-        userJwt = responseBodyPost;
+        adminJwt = mvcResultPost.getResponse().getContentAsString();
     }
 
     @Test
@@ -106,15 +100,16 @@ public class UserControllerTest {
         RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(mapper.writeValueAsString(user));
+                .content(mapper.writeValueAsString(subUser))
+                .header("Authorization", "Bearer " + adminJwt);
 
         MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
         String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
 
         Id id = mapper.readValue(responseBodyPost, Id.class);
         assertNotNull(id);
-        user.setId(id.getId());
-        user.setSubordinates(List.of());
+        subUser.setId(id.getId());
+        subUser.setSubordinates(List.of());
 
         //getting jwt token
         requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
@@ -124,9 +119,7 @@ public class UserControllerTest {
 
         mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
         responseBodyPost = mvcResultPost.getResponse().getContentAsString();
-        System.out.println("RBP: "  + responseBodyPost);
-        adminJwt = responseBodyPost;
-        System.out.println(adminJwt);
+        userJwt = responseBodyPost;
 
         //Testing get request for newly created user
         RequestBuilder requestBuilderGet =

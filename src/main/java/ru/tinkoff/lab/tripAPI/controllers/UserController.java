@@ -1,5 +1,6 @@
 package ru.tinkoff.lab.tripAPI.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +27,9 @@ public class UserController {
 
     private final AccommodationDestinationTripService accommodationDestinationTripService;
 
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("")
-    public Id createNewUser(@RequestBody User user) {
+    public Id createNewUser(@Valid @RequestBody User user) {
         return userService.createUser(user);
     }
 

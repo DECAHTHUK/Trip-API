@@ -1,6 +1,7 @@
 package ru.tinkoff.lab.tripAPI.business;
 
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.List;
 
@@ -11,6 +12,7 @@ public class User {
 
     private String email;
 
+    @Length(min = 6)
     private String password;
 
     private String firstName;

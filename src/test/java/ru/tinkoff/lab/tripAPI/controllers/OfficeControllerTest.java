@@ -77,38 +77,30 @@ public class OfficeControllerTest {
 
     @BeforeAll
     public void init() throws Exception {
-        RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/users")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(mapper.writeValueAsString(user));
+        // Adding user
+        String tempPas = user.getPassword();
+        userService.createUser(user);
 
-        MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
-        String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
-
-        Id id = mapper.readValue(responseBodyPost, Id.class);
-        assertNotNull(id);
-        user.setId(id.getId());
-        user.setSubordinates(List.of());
-
-        //getting admin's jwt token
-        requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
+        // getting jwt token
+        RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.TEXT_PLAIN)
-                .content(mapper.writeValueAsString(new LoginRequest(user.getEmail(), user.getPassword())));
+                .content(mapper.writeValueAsString(new LoginRequest(user.getEmail(), tempPas)));
 
-        mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
-        responseBodyPost = mvcResultPost.getResponse().getContentAsString();
-        adminJwt = responseBodyPost;
+        MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
+
+        adminJwt = mvcResultPost.getResponse().getContentAsString();
 
         requestBuilderPost = MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(mapper.writeValueAsString(subUser));
+                .content(mapper.writeValueAsString(subUser))
+                .header("Authorization", "Bearer " + adminJwt);
 
         mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
-        responseBodyPost = mvcResultPost.getResponse().getContentAsString();
+        String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
 
-        id = mapper.readValue(responseBodyPost, Id.class);
+        Id id = mapper.readValue(responseBodyPost, Id.class);
         assertNotNull(id);
         subUser.setId(id.getId());
         subUser.setSubordinates(List.of());
