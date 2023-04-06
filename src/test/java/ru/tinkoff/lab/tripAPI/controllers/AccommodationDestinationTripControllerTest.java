@@ -88,19 +88,46 @@ public class AccommodationDestinationTripControllerTest {
             "John",
             "Smith",
             "USER");
+    User user = new User(
+            "rs_xdm@inst.com",
+            "qwertyuiop",
+            "Ruslan",
+            "Sultanov",
+            "ADMIN"
+    );
 
     String workerJwt;
+    String adminJwt;
 
     TripDto tripDto = new TripDto();
 
     @BeforeAll
     public void init() throws Exception {
-        RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/users")
+        // Adding user
+        String tempPas = user.getPassword();
+        userService.createUser(user);
+
+        System.out.println(tempPas);
+        // getting jwt token
+        RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(mapper.writeValueAsString(worker));
+                .accept(MediaType.TEXT_PLAIN)
+                .content(mapper.writeValueAsString(new LoginRequest(user.getEmail(), tempPas)));
 
         MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
+        System.out.println(mvcResultPost.getResponse().getErrorMessage());
+        System.out.println(mvcResultPost.getResponse().getStatus());
+
+        adminJwt = mvcResultPost.getResponse().getContentAsString();
+        System.out.println(adminJwt);
+
+        requestBuilderPost = MockMvcRequestBuilders.post("/users")
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .content(mapper.writeValueAsString(worker))
+                .header("Authorization", "Bearer " + adminJwt);
+
+        mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
         String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
 
         Id workerId = mapper.readValue(responseBodyPost, Id.class);
