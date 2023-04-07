@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -48,6 +50,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DirtiesContext
+@WithMockUser
 public class RequestControllerTest {
 
     ObjectMapper mapper = new ObjectMapper();
@@ -86,13 +89,8 @@ public class RequestControllerTest {
 
     Id requestId;
 
-    String workerJwt;
-    String approverJwt;
-    String approver2Jwt;
-    String adminJwt;
-
     @BeforeAll
-    public void init() throws Exception {
+    public void init() {
         User worker = new User(
                 "rs_xdm@inst.com",
                 "qwertyuiop",
@@ -114,26 +112,6 @@ public class RequestControllerTest {
                 "Sultanov",
                 "USER"
         );
-        User admin = new User(
-                "rs_xdm3afawf@inst.com",
-                "awfawfawf",
-                "Ruslan",
-                "Sultanov",
-                "ADMIN"
-        );
-        // Initialization some data
-        //getting admin jwt
-        String tempPas = admin.getPassword();
-        userService.createUser(admin);
-
-        RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.TEXT_PLAIN)
-                .content(mapper.writeValueAsString(new LoginRequest(admin.getEmail(), tempPas)));
-
-        MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
-        String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
-        adminJwt = responseBodyPost;
 
         Id officeId = officeService.createOffice(office);
         office.setId(officeId.getId());
@@ -142,76 +120,14 @@ public class RequestControllerTest {
         Id destinationId = accommodationDestinationTripService.createDestination(destinationDto);
         destinationDto.setId(destinationId.getId());
 
-        requestBuilderPost = MockMvcRequestBuilders.post("/users")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(mapper.writeValueAsString(worker))
-                .header("Authorization", "Bearer " + adminJwt);
-
-        mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
-        responseBodyPost = mvcResultPost.getResponse().getContentAsString();
-
-        workerId = mapper.readValue(responseBodyPost, Id.class);
+        workerId = userService.createUser(worker);
         assertNotNull(workerId);
-        worker.setId(workerId.getId());
 
-        //getting worker's jwt token
-        requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.TEXT_PLAIN)
-                .content(mapper.writeValueAsString(new LoginRequest(worker.getEmail(), worker.getPassword())));
-
-        mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
-        responseBodyPost = mvcResultPost.getResponse().getContentAsString();
-        workerJwt = responseBodyPost;
-
-        // approver user
-        requestBuilderPost = MockMvcRequestBuilders.post("/users")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(mapper.writeValueAsString(approver))
-                .header("Authorization", "Bearer " + adminJwt);
-
-        mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
-        responseBodyPost = mvcResultPost.getResponse().getContentAsString();
-
-        approverId = mapper.readValue(responseBodyPost, Id.class);
+        approverId = userService.createUser(approver);
         assertNotNull(approverId);
-        approver.setId(approverId.getId());
 
-        //getting first approver's jwt token
-        requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.TEXT_PLAIN)
-                .content(mapper.writeValueAsString(new LoginRequest(approver.getEmail(), approver.getPassword())));
-
-        mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
-        responseBodyPost = mvcResultPost.getResponse().getContentAsString();
-        approverJwt = responseBodyPost;
-
-        // approver user
-        requestBuilderPost = MockMvcRequestBuilders.post("/users")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(mapper.writeValueAsString(approver2))
-                .header("Authorization", "Bearer " + adminJwt);
-
-        mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
-        responseBodyPost = mvcResultPost.getResponse().getContentAsString();
-
-        approver2Id = mapper.readValue(responseBodyPost, Id.class);
+        approver2Id = userService.createUser(approver2);
         assertNotNull(approver2Id);
-        approver2.setId(approver2Id.getId());
-
-        //getting first approver's jwt token
-        requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.TEXT_PLAIN)
-                .content(mapper.writeValueAsString(new LoginRequest(approver2.getEmail(), approver2.getPassword())));
-
-        mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
-        responseBodyPost = mvcResultPost.getResponse().getContentAsString();
-        approver2Jwt = responseBodyPost;
 
         userService.createRelation(UUID.fromString(approverId.getId()), UUID.fromString(workerId.getId()));
         userService.createRelation(UUID.fromString(approver2Id.getId()), UUID.fromString(workerId.getId()));
@@ -232,7 +148,6 @@ public class RequestControllerTest {
                 .post("/requests")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", "Bearer " + workerJwt)
                 .content(mapper.writeValueAsString(requestDto));
 
         MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
@@ -245,8 +160,7 @@ public class RequestControllerTest {
         // Testing get method
         RequestBuilder requestBuilderGet = MockMvcRequestBuilders
                 .get("/requests/" + requestDto.getId())
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", "Bearer " + workerJwt);
+                .accept(MediaType.APPLICATION_JSON_VALUE);
 
         MvcResult mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
         String responseBodyGet = mvcResultGet.getResponse().getContentAsString();
@@ -278,7 +192,6 @@ public class RequestControllerTest {
         RequestBuilder requestBuilderPut = MockMvcRequestBuilders
                 .put("/requests")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", "Bearer " + workerJwt)
                 .content(mapper.writeValueAsString(requestDto));
 
         mockMvc.perform(requestBuilderPut);
@@ -286,7 +199,6 @@ public class RequestControllerTest {
         // Checking if request was updated
         RequestBuilder requestBuilderGet = MockMvcRequestBuilders
                 .get("/requests/" + requestDto.getId())
-                .header("Authorization", "Bearer " + workerJwt)
                 .accept(MediaType.APPLICATION_JSON_VALUE);
 
         MvcResult mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
@@ -324,8 +236,7 @@ public class RequestControllerTest {
         Notification notificationToWatch = notifications1.get(0);
 
         RequestBuilder requestBuilderPost = MockMvcRequestBuilders
-                .put("/notifications/" + notificationToWatch.getId() + "/watch")
-                .header("Authorization", "Bearer " + approverJwt);
+                .put("/notifications/" + notificationToWatch.getId() + "/watch");
 
         mockMvc.perform(requestBuilderPost);
 
@@ -353,7 +264,6 @@ public class RequestControllerTest {
         RequestBuilder requestBuilderPut = MockMvcRequestBuilders
                 .put("/requests/" + requestId.getId() + "/send-for-editing")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", "Bearer " + approverJwt)
                 .content(mapper.writeValueAsString(requestStatusChangeDto));
 
         mockMvc.perform(requestBuilderPut);
@@ -365,7 +275,6 @@ public class RequestControllerTest {
         requestBuilderPut = MockMvcRequestBuilders
                 .put("/requests/" + requestId.getId() + "/decline")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", "Bearer " + approverJwt)
                 .content(mapper.writeValueAsString(requestStatusChangeDto));
         mockMvc.perform(requestBuilderPut);
 
@@ -385,7 +294,6 @@ public class RequestControllerTest {
         RequestBuilder requestBuilderPut = MockMvcRequestBuilders
                 .put("/requests")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", "Bearer " + workerJwt)
                 .content(mapper.writeValueAsString(requestDto));
         mockMvc.perform(requestBuilderPut);
 
@@ -417,7 +325,6 @@ public class RequestControllerTest {
         RequestBuilder requestBuilderPut = MockMvcRequestBuilders
                 .put("/requests/" + requestId.getId() + "/approve")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", "Bearer " + approverJwt)
                 .content(mapper.writeValueAsString(requestStatusChangeDto));
 
         MvcResult mvcResultGet = mockMvc.perform(requestBuilderPut).andReturn();
@@ -442,6 +349,7 @@ public class RequestControllerTest {
     @Test
     @Order(7)
     @DisplayName("Testing unauthorized user")
+    @WithAnonymousUser
     public void testUnauthorizedAccess() throws Exception {
         RequestBuilder requestBuilderGet = MockMvcRequestBuilders
                 .get("/requests/" + requestDto.getId())

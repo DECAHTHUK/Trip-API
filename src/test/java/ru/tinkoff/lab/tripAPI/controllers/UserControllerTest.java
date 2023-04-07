@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -46,6 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DirtiesContext
+@WithMockUser
 public class UserControllerTest {
 
     ObjectMapper mapper = new ObjectMapper();
@@ -72,36 +74,22 @@ public class UserControllerTest {
             "USER"
     );
 
-    String userJwt;
-    String adminJwt;
-
     @BeforeAll
     public void init() throws Exception {
         // Adding admin
-        String tempPas = user.getPassword();
         user.setSubordinates(List.of());
         user.setId(userService.createUser(user).getId());
-
-        // getting jwt token
-        RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.TEXT_PLAIN)
-                .content(mapper.writeValueAsString(new LoginRequest(user.getEmail(), tempPas)));
-
-        MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
-
-        adminJwt = mvcResultPost.getResponse().getContentAsString();
     }
 
     @Test
     @Order(1)
     @DisplayName("Test user gets created and returned")
+    @WithMockUser(username = "admin", authorities = { "ADMIN" })
     void testCreateGetUser() throws Exception {
         RequestBuilder requestBuilderPost = MockMvcRequestBuilders.post("/users")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .accept(MediaType.APPLICATION_JSON_VALUE)
-                .content(mapper.writeValueAsString(subUser))
-                .header("Authorization", "Bearer " + adminJwt);
+                .content(mapper.writeValueAsString(subUser));
 
         MvcResult mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
         String responseBodyPost = mvcResultPost.getResponse().getContentAsString();
@@ -111,46 +99,34 @@ public class UserControllerTest {
         subUser.setId(id.getId());
         subUser.setSubordinates(List.of());
 
-        //getting jwt token
-        requestBuilderPost = MockMvcRequestBuilders.post("/api/login")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .accept(MediaType.TEXT_PLAIN)
-                .content(mapper.writeValueAsString(new LoginRequest(user.getEmail(), user.getPassword())));
-
-        mvcResultPost = mockMvc.perform(requestBuilderPost).andReturn();
-        responseBodyPost = mvcResultPost.getResponse().getContentAsString();
-        userJwt = responseBodyPost;
-
         //Testing get request for newly created user
         RequestBuilder requestBuilderGet =
-                MockMvcRequestBuilders.get("/users/" + user.getId())
-                        .header("Authorization", "Bearer " + adminJwt)
+                MockMvcRequestBuilders.get("/users/" + subUser.getId())
                         .accept(MediaType.APPLICATION_JSON_VALUE);
 
         MvcResult mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
         String responseBodyGet = mvcResultGet.getResponse().getContentAsString();
 
         User userFromRequest = mapper.readValue(responseBodyGet, User.class);
-        assertEquals(user.getEmail(), userFromRequest.getEmail());
+        assertEquals(subUser.getEmail(), userFromRequest.getEmail());
     }
 
     @Test
     @Order(2)
     @DisplayName("Test user relations gets created")
+    @WithMockUser(username = "admin", authorities = { "ADMIN" })
     public void testCreateUserRelation() throws Exception {
         assertEquals(0, user.getSubordinates().size());
 
         // Testing post new relations
         RequestBuilder requestBuilderPostRelations = MockMvcRequestBuilders
-                .post("/users/" + user.getId() + "/subordinates/" + subUser.getId())
-                .header("Authorization", "Bearer " + adminJwt);
+                .post("/users/" + user.getId() + "/subordinates/" + subUser.getId());
 
         mockMvc.perform(requestBuilderPostRelations);
 
         RequestBuilder requestBuilderGetUser =
                 MockMvcRequestBuilders.get("/users/" + user.getId())
-                        .accept(MediaType.APPLICATION_JSON_VALUE)
-                        .header("Authorization", "Bearer " + adminJwt);
+                        .accept(MediaType.APPLICATION_JSON_VALUE);
 
         MvcResult mvcResultGetUser = mockMvc.perform(requestBuilderGetUser).andReturn();
         String responseBodyGetUser = mvcResultGetUser.getResponse().getContentAsString();
@@ -170,8 +146,7 @@ public class UserControllerTest {
     @DisplayName("Test if user cannot use admin's endpoints")
     public void testUserAccess() throws Exception {
         RequestBuilder requestBuilderDelete = MockMvcRequestBuilders
-                .delete("/users/" + user.getId() + "/subordinates/" + subUser.getId())
-                .header("Authorization", "Bearer " + userJwt);
+                .delete("/users/" + user.getId() + "/subordinates/" + subUser.getId());
 
         mockMvc.perform(requestBuilderDelete).andExpect(status().isForbidden());
     }
@@ -179,18 +154,17 @@ public class UserControllerTest {
     @Test
     @Order(4)
     @DisplayName("Test user relations gets deleted")
+    @WithMockUser(username = "admin", authorities = { "ADMIN" })
     public void testDeleteUserRelation() throws Exception {
         //Testing relations get deleted
         RequestBuilder requestBuilderDelete = MockMvcRequestBuilders
-                .delete("/users/" + user.getId() + "/subordinates/" + subUser.getId())
-                .header("Authorization", "Bearer " + adminJwt);
+                .delete("/users/" + user.getId() + "/subordinates/" + subUser.getId());
 
         mockMvc.perform(requestBuilderDelete);
 
         RequestBuilder requestBuilderGet = MockMvcRequestBuilders
                 .get("/users/" + user.getId())
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", "Bearer " + adminJwt);
+                .accept(MediaType.APPLICATION_JSON_VALUE);
 
         MvcResult mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
         String responseBodyGetUser = mvcResultGet.getResponse().getContentAsString();
@@ -204,6 +178,7 @@ public class UserControllerTest {
     @Test
     @Order(5)
     @DisplayName("Test user gets updated and deleted")
+    @WithMockUser(username = "admin", authorities = { "ADMIN" })
     public void testUpdateDeleteUser() throws Exception {
         //Updating user
         user.setFirstName("Lyosha");
@@ -211,15 +186,13 @@ public class UserControllerTest {
 
         RequestBuilder requestBuilderPut = MockMvcRequestBuilders.put("/users")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
-                .content(mapper.writeValueAsString(user))
-                .header("Authorization", "Bearer " + adminJwt);
+                .content(mapper.writeValueAsString(user));
 
         mockMvc.perform(requestBuilderPut);
 
         //Getting user to check if it was updated
         RequestBuilder requestBuilderGet = MockMvcRequestBuilders.get("/users/" + user.getId())
-                .accept(MediaType.APPLICATION_JSON_VALUE)
-                .header("Authorization", "Bearer " + adminJwt);
+                .accept(MediaType.APPLICATION_JSON_VALUE);
 
         MvcResult mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
         String responseBodyGet = mvcResultGet.getResponse().getContentAsString();
@@ -229,8 +202,7 @@ public class UserControllerTest {
         assertEquals("Talanov", userFromRequest.getSecondName());
 
         //Testing user to check if it was deleted
-        RequestBuilder requestBuilderDelete = MockMvcRequestBuilders.delete("/users/" + user.getId())
-                .header("Authorization", "Bearer " + adminJwt);
+        RequestBuilder requestBuilderDelete = MockMvcRequestBuilders.delete("/users/" + user.getId());
         mockMvc.perform(requestBuilderDelete);
 
         mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
