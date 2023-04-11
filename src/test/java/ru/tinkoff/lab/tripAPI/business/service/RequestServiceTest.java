@@ -16,6 +16,7 @@ import ru.tinkoff.lab.tripAPI.business.dto.DestinationDto;
 import ru.tinkoff.lab.tripAPI.business.dto.RequestDto;
 import ru.tinkoff.lab.tripAPI.business.enums.RequestStatus;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
+import ru.tinkoff.lab.tripAPI.security.utils.JwtUtils;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -25,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @MybatisTest
-@Import({RequestService.class, AccommodationDestinationTripService.class,
+@Import({RequestService.class, AccommodationDestinationTripService.class, JwtUtils.class,
         UserService.class, OfficeService.class, NotificationService.class, UuidTypeHandler.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -84,8 +85,7 @@ public class RequestServiceTest {
                 "12345678",
                 "John",
                 "Smith",
-                "USER",
-                "something");
+                "USER");
         workerId = userService.createUser(user);
         workerEmail = user.getEmail();
 
@@ -93,15 +93,13 @@ public class RequestServiceTest {
                 "1234",
                 "Sam",
                 "Winchester",
-                "USER",
-                "SALT");
+                "USER");
         approverId = userService.createUser(userApprover);
         User userApprover2 = new User("approver2@mail.ru",
                 "1234",
                 "Sam",
                 "Winchester",
-                "USER",
-                "SALT");
+                "USER");
         approver2Id = userService.createUser(userApprover2);
         userService.createRelation(UUID.fromString(approverId.getId()), UUID.fromString(workerId.getId()));
         userService.createRelation(UUID.fromString(approver2Id.getId()), UUID.fromString(workerId.getId()));

@@ -18,7 +18,7 @@
             <column name="email" type="VARCHAR(100)">
                 <constraints primaryKey="false" nullable="false" unique="true"/>
             </column>
-            <column name="password" type="VARCHAR(100)">
+            <column name="password" type="VARCHAR(64)">
                 <constraints nullable="false"/>
             </column>
             <column name="first_name" type="VARCHAR(100)">
@@ -30,7 +30,7 @@
             <column name="user_role" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="salt" type="VARCHAR(10)"/>
+            <column name="salt" type="VARCHAR(16)"/>
         </createTable>
 
         <!--USER_RELATIONS -->

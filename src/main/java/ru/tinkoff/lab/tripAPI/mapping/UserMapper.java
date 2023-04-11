@@ -15,8 +15,8 @@ public interface UserMapper {
 
     @Result(property = "id", column = "id")
     @Select("""
-            INSERT INTO users (email, password, first_name, second_name, user_role, salt)
-            VALUES(#{email}, #{password}, #{firstName}, #{secondName}, #{userRole}, #{salt})
+            INSERT INTO users (email, password, first_name, second_name, user_role)
+            VALUES(#{email}, #{password}, #{firstName}, #{secondName}, #{userRole})
             RETURNING id;
             """)
     Id insertUser(User user) throws RuntimeException;
@@ -30,11 +30,23 @@ public interface UserMapper {
             @Result(column = "id", property = "id")
     })
     @Select("""
-            SELECT u.id, u.email, u.password, u.first_name, u.second_name, u.user_role, u.salt
+            SELECT u.id, u.email, u.password, u.first_name, u.second_name, u.user_role
             FROM users as u
             WHERE u.id = '${uuid}';
             """)
     User selectUser(@Param("uuid") UUID uuid);
+
+    @Results(value = {
+            @Result(property = "firstName", column = "first_name"),
+            @Result(property = "secondName", column = "second_name"),
+            @Result(property = "userRole", column = "user_role")
+    })
+    @Select("""
+            SELECT u.id, u.email, u.password, u.first_name, u.second_name, u.user_role
+            FROM users as u
+            WHERE u.email = #{email};
+            """)
+    User selectUserByEmail(String email);
 
     /**
      * Additional query for our many-to-many relationship(myBatis works only this way)

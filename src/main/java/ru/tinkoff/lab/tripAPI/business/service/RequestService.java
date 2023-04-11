@@ -3,10 +3,8 @@ package ru.tinkoff.lab.tripAPI.business.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.Request;
 import ru.tinkoff.lab.tripAPI.business.dto.NotificationDto;
@@ -14,6 +12,7 @@ import ru.tinkoff.lab.tripAPI.business.dto.RequestDto;
 import ru.tinkoff.lab.tripAPI.business.dto.RequestStatusChangeDto;
 import ru.tinkoff.lab.tripAPI.business.enums.RequestStatus;
 import ru.tinkoff.lab.tripAPI.business.enums.TripStatus;
+import ru.tinkoff.lab.tripAPI.exceptions.*;
 import ru.tinkoff.lab.tripAPI.mapping.RequestMapper;
 import ru.tinkoff.lab.tripAPI.mapping.UserRelationMapper;
 
@@ -48,15 +47,15 @@ public class RequestService {
             }
             if (!notificationDtoList.isEmpty()) notificationService.createMultipleNotifications(notificationDtoList);
             return requestId;
-        } catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (Exception e) {
+            throw new RequestCreateException(e.getMessage());
         }
     }
 
     public Request getRequest(UUID uuid) {
         Request request = requestMapper.selectRequest(uuid);
         if (request == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Request with id = " + uuid + " was not found");
+            throw new RequestNotFoundException("Request with id = " + uuid + " was not found");
         }
         return request;
     }
@@ -80,8 +79,8 @@ public class RequestService {
             if (approverId != null && !approverId.isEmpty()) {
                 notificationService.createNotification(new NotificationDto(requestDto.getId(), false, approverId));
             }
-        } catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (NotificationCreateException e) {
+            throw new NotificationCreateException(e.getMessage());
         }
     }
 
@@ -98,14 +97,14 @@ public class RequestService {
     public Id approveRequest(UUID uuid, RequestStatusChangeDto requestStatusChangeDto) {
         requestStatusChangeDto.getTripDto().setTripStatus(TripStatus.PENDING);
         if (requestStatusChangeDto.getTripDto() == null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "RequestStatusChangeDto MUST have valid TripDto in body when approving request");
+            throw new TripDtoNullException("RequestStatusChangeDto MUST have valid TripDto in body when approving request");
         }
         try {
             requestMapper.updateRequestStatus(uuid, RequestStatus.APPROVED,
                     requestStatusChangeDto.getComment(), UUID.fromString(requestStatusChangeDto.getApproverId()));
             return accommodationDestinationTripService.createTrip(requestStatusChangeDto.getTripDto());
-        } catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (TripCreateException e) {
+            throw new TripCreateException(e.getMessage());
         }
     }
 }

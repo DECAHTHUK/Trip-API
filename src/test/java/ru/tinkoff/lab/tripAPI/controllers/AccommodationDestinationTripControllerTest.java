@@ -10,6 +10,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -17,31 +19,42 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.*;
 import ru.tinkoff.lab.tripAPI.business.dto.DestinationDto;
 import ru.tinkoff.lab.tripAPI.business.dto.RequestDto;
 import ru.tinkoff.lab.tripAPI.business.dto.TripDto;
 import ru.tinkoff.lab.tripAPI.business.enums.TripStatus;
 import ru.tinkoff.lab.tripAPI.business.service.*;
+import ru.tinkoff.lab.tripAPI.exceptions.AccommodationNotFoundException;
+import ru.tinkoff.lab.tripAPI.exceptions.DestinationNotFoundException;
+import ru.tinkoff.lab.tripAPI.exceptions.TripNotFoundException;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
+import ru.tinkoff.lab.tripAPI.security.AuthService;
+import ru.tinkoff.lab.tripAPI.security.LoginController;
+import ru.tinkoff.lab.tripAPI.security.filtering.JwtFilter;
+import ru.tinkoff.lab.tripAPI.security.filtering.SecurityConfig;
+import ru.tinkoff.lab.tripAPI.security.models.LoginRequest;
+import ru.tinkoff.lab.tripAPI.security.utils.JwtProvider;
+import ru.tinkoff.lab.tripAPI.security.utils.JwtUtils;
 
 import java.sql.Timestamp;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @AutoConfigureMybatis
-@WebMvcTest(controllers = AccommodationDestinationTripController.class)
-@Import({AccommodationDestinationTripService.class, UuidTypeHandler.class, OfficeService.class,
-        RequestService.class, NotificationService.class, UserService.class})
+@WebMvcTest(controllers = {AccommodationDestinationTripController.class, LoginController.class, UserController.class})
+@Import({UserService.class, UuidTypeHandler.class, NotificationService.class, RequestService.class, AccommodationDestinationTripService.class,
+        JwtUtils.class, JwtProvider.class, JwtFilter.class, SecurityConfig.class, AuthService.class, OfficeService.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestPropertySource("/application.yaml")
 @DirtiesContext
+@WithMockUser
 public class AccommodationDestinationTripControllerTest {
 
 
@@ -77,10 +90,23 @@ public class AccommodationDestinationTripControllerTest {
             "12345678",
             "John",
             "Smith",
-            "USER",
-            "something");
+            "USER");
+    User user = new User(
+            "rs_xdm@inst.com",
+            "qwertyuiop",
+            "Ruslan",
+            "Sultanov",
+            "ADMIN"
+    );
 
     TripDto tripDto = new TripDto();
+
+    @BeforeAll
+    public void init() throws Exception {
+        // Adding user
+        worker.setId(userService.createUser(worker).getId());
+        user.setId(userService.createUser(user).getId());
+    }
 
     @Test
     @Order(1)
@@ -151,9 +177,6 @@ public class AccommodationDestinationTripControllerTest {
     @Order(3)
     @DisplayName("Test if newly created trip gets returned")
     public void testCreateGetTrip() throws Exception {
-        Id workerId = userService.createUser(worker);
-        worker.setId(workerId.getId());
-
         requestDto.setDestinationId(destinationDto.getId());
         requestDto.setWorkerId(worker.getId());
 
@@ -193,6 +216,18 @@ public class AccommodationDestinationTripControllerTest {
 
     @Test
     @Order(4)
+    @DisplayName("Testing unauthorized user")
+    @WithAnonymousUser
+    public void testUnauthorizedUser() throws Exception {
+        RequestBuilder requestBuilderGet = MockMvcRequestBuilders
+                .get("/trips/" + tripDto.getId())
+                .accept(MediaType.APPLICATION_JSON_VALUE);
+
+        mockMvc.perform(requestBuilderGet).andExpect(status().isForbidden());
+    }
+
+    @Test
+    @Order(4)
     @DisplayName("Test if trip gets updated and deleted")
     public void testUpdateDeleteTrip() throws Exception {
         tripDto.setTripStatus(TripStatus.COMPLETED);
@@ -224,7 +259,7 @@ public class AccommodationDestinationTripControllerTest {
 
         //Trying to get the trip to check if it was deleted
         mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
-        ResponseStatusException exception = (ResponseStatusException) mvcResultGet.getResolvedException();
+        TripNotFoundException exception = (TripNotFoundException) mvcResultGet.getResolvedException();
 
         assertNotNull(exception);
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
@@ -266,7 +301,7 @@ public class AccommodationDestinationTripControllerTest {
 
         //Trying to get the trip to check if it was deleted
         mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
-        ResponseStatusException exception = (ResponseStatusException) mvcResultGet.getResolvedException();
+        DestinationNotFoundException exception = (DestinationNotFoundException) mvcResultGet.getResolvedException();
 
         assertNotNull(exception);
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());
@@ -306,7 +341,7 @@ public class AccommodationDestinationTripControllerTest {
 
         //Trying to get the trip to check if it was deleted
         mvcResultGet = mockMvc.perform(requestBuilderGet).andReturn();
-        ResponseStatusException exception = (ResponseStatusException) mvcResultGet.getResolvedException();
+        AccommodationNotFoundException exception = (AccommodationNotFoundException) mvcResultGet.getResolvedException();
 
         assertNotNull(exception);
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatusCode());

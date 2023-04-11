@@ -9,10 +9,12 @@ import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.User;
+import ru.tinkoff.lab.tripAPI.exceptions.UserCreateException;
+import ru.tinkoff.lab.tripAPI.exceptions.UserNotFoundException;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
+import ru.tinkoff.lab.tripAPI.security.utils.JwtUtils;
 
 
 import java.util.UUID;
@@ -21,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
 @MybatisTest
-@Import({UserService.class, UuidTypeHandler.class})
+@Import({UserService.class, JwtUtils.class, UuidTypeHandler.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -42,15 +44,14 @@ public class UserServiceTest {
                 "12345678",
                 "John",
                 "Smith",
-                "USER",
-                "salt");
+                "USER");
         Id userId = userService.createUser(user);
         user.setId(userId.getId());
 
         bossId = userService.createUser(new User("krutoi1337@gmail.com",
-                "qwertyuio", "Rusya", "Talanov", "user"));
+                "qwertyuio", "Rusya", "Talanov", "ADMIN"));
         subordinateId = userService.createUser(new User("slavakpss@gmail.com",
-                "12345678", "Lyosha", "Sultanov", "user"));
+                "12345678", "Lyosha", "Sultanov", "USER"));
         userService.createRelation(UUID.fromString(bossId.getId()), UUID.fromString(subordinateId.getId()));
     }
 
@@ -83,16 +84,16 @@ public class UserServiceTest {
 
         userService.deleteUser(UUID.fromString(user.getId()));
 
-        ResponseStatusException thrown = assertThrows(ResponseStatusException.class, () -> userService.findById(UUID.fromString(user.getId())));
+        UserNotFoundException thrown = assertThrows(UserNotFoundException.class, () -> userService.findById(UUID.fromString(user.getId())));
 
-        assertEquals(HttpStatus.NOT_FOUND + " \"User with id = " + user.getId() + " was not found\"", thrown.getMessage());
+        assertEquals("User with id = " + user.getId() + " was not found", thrown.getMessage());
     }
 
     @Test
     @Order(4)
     @DisplayName("Test the email unique constraint")
     public void testCreateUser_whenEmailAlreadyInDatabase_shouldReturnNull() {
-        ResponseStatusException thrown = assertThrows(ResponseStatusException.class, () -> userService.createUser(user));
+        UserCreateException thrown = assertThrows(UserCreateException.class, () -> userService.createUser(user));
         assertEquals(HttpStatus.BAD_REQUEST, thrown.getStatusCode());
     }
 

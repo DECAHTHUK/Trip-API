@@ -3,15 +3,14 @@ package ru.tinkoff.lab.tripAPI.business.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.business.Accommodation;
 import ru.tinkoff.lab.tripAPI.business.Destination;
 import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.Trip;
 import ru.tinkoff.lab.tripAPI.business.dto.DestinationDto;
 import ru.tinkoff.lab.tripAPI.business.dto.TripDto;
+import ru.tinkoff.lab.tripAPI.exceptions.*;
 import ru.tinkoff.lab.tripAPI.mapping.AccommodationDestinationTripMapper;
 
 import java.util.List;
@@ -33,8 +32,8 @@ public class AccommodationDestinationTripService {
     public Id createAccommodation(Accommodation accommodation) {
         try {
             return mapper.insertAccommodation(accommodation);
-        } catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (Exception e) {
+            throw new AccommodationCreateException(e.getMessage());
         }
     }
 
@@ -45,7 +44,7 @@ public class AccommodationDestinationTripService {
     public Accommodation getAccommodation(UUID uuid) {
         Accommodation accommodation = mapper.selectAccommodation(uuid);
         if (accommodation == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Accommodation with id = " + uuid + " was not found");
+            throw new AccommodationNotFoundException("Accommodation with id = " + uuid + " was not found");
         }
         return accommodation;
     }
@@ -60,15 +59,15 @@ public class AccommodationDestinationTripService {
     public Id createDestination(DestinationDto destinationDto) {
         try {
             return mapper.insertDestination(destinationDto);
-        } catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (DestinationCreateException e) {
+            throw new DestinationCreateException(e.getMessage());
         }
     }
 
     public Destination getDestination(UUID uuid) {
         Destination destination = mapper.selectDestination(uuid);
         if (destination == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Destination with id = " + uuid + " was not found");
+            throw new DestinationNotFoundException("Destination with id = " + uuid + " was not found");
         }
         return destination;
     }
@@ -87,15 +86,15 @@ public class AccommodationDestinationTripService {
     public Id createTrip(TripDto tripDto) {
         try {
             return mapper.insertTrip(tripDto);
-        } catch (RuntimeException e) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+        } catch (TripCreateException e) {
+            throw new TripCreateException(e.getMessage());
         }
     }
 
     public Trip getTrip(UUID uuid) {
         Trip trip = mapper.selectTrip(uuid);
         if (trip == null) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Trip with id = " + uuid + " was not found");
+            throw new TripNotFoundException("Trip with id = " + uuid + " was not found");
         }
         return trip;
     }

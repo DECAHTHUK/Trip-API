@@ -13,6 +13,7 @@ import ru.tinkoff.lab.tripAPI.business.dto.DestinationDto;
 import ru.tinkoff.lab.tripAPI.business.dto.NotificationDto;
 import ru.tinkoff.lab.tripAPI.business.dto.RequestDto;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
+import ru.tinkoff.lab.tripAPI.security.utils.JwtUtils;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -23,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @MybatisTest
-@Import({NotificationService.class, OfficeService.class, RequestService.class,
+@Import({NotificationService.class, OfficeService.class, RequestService.class, JwtUtils.class,
         UserService.class, AccommodationDestinationTripService.class, UuidTypeHandler.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
@@ -69,8 +70,7 @@ public class NotificationServiceTest {
                 "12345678",
                 "John",
                 "Smith",
-                "USER",
-                "something");
+                "USER");
         workerId = userService.createUser(user);
         user.setId(workerId.getId());
 
@@ -78,8 +78,7 @@ public class NotificationServiceTest {
                 "1234",
                 "Sam",
                 "Winchester",
-                "USER",
-                "SALT");
+                "USER");
         bossId = userService.createUser(userBoss);
         userBoss.setId(bossId.getId());
         userService.createRelation(UUID.fromString(bossId.getId()), UUID.fromString(workerId.getId()));

@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,22 +26,31 @@ import ru.tinkoff.lab.tripAPI.business.enums.RequestStatus;
 import ru.tinkoff.lab.tripAPI.business.enums.TripStatus;
 import ru.tinkoff.lab.tripAPI.business.service.*;
 import ru.tinkoff.lab.tripAPI.mapping.handlers.UuidTypeHandler;
+import ru.tinkoff.lab.tripAPI.security.AuthService;
+import ru.tinkoff.lab.tripAPI.security.LoginController;
+import ru.tinkoff.lab.tripAPI.security.filtering.JwtFilter;
+import ru.tinkoff.lab.tripAPI.security.filtering.SecurityConfig;
+import ru.tinkoff.lab.tripAPI.security.models.LoginRequest;
+import ru.tinkoff.lab.tripAPI.security.utils.JwtProvider;
+import ru.tinkoff.lab.tripAPI.security.utils.JwtUtils;
 
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
 @AutoConfigureMybatis
-@WebMvcTest(controllers = {RequestController.class, NotificationController.class})
-@Import({RequestService.class, OfficeService.class, UserService.class,
-        AccommodationDestinationTripService.class, NotificationService.class, UuidTypeHandler.class})
+@WebMvcTest(controllers = {RequestController.class, NotificationController.class, LoginController.class, UserController.class})
+@Import({UserService.class, UuidTypeHandler.class, NotificationService.class, RequestService.class, AccommodationDestinationTripService.class,
+        JwtUtils.class, JwtProvider.class, JwtFilter.class, SecurityConfig.class, AuthService.class, OfficeService.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @DirtiesContext
+@WithMockUser
 public class RequestControllerTest {
 
     ObjectMapper mapper = new ObjectMapper();
@@ -85,23 +96,23 @@ public class RequestControllerTest {
                 "qwertyuiop",
                 "Ruslan",
                 "Sultanov",
-                "user"
+                "USER"
         );
         User approver = new User(
                 "rs_xdm2@inst.com",
                 "qwertyuiop",
                 "Ruslan",
                 "Sultanov",
-                "user"
+                "USER"
         );
         User approver2 = new User(
                 "rs_xdm3@inst.com",
                 "qwertyuiop",
                 "Ruslan",
                 "Sultanov",
-                "user"
+                "USER"
         );
-        // Initialization some data
+
         Id officeId = officeService.createOffice(office);
         office.setId(officeId.getId());
         destinationDto.setOfficeId(officeId.getId());
@@ -110,8 +121,14 @@ public class RequestControllerTest {
         destinationDto.setId(destinationId.getId());
 
         workerId = userService.createUser(worker);
+        assertNotNull(workerId);
+
         approverId = userService.createUser(approver);
+        assertNotNull(approverId);
+
         approver2Id = userService.createUser(approver2);
+        assertNotNull(approver2Id);
+
         userService.createRelation(UUID.fromString(approverId.getId()), UUID.fromString(workerId.getId()));
         userService.createRelation(UUID.fromString(approver2Id.getId()), UUID.fromString(workerId.getId()));
 
@@ -196,13 +213,13 @@ public class RequestControllerTest {
         //test if NEW notifications are created
         List<Notification> notifications1 = notificationService
                 .getUnwatchedNotifications(UUID.fromString(approverId.getId()));
-        assertEquals(2, notifications1.size());
+        assertEquals(1, notifications1.size());
         assertEquals(requestId.getId(), notifications1.get(0).getRequest().getId());
         assertEquals(approverId.getId(), notifications1.get(0).getUserId());
 
         List<Notification> notifications2 = notificationService
                 .getUnwatchedNotifications(UUID.fromString(approver2Id.getId()));
-        assertEquals(2, notifications2.size());
+        assertEquals(1, notifications2.size());
         assertEquals(requestId.getId(), notifications2.get(0).getRequest().getId());
         assertEquals(approver2Id.getId(), notifications2.get(0).getUserId());
     }
@@ -214,7 +231,7 @@ public class RequestControllerTest {
         // TEST markAsWatched
         List<Notification> notifications1 = notificationService
                 .getUnwatchedNotifications(UUID.fromString(approverId.getId()));
-        assertEquals(2, notifications1.size());
+        assertEquals(1, notifications1.size());
 
         Notification notificationToWatch = notifications1.get(0);
 
@@ -225,8 +242,7 @@ public class RequestControllerTest {
 
         notifications1 = notificationService
                 .getUnwatchedNotifications(UUID.fromString(approverId.getId()));
-        assertEquals(1, notifications1.size());
-        assertNotEquals(notificationToWatch.getId(), notifications1.get(0).getId());
+        assertEquals(0, notifications1.size());
     }
 
     @Test
@@ -284,10 +300,10 @@ public class RequestControllerTest {
         request = requestService.getRequest(UUID.fromString(requestDto.getId()));
         assertEquals(RequestStatus.PENDING, request.getRequestStatus());
         List<Notification> notifications = notificationService.getUnwatchedNotifications(UUID.fromString(request.getApproverId()));
-        assertEquals(2, notifications.size());
+        assertEquals(1, notifications.size());
 
         List<Notification> notificationsForSecondApprover = notificationService.getUnwatchedNotifications(UUID.fromString(approver2Id.getId()));
-        assertEquals(2, notificationsForSecondApprover.size());
+        assertEquals(1, notificationsForSecondApprover.size());
     }
 
     @Test
@@ -328,5 +344,17 @@ public class RequestControllerTest {
         assertEquals(tripDto.getAccommodationId(), tripFromDb.getAccommodation().getId());
         assertEquals(tripDto.getDestinationId(), tripFromDb.getDestination().getId());
         assertEquals(TripStatus.PENDING, tripFromDb.getTripStatus());
+    }
+
+    @Test
+    @Order(7)
+    @DisplayName("Testing unauthorized user")
+    @WithAnonymousUser
+    public void testUnauthorizedAccess() throws Exception {
+        RequestBuilder requestBuilderGet = MockMvcRequestBuilders
+                .get("/requests/" + requestDto.getId())
+                .accept(MediaType.APPLICATION_JSON_VALUE);
+
+        mockMvc.perform(requestBuilderGet).andExpect(status().isForbidden());
     }
 }

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="2" author="RusyaAndLyosha">
+
+        <comment>
+            Indexes initialisation
+        </comment>
+
+        <createIndex tableName="users" indexName="idx_users_email">
+            <column name="email"/>
+        </createIndex>
+        
+        <createIndex tableName="users_relations" indexName="idx_users_relations">
+            <column name="approver_id"/>
+            <column name="user_id"/>
+        </createIndex>
+
+        <createIndex tableName="notification" indexName="idx_notification_user_id">
+            <column name="user_id"/>
+            <column name="watched"/>
+        </createIndex>
+        
+        <createIndex tableName="request" indexName="idx_request_worker_id_status">
+            <column name="worker_id"/>
+            <column name="status"/>
+        </createIndex>
+
+    </changeSet>
+</databaseChangeLog>

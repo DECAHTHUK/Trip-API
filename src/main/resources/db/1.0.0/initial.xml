@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <changeSet id="1" author="RusyaAndLyosha">
+
+        <sql dbms="postgresql" endDelimiter=";">
+            CREATE EXTENSION pgcrypto
+        </sql>
+
+        <!-- USERS -->
+        <createTable tableName="users">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="email" type="VARCHAR(100)">
+                <constraints primaryKey="false" nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="second_name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="user_role" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <!--USER_RELATIONS -->
+        <createTable tableName="users_relations">
+            <column name="approver_id" type="UUID">
+                <constraints foreignKeyName="fk_user_approver" references="users(id)" nullable="false"/>
+            </column>
+            <column name="user_id" type="UUID">
+                <constraints foreignKeyName="fk_user_sub" references="users(id)" nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- NOTIFICATION -->
+        <createTable tableName="notification">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="request_id" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="watched" type="BOOLEAN"/>
+            <column name="user_id" type="UUID">
+                <constraints foreignKeyName="fk_notification_user" references="users(id)" nullable="false"/>
+            </column>
+        </createTable>
+
+        <!-- ACCOMMODATION -->
+        <createTable tableName="accommodation">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="address" type="TEXT"/>
+            <column name="booking_tickets" type="TEXT"/>
+        </createTable>
+
+        <!-- OFFICE -->
+        <createTable tableName="office">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="address" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+        </createTable>
+
+        <!-- DESTINATION -->
+        <createTable tableName="destination">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="office_id" type="UUID">
+                <constraints foreignKeyName="fk_destination_office" references="office(id)"/>
+            </column>
+            <column name="seat_place" type="TEXT"/>
+        </createTable>
+        
+        <!-- REQUEST -->
+        <createTable tableName="request">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="status" type="VARCHAR(36)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="TEXT"/>
+            <column name="worker_id" type="UUID">
+                <constraints foreignKeyName="fk_request_user" references="users(id)" nullable="false"/>
+            </column>
+            <column name="destination_id" type="UUID">
+                <constraints foreignKeyName="fk_request_destination" references="destination(id)" nullable="false"/>
+            </column>
+            <column name="office_id" type="UUID">
+                <constraints foreignKeyName="fk_request_office" references="office(id)"/>
+            </column>
+            <column name="comment" type="TEXT"/>
+            <column name="approver_id" type="UUID">
+                <constraints foreignKeyName="fk_request_approver" references="users(id)" nullable="true"/>
+            </column>
+            <column name="start_date" type="TIMESTAMPTZ"/>
+            <column name="end_date" type="TIMESTAMPTZ"/>
+            <column name="tickets" type="TEXT"/>
+        </createTable>
+        
+        <!-- TRIP -->
+        <createTable tableName="trip">
+            <column name="id" type="UUID" defaultValueComputed="gen_random_uuid()">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="trip_status" type="VARCHAR(10)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="accommodation_id" type="UUID">
+                <constraints foreignKeyName="fk_trip_accommodation" references="accommodation(id)"/>
+            </column>
+            <column name="destination_id" type="UUID">
+                <constraints foreignKeyName="fk_trip_destination" references="destination(id)" nullable="false"/>
+            </column>
+            <column name="request_id" type="UUID">
+                <constraints foreignKeyName="fk_trip_request" references="request(id)" nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="notification" baseColumnNames="request_id"
+                                 constraintName="fk_notification_request" referencedTableName="request"
+                                 referencedColumnNames="id"/>
+
+    </changeSet>
+</databaseChangeLog>
