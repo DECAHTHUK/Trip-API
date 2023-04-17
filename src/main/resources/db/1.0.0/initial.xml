@@ -7,7 +7,7 @@
     <changeSet id="1" author="RusyaAndLyosha">
 
         <sql dbms="postgresql" endDelimiter=";">
-            CREATE EXTENSION pgcrypto
+            CREATE EXTENSION IF NOT EXISTS pgcrypto
         </sql>
 
         <!-- USERS -->

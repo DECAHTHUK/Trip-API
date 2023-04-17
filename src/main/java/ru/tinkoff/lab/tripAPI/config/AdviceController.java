@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.server.ResponseStatusException;
 import ru.tinkoff.lab.tripAPI.exceptions.ObjectCreateException;
 import ru.tinkoff.lab.tripAPI.exceptions.ObjectNotFoundException;
 import ru.tinkoff.lab.tripAPI.exceptions.TripDtoNullException;
@@ -22,6 +23,11 @@ public class AdviceController {
 
     @ExceptionHandler(value = {TripDtoNullException.class})
     public ResponseEntity<Object> handleNullTripDto(TripDtoNullException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = {ResponseStatusException.class})
+    public ResponseEntity<Object> handleRSE(ResponseStatusException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }

@@ -6,5 +6,6 @@
 
     <include file="db/1.0.0/initial.xml"/>
     <include file="db/1.0.0/indexes.xml"/>
+    <include file="db/1.0.0/add_superuser.xml"/>
     
 </databaseChangeLog>

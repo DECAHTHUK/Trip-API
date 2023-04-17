@@ -5,8 +5,19 @@ plugins {
 }
 
 group = 'ru.tinkoff.lab'
-version = '0.0.1-SNAPSHOT'
+version = '1.0.0'
 sourceCompatibility = '17'
+
+jar {
+	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+	manifest {
+		attributes "Main-Class": "ru.tinkoff.lab.tripAPI.TripApiApplication"
+	}
+
+	from {
+		configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+	}
+}
 
 configurations {
 	compileOnly {
