@@ -23,6 +23,10 @@ tags:
     description: Endpoints for destinations
   - name: notificationsEnd
     description: Endpoints for notifications
+  - name: officesEnd
+    description: Endpoints for offices
+  - name: loginEnd
+    description: Endpoints for Auth
 
 
 paths:
@@ -32,6 +36,13 @@ paths:
         - usersEnd
       summary: создание нового пользователя
       operationId: createNewUser
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
       requestBody:
         description: структура для создания нового пользователя
         required: true
@@ -93,6 +104,12 @@ paths:
             type: string
             format: uuid
           required: true
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
       responses:
         '200':
           description: Success
@@ -128,6 +145,12 @@ paths:
           schema:
             type: integer
             format: int32
+          required: true
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
           required: true
       responses:
         '200':
@@ -167,6 +190,12 @@ paths:
             type: integer
             format: int32
           required: true
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
       responses:
         '200':
           description: Success
@@ -205,6 +234,12 @@ paths:
             type: integer
             format: int32
           required: true
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
       responses:
         '200':
           description: Success
@@ -235,6 +270,12 @@ paths:
           schema:
             type: string
             format: uuid
+          required: true
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
           required: true
       responses:
         '200':
@@ -274,6 +315,12 @@ paths:
             type: string
             format: uuid
           required: true
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
       responses:
         '200':
           description: Success
@@ -304,6 +351,12 @@ paths:
             type: string
             format: uuid
           required: true
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
       responses:
         '200':
           description: Success
@@ -325,6 +378,13 @@ paths:
         - requestsEnd
       summary: Создание нового запроса
       operationId: createNewRequest
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
       requestBody:
         description: Структура запроса
         required: true
@@ -353,6 +413,13 @@ paths:
         - requestsEnd
       summary: Обновление запроса
       operationId: updateRequest
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
       requestBody:
         description: Структура запроса
         required: true
@@ -386,6 +453,12 @@ paths:
             type: string
             format: uuid
           required: true
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
       responses:
         '200':
           description: Success
@@ -415,6 +488,12 @@ paths:
           schema:
             type: string
             format: uuid
+          required: true
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
           required: true
       requestBody:
         description: ТрипДто который создастся в бд обязателен
@@ -453,6 +532,12 @@ paths:
             type: string
             format: uuid
           required: true
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
       requestBody:
         description: ТрипДто НЕ нужен
         required: true
@@ -485,6 +570,12 @@ paths:
           schema:
             type: string
             format: uuid
+          required: true
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
           required: true
       requestBody:
         description: ТрипДто НЕ нужен
@@ -519,6 +610,12 @@ paths:
             type: string
             format: uuid
           required: true
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
       responses:
         '200':
           description: Success
@@ -542,6 +639,13 @@ paths:
         - tripsEnd
       summary: Trip creation
       operationId: createNewTrip
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
       requestBody:
         required: true
         content:
@@ -569,6 +673,13 @@ paths:
         - tripsEnd
       summary: Trip update
       operationId: updateTrip
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
       requestBody:
         description: Структура запроса
         required: true
@@ -602,6 +713,12 @@ paths:
             type: string
             format: uuid
           required: true
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
       responses:
         '200':
           description: Success
@@ -621,6 +738,13 @@ paths:
         - accommodationsEnd
       summary: Accommodation creation
       operationId: createNewAccommodation
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
       requestBody:
         required: true
         content:
@@ -648,6 +772,13 @@ paths:
         - accommodationsEnd
       summary: Accommodation update
       operationId: updateAccommodation
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
       requestBody:
         required: true
         content:
@@ -680,6 +811,12 @@ paths:
             type: string
             format: uuid
           required: true
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
       responses:
         '200':
           description: Success
@@ -708,6 +845,12 @@ paths:
             type: string
             format: uuid
           required: true
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
       responses:
         '200':
           description: Success
@@ -727,6 +870,13 @@ paths:
         - destinationsEnd
       summary: Destination creation
       operationId: createNewDestination
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
       requestBody:
         required: true
         content:
@@ -754,6 +904,13 @@ paths:
         - destinationsEnd
       summary: Destination update
       operationId: updateDestination
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
       requestBody:
         required: true
         content:
@@ -786,6 +943,12 @@ paths:
             type: string
             format: uuid
           required: true
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
       responses:
         '200':
           description: Success
@@ -814,6 +977,12 @@ paths:
             type: string
             format: uuid
           required: true
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
       responses:
         '200':
           description: Success
@@ -841,6 +1010,12 @@ paths:
             type: string
             format: uuid
           required: true
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
       responses:
         '200':
           description: Success
@@ -867,6 +1042,12 @@ paths:
             type: string
             format: uuid
           required: true
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
       responses:
         '200':
           description: Success
@@ -884,6 +1065,169 @@ paths:
         '500':
           description: Internal server error
 
+  '/offices':
+    post:
+      tags:
+        - officesEnd
+      summary: Office creation
+      operationId: createNewOffice
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Office'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Id'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+    put:
+      tags:
+        - officesEnd
+      summary: Office update
+      operationId: updateOffice
+      parameters:
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Office'
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/offices/{uuid}':
+    get:
+      tags:
+        - officesEnd
+      summary: Get an office
+      operationId: getOffice
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Office'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+    delete:
+      tags:
+        - officesEnd
+      summary: Delete an office
+      operationId: deleteOffice
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/api/login':
+    post:
+      tags:
+        - loginEnd
+      summary: Login as a user
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: string
+                description: jwt token
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+
 components:
   schemas:
     User:
@@ -892,9 +1236,9 @@ components:
       required:
         - email
         - password
-        - name
-        - surname
-        - role
+        - firstName
+        - secondName
+        - userRole
       properties:
         id:
           type: string
@@ -911,7 +1255,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/User'
-        user_role:
+        userRole:
           type: string
 
     Notification:
@@ -922,6 +1266,21 @@ components:
           format: uuid
         request:
           $ref: '#/components/schemas/Request'
+        watched:
+          type: boolean
+        userId:
+          type: string
+          format: uuid
+
+    NotificationDto:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        requestId:
+          type: string
+          format: uuid
         watched:
           type: boolean
         userId:
@@ -952,8 +1311,9 @@ components:
     Request:
       type: object
       required:
-        - status
-        - worker
+        - requestStatus
+        - workerFirstName
+        - workerSecondName
         - startDate
         - endDate
         - destination
@@ -1106,11 +1466,23 @@ components:
           format: uuid
         tripDto:
           $ref: "#/components/schemas/TripDto"
+        comment:
+          type: string
 
     Id:
       type: object
       description: id return type
       properties:
         id:
+          type: string
+          format: uuid
+
+    LoginRequest:
+      type: object
+      description: Needed at login endpoint
+      properties:
+        email:
+          type: string
+        password:
           type: string
           format: uuid
