@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet id="1" author="RusyaAndLyosha">
+
+        <insert tableName="users">
+            <column name="id" value="a6a89f14-67e5-46fc-a868-a28ece344f45"/>
+            <column name="email" value="supersecretAdmin@protonmail.com"/>
+            <column name="password" value="$2a$10$ia9HeqTyt1sGR83vq53hyuQA4WWIfm8i84OI.J99luqQ7lo8QlmSe"/>
+            <column name="first_name" value="SuperAdmin"/>
+            <column name="second_name" value="Admin"/>
+            <column name="user_role" value="ADMIN"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
