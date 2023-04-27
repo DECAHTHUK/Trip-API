@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+  tripapi:
+    image: decahthuk/tripapi
+    ports:
+      - '8080:8080'
+    restart: on-failure
+    environment:
+      SPRING_DATASOURCE_USERNAME: {{env.DATASOURCE_USERNAME}}
+      SPRING_DATASOURCE_PASSWORD: {{env.DATASOURCE_PASSWORD}}
+      SPRING_DATASOURCE_URL: {{env.DATASOURCE_URL}}
+      JWT_SECRET_ACCESS: {{env.JWT_SECRET}}

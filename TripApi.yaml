@@ -160,7 +160,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/TripDto'
+                  $ref: '#/components/schemas/Trip'
         '400':
           description: Bad Request
           content:
@@ -204,7 +204,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/RequestDto'
+                  $ref: '#/components/schemas/Request'
         '400':
           description: Bad Request
           content:
@@ -248,7 +248,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/RequestDto'
+                  $ref: '#/components/schemas/Request'
         '400':
           description: Bad Request
           content:

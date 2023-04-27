@@ -20,4 +20,3 @@ jobs:
         run: gradle test --tests 'ru.tinkoff.lab.tripAPI.business.service*'
       - name: Test controllers
         run: gradle test --tests 'ru.tinkoff.lab.tripAPI.controllers*'
-
