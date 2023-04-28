@@ -176,11 +176,11 @@ public class RequestServiceTest {
     @Order(4)
     @DisplayName("Test get incoming requests")
     public void getIncomingRequestsTest() {
-        List<Request> requests = requestService.getIncomingRequests(UUID.fromString(approverId.getId()), 1);
+        List<Request> requests = requestService.getIncomingRequests(UUID.fromString(approverId.getId()), 1, null);
 
         assertEquals(ROWS_AMOUNT, requests.size());
 
-        List<Request> requests2 = requestService.getIncomingRequests(UUID.fromString(approverId.getId()), 2);
+        List<Request> requests2 = requestService.getIncomingRequests(UUID.fromString(approverId.getId()), 2, null);
 
         assertEquals(2, requests2.size());
         assertTrue(requests2.stream().map(Request::getDescription)
@@ -195,11 +195,11 @@ public class RequestServiceTest {
     @Order(5)
     @DisplayName("Test get outgoing requests")
     public void getOutgoingRequestsTest() {
-        List<Request> requests = requestService.getOutgoingRequests(UUID.fromString(workerId.getId()), 1);
+        List<Request> requests = requestService.getOutgoingRequests(UUID.fromString(workerId.getId()), 1, null);
 
         assertEquals(ROWS_AMOUNT, requests.size());
 
-        List<Request> requests2 = requestService.getOutgoingRequests(UUID.fromString(workerId.getId()), 2);
+        List<Request> requests2 = requestService.getOutgoingRequests(UUID.fromString(workerId.getId()), 2, null);
 
         requests.addAll(requests2);
 

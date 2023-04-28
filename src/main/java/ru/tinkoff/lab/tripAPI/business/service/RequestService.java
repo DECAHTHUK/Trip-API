@@ -60,14 +60,30 @@ public class RequestService {
         return request;
     }
 
-    public List<Request> getIncomingRequests(UUID approverId, int page) {
+    public List<Request> getIncomingRequests(UUID approverId, int page, String status) {
+        if (status != null) {
+            status = status.toUpperCase();
+            if (RequestStatus.valueOf(status).equals(RequestStatus.APPROVED) || RequestStatus.valueOf(status).equals(RequestStatus.PENDING) ||
+                    RequestStatus.valueOf(status).equals(RequestStatus.DECLINED) || RequestStatus.valueOf(status).equals(RequestStatus.AWAIT_CHANGES)) {
+                return requestMapper.selectIncomingStatusRequests(
+                        approverId, page * ROWS_AMOUNT - ROWS_AMOUNT, ROWS_AMOUNT, status);
+            }
+        }
         return requestMapper.selectIncomingRequests(
-                approverId, page * ROWS_AMOUNT - ROWS_AMOUNT, ROWS_AMOUNT);
+                    approverId, page * ROWS_AMOUNT - ROWS_AMOUNT, ROWS_AMOUNT);
     }
 
-    public List<Request> getOutgoingRequests(UUID workerId, int page) {
+    public List<Request> getOutgoingRequests(UUID workerId, int page, String status) {
+        if (status != null) {
+            status = status.toUpperCase();
+            if ((RequestStatus.valueOf(status).equals(RequestStatus.APPROVED) || RequestStatus.valueOf(status).equals(RequestStatus.PENDING) ||
+                    RequestStatus.valueOf(status).equals(RequestStatus.DECLINED) || RequestStatus.valueOf(status).equals(RequestStatus.AWAIT_CHANGES))) {
+                return requestMapper.selectOutgoingStatusRequests(
+                        workerId, page * ROWS_AMOUNT - ROWS_AMOUNT, ROWS_AMOUNT, status);
+            }
+        }
         return requestMapper.selectOutgoingRequests(
-                workerId, page * ROWS_AMOUNT - ROWS_AMOUNT, ROWS_AMOUNT);
+                    workerId, page * ROWS_AMOUNT - ROWS_AMOUNT, ROWS_AMOUNT);
     }
 
     @Transactional

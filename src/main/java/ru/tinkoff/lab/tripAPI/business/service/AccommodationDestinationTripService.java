@@ -10,6 +10,7 @@ import ru.tinkoff.lab.tripAPI.business.Id;
 import ru.tinkoff.lab.tripAPI.business.Trip;
 import ru.tinkoff.lab.tripAPI.business.dto.DestinationDto;
 import ru.tinkoff.lab.tripAPI.business.dto.TripDto;
+import ru.tinkoff.lab.tripAPI.business.enums.TripStatus;
 import ru.tinkoff.lab.tripAPI.exceptions.*;
 import ru.tinkoff.lab.tripAPI.mapping.AccommodationDestinationTripMapper;
 
@@ -99,7 +100,14 @@ public class AccommodationDestinationTripService {
         return trip;
     }
 
-    public List<Trip> getSomeTrips(UUID userId, int page) {
+    public List<Trip> getSomeTrips(UUID userId, int page, String status) {
+        if (status != null) {
+            status = status.toUpperCase();
+            if ((TripStatus.valueOf(status).equals(TripStatus.PENDING) || TripStatus.valueOf(status).equals(TripStatus.COMPLETED) ||
+                    TripStatus.valueOf(status).equals(TripStatus.CANCELLED))) {
+                return mapper.selectSomeTripsWithStatus(userId, page * ROWS_AMOUNT - ROWS_AMOUNT, ROWS_AMOUNT, status);
+            }
+        }
         return mapper.selectSomeTrips(userId, page * ROWS_AMOUNT - ROWS_AMOUNT, ROWS_AMOUNT);
     }
 
