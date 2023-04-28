@@ -20,7 +20,7 @@ jobs:
         with:
           file: ./Dockerfile
           push: true
-          tags: decahthuk/tripapi
+          tags: decahthuk/tripapi:1.0.0
 
   update-yc:
     runs-on: ubuntu-latest
@@ -40,8 +40,8 @@ jobs:
         with:
           yc-sa-json-credentials: ${{ secrets.YC_SA_JSON_CREDENTIALS }}
           folder-id: ${{ secrets.YC_FOLDER_ID }}
-          VM-name: excalibur
+          vm-name: excalibur
           vm-service-account-id: ${{ secrets.YC_SERVICE_ACCOUNT_ID }}
           vm-subnet-id: ${{ secrets.YC_SUBNET_ID }}
-          #user-data-path: './yc/user-data.yaml'
+          user-data-path: './yc/user-data.yaml'
           docker-compose-path: './yc/docker-compose.yaml'

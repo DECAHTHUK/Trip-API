@@ -20,7 +20,7 @@ public class LoginController {
 
     @GetMapping("/hello/user")
     public String helloUser() {
-        return "We got em";
+        return "We got em4";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
