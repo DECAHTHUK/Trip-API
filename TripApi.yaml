@@ -1,6 +1,6 @@
 openapi: 3.0.3
 info:
-  version: 0.0.1-SNAPSHOT
+  version: 1.1.0
   description: API for reserving trips for Tinkoff employers
   title: Tinkoff trip API
   contact:
@@ -360,6 +360,156 @@ paths:
       responses:
         '200':
           description: Success
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/{uuid}/incoming-requests-at/{page}/{status}':
+    get:
+      tags:
+        - usersEnd
+      summary: Получение страницы номер {page}(либо все сразу если не указано) из n запросов для ментора с заданным {id} и статусом {status}
+      operationId: getIncomingRequestsWithStatus
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: path
+          name: page
+          schema:
+            type: integer
+            format: int32
+          required: true
+        - in: path
+          name: status
+          schema:
+            type: string
+            format: RequestStatus
+          required: true
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Request'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/{uuid}/outgoing-requests-at/{page}/{status}':
+    get:
+      tags:
+        - usersEnd
+      summary: Получение страницы номер {page}(либо все сразу если не указано) из n запросов для сотрудника с заданным {id} и статусом {status}
+      operationId: getOutgoingRequestsWithStatus
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: path
+          name: page
+          schema:
+            type: integer
+            format: int32
+          required: true
+        - in: path
+          name: status
+          schema:
+            type: string
+            format: RequestStatus
+          required: true
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Request'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: string
+                description: description
+        '500':
+          description: Internal server error
+
+  '/{uuid}/trips-at/{page}/{status}':
+    get:
+      tags:
+        - usersEnd
+      summary: Получение страницы номер {page}(либо все сразу если не указано) из n командировок для пользователя с заданным {id} и статусом {status}
+      operationId: getSomeTripsWithStatus
+      parameters:
+        - in: path
+          name: uuid
+          schema:
+            type: string
+            format: uuid
+          required: true
+        - in: path
+          name: page
+          schema:
+            type: integer
+            format: int32
+          required: true
+        - in: path
+          name: status
+          schema:
+            type: string
+            format: RequestStatus
+          required: true
+        - in: header
+          name: Authorization
+          schema:
+            type: string
+            format: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trip'
         '400':
           description: Bad Request
           content:
@@ -1306,6 +1456,15 @@ components:
         requestId:
           type: string
           format: uuid
+        startDate:
+          type: string
+          format: date
+          example: "2021-01-30T08:30:00Z"
+        endDate:
+          type: string
+          format: date
+          example: "2021-01-30T08:30:00Z"
+
 
 
     Request:

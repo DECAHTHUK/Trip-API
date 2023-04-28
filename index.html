@@ -183,7 +183,7 @@ font-style: italic;
     <div class="app-desc">API for reserving trips for Tinkoff employers</div>
     <div class="app-desc">More information: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a></div>
     <div class="app-desc">Contact Info: <a href="alexei.talanov003@mail.ru">alexei.talanov003@mail.ru</a></div>
-    <div class="app-desc">Version: 0.0.1-SNAPSHOT</div>
+    <div class="app-desc">Version: 1.1.0</div>
     <div class="app-desc">BasePath:</div>
     <div class="license-info">Chestnoye slovo 2.0</div>
     <div class="license-url">http://apache.org/licenses/LICENSE-2.0.html</div>
@@ -246,7 +246,10 @@ font-style: italic;
   <li><a href="#createRelation"><code><span class="http-method">post</span> /users/{approver}/subordinates/{subordinate}</code></a></li>
   <li><a href="#deleteRelation"><code><span class="http-method">delete</span> /users/{approver}/subordinates/{subordinate}</code></a></li>
   <li><a href="#getIncomingRequestsAt"><code><span class="http-method">get</span> /users/{uuid}/incoming-requests-at/{page}</code></a></li>
+  <li><a href="#getIncomingRequestsWithStatus"><code><span class="http-method">get</span> /{uuid}/incoming-requests-at/{page}/{status}</code></a></li>
   <li><a href="#getOutgoingRequestsAt"><code><span class="http-method">get</span> /users/{uuid}/outgoing-requests-at/{page}</code></a></li>
+  <li><a href="#getOutgoingRequestsWithStatus"><code><span class="http-method">get</span> /{uuid}/outgoing-requests-at/{page}/{status}</code></a></li>
+  <li><a href="#getSomeTripsWithStatus"><code><span class="http-method">get</span> /{uuid}/trips-at/{page}/{status}</code></a></li>
   <li><a href="#getTripsAt"><code><span class="http-method">get</span> /users/{uuid}/trips-at/{page}</code></a></li>
   <li><a href="#getUnwatchedNotifications"><code><span class="http-method">get</span> /users/{uuid}/unwatched-notifications</code></a></li>
   <li><a href="#getUserById"><code><span class="http-method">get</span> /users/{uuid}</code></a></li>
@@ -1684,6 +1687,7 @@ font-style: italic;
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
+  "endDate" : "2000-01-23",
   "requestId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
   "accommodation" : {
     "address" : "address",
@@ -1701,6 +1705,7 @@ font-style: italic;
     "seatPlace" : "seatPlace"
   },
   "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "startDate" : "2000-01-23",
   "tripStatus" : "pending"
 }</code></pre>
 
@@ -2049,6 +2054,111 @@ font-style: italic;
         <a href="#"></a>
   </div> <!-- method -->
   <hr/>
+  <div class="method"><a name="getIncomingRequestsWithStatus"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /{uuid}/incoming-requests-at/{page}/{status}</code></pre></div>
+    <div class="method-summary">Получение страницы номер {page}(либо все сразу если не указано) из n запросов для ментора с заданным {id} и статусом {status} (<span class="nickname">getIncomingRequestsWithStatus</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">uuid (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: uuid</div><div class="param">page (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: int32</div><div class="param">status (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: RequestStatus</div>
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      array[<a href="#Request">Request</a>]
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>[ {
+  "workerFirstName" : "workerFirstName",
+  "ticketsUrl" : "http://example.com/aeiou",
+  "workerSecondName" : "workerSecondName",
+  "workerEmail" : "workerEmail",
+  "endDate" : "2000-01-23",
+  "approverId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "destination" : {
+    "description" : "description",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "office" : {
+      "address" : "address",
+      "description" : "description",
+      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+    },
+    "seatPlace" : "seatPlace"
+  },
+  "description" : "description",
+  "comment" : "comment",
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "requestStatus" : "approved",
+  "startDate" : "2000-01-23"
+}, {
+  "workerFirstName" : "workerFirstName",
+  "ticketsUrl" : "http://example.com/aeiou",
+  "workerSecondName" : "workerSecondName",
+  "workerEmail" : "workerEmail",
+  "endDate" : "2000-01-23",
+  "approverId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "destination" : {
+    "description" : "description",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "office" : {
+      "address" : "address",
+      "description" : "description",
+      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+    },
+    "seatPlace" : "seatPlace"
+  },
+  "description" : "description",
+  "comment" : "comment",
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "requestStatus" : "approved",
+  "startDate" : "2000-01-23"
+} ]</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
   <div class="method"><a name="getOutgoingRequestsAt"/>
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
@@ -2152,6 +2262,214 @@ font-style: italic;
         <a href="#"></a>
   </div> <!-- method -->
   <hr/>
+  <div class="method"><a name="getOutgoingRequestsWithStatus"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /{uuid}/outgoing-requests-at/{page}/{status}</code></pre></div>
+    <div class="method-summary">Получение страницы номер {page}(либо все сразу если не указано) из n запросов для сотрудника с заданным {id} и статусом {status} (<span class="nickname">getOutgoingRequestsWithStatus</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">uuid (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: uuid</div><div class="param">page (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: int32</div><div class="param">status (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: RequestStatus</div>
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      array[<a href="#Request">Request</a>]
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>[ {
+  "workerFirstName" : "workerFirstName",
+  "ticketsUrl" : "http://example.com/aeiou",
+  "workerSecondName" : "workerSecondName",
+  "workerEmail" : "workerEmail",
+  "endDate" : "2000-01-23",
+  "approverId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "destination" : {
+    "description" : "description",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "office" : {
+      "address" : "address",
+      "description" : "description",
+      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+    },
+    "seatPlace" : "seatPlace"
+  },
+  "description" : "description",
+  "comment" : "comment",
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "requestStatus" : "approved",
+  "startDate" : "2000-01-23"
+}, {
+  "workerFirstName" : "workerFirstName",
+  "ticketsUrl" : "http://example.com/aeiou",
+  "workerSecondName" : "workerSecondName",
+  "workerEmail" : "workerEmail",
+  "endDate" : "2000-01-23",
+  "approverId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "destination" : {
+    "description" : "description",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "office" : {
+      "address" : "address",
+      "description" : "description",
+      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+    },
+    "seatPlace" : "seatPlace"
+  },
+  "description" : "description",
+  "comment" : "comment",
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "requestStatus" : "approved",
+  "startDate" : "2000-01-23"
+} ]</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getSomeTripsWithStatus"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /{uuid}/trips-at/{page}/{status}</code></pre></div>
+    <div class="method-summary">Получение страницы номер {page}(либо все сразу если не указано) из n командировок для пользователя с заданным {id} и статусом {status} (<span class="nickname">getSomeTripsWithStatus</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">uuid (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: uuid</div><div class="param">page (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: int32</div><div class="param">status (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: RequestStatus</div>
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      array[<a href="#Trip">Trip</a>]
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>[ {
+  "endDate" : "2000-01-23",
+  "requestId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "accommodation" : {
+    "address" : "address",
+    "bookingUrl" : "http://example.com/aeiou",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+  },
+  "destination" : {
+    "description" : "description",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "office" : {
+      "address" : "address",
+      "description" : "description",
+      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+    },
+    "seatPlace" : "seatPlace"
+  },
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "startDate" : "2000-01-23",
+  "tripStatus" : "pending"
+}, {
+  "endDate" : "2000-01-23",
+  "requestId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "accommodation" : {
+    "address" : "address",
+    "bookingUrl" : "http://example.com/aeiou",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+  },
+  "destination" : {
+    "description" : "description",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "office" : {
+      "address" : "address",
+      "description" : "description",
+      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+    },
+    "seatPlace" : "seatPlace"
+  },
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "startDate" : "2000-01-23",
+  "tripStatus" : "pending"
+} ]</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
   <div class="method"><a name="getTripsAt"/>
     <div class="method-path">
     <a class="up" href="#__Methods">Up</a>
@@ -2191,6 +2509,7 @@ font-style: italic;
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>[ {
+  "endDate" : "2000-01-23",
   "requestId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
   "accommodation" : {
     "address" : "address",
@@ -2208,8 +2527,10 @@ font-style: italic;
     "seatPlace" : "seatPlace"
   },
   "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "startDate" : "2000-01-23",
   "tripStatus" : "pending"
 }, {
+  "endDate" : "2000-01-23",
   "requestId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
   "accommodation" : {
     "address" : "address",
@@ -2227,6 +2548,7 @@ font-style: italic;
     "seatPlace" : "seatPlace"
   },
   "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "startDate" : "2000-01-23",
   "tripStatus" : "pending"
 } ]</code></pre>
 
@@ -2622,6 +2944,8 @@ font-style: italic;
 <div class="param">accommodation (optional)</div><div class="param-desc"><span class="param-type"><a href="#Accommodation">Accommodation</a></span>  </div>
 <div class="param">destination (optional)</div><div class="param-desc"><span class="param-type"><a href="#Destination">Destination</a></span>  </div>
 <div class="param">requestId (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
+<div class="param">startDate (optional)</div><div class="param-desc"><span class="param-type"><a href="#date">date</a></span>  format: date</div>
+<div class="param">endDate (optional)</div><div class="param-desc"><span class="param-type"><a href="#date">date</a></span>  format: date</div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">

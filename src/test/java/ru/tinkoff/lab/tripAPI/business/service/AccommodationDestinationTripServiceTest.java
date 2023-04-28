@@ -176,6 +176,7 @@ public class AccommodationDestinationTripServiceTest {
     @DisplayName("Test if newly created trip is returned from db")
     public void testGetTrip() {
         Trip tripFromDb = accommodationDestinationTripService.getTrip(UUID.fromString(tripDto.getId()));
+        System.out.println(tripFromDb);
 
         assertEquals(accommodationDestinationTripService.getDestination(UUID.fromString(tripDto.getDestinationId())),
                 tripFromDb.getDestination());
@@ -184,7 +185,7 @@ public class AccommodationDestinationTripServiceTest {
         assertEquals(tripDto.getRequestId(), tripFromDb.getRequestId());
         assertEquals(tripDto.getTripStatus(), tripFromDb.getTripStatus());
 
-        List<Trip> trips = accommodationDestinationTripService.getSomeTrips(UUID.fromString(worker.getId()), 1);
+        List<Trip> trips = accommodationDestinationTripService.getSomeTrips(UUID.fromString(worker.getId()), 1, null);
         assertEquals(1, trips.size());
     }
 

@@ -97,6 +97,8 @@ public interface AccommodationDestinationTripMapper {
     @Results(value = {
             @Result(property = "tripStatus", column = "trip_status"),
             @Result(property = "requestId", column = "request_id"),
+            @Result(property = "startDate", column = "start_date"),
+            @Result(property = "endDate", column = "end_date"),
             @Result(property = "accommodation.id", column = "accom_id"),
             @Result(property = "accommodation.address", column = "address"),
             @Result(property = "accommodation.bookingUrl", column = "booking_tickets"),
@@ -112,8 +114,9 @@ public interface AccommodationDestinationTripMapper {
             SELECT t.id, t.trip_status, t.request_id,
             	a.id as accom_id, a.address, a.booking_tickets,
             	d.id as dest_id, d.description as destination_description, d.seat_place,
-            	o.id as office_id, o.address as office_address, o.description as office_description
+            	o.id as office_id, o.address as office_address, o.description as office_description, r.start_date, r.end_date
             FROM trip t
+            JOIN request r on t.request_id = r.id
             JOIN accommodation a on a.id = t.accommodation_id
             JOIN destination d on t.destination_id = d.id
             JOIN office o on d.office_id = o.id
@@ -125,6 +128,8 @@ public interface AccommodationDestinationTripMapper {
             @Result(property = "id", column = "trip_id"),
             @Result(property = "tripStatus", column = "trip_status"),
             @Result(property = "requestId", column = "request_id"),
+            @Result(property = "startDate", column = "start_date"),
+            @Result(property = "endDate", column = "end_date"),
             @Result(property = "accommodation.id", column = "accom_id"),
             @Result(property = "accommodation.address", column = "address"),
             @Result(property = "accommodation.bookingUrl", column = "booking_tickets"),
@@ -138,7 +143,7 @@ public interface AccommodationDestinationTripMapper {
     @Select("""
             SELECT t.id as trip_id, t.trip_status, t.request_id, a.id as accom_id, a.address, a.booking_tickets,
             d.id as dest_id, d.description as destination_description, d.seat_place,
-            o.id as office_id, o.address as office_address, o.description as office_description
+            o.id as office_id, o.address as office_address, o.description as office_description, r.start_date, r.end_date
             FROM trip t
             JOIN request r on t.request_id = r.id
             JOIN accommodation a on t.accommodation_id = a.id
@@ -148,6 +153,36 @@ public interface AccommodationDestinationTripMapper {
             ORDER BY r.start_date OFFSET #{offset} ROWS FETCH NEXT #{rows} ROWS ONLY;
             """)
     List<Trip> selectSomeTrips(@Param("userId") UUID userId, int offset, int rows);
+
+    @Results(value = {
+            @Result(property = "id", column = "trip_id"),
+            @Result(property = "tripStatus", column = "trip_status"),
+            @Result(property = "requestId", column = "request_id"),
+            @Result(property = "startDate", column = "start_date"),
+            @Result(property = "endDate", column = "end_date"),
+            @Result(property = "accommodation.id", column = "accom_id"),
+            @Result(property = "accommodation.address", column = "address"),
+            @Result(property = "accommodation.bookingUrl", column = "booking_tickets"),
+            @Result(property = "destination.id", column = "dest_id"),
+            @Result(property = "destination.description", column = "destination_description"),
+            @Result(property = "destination.seatPlace", column = "seat_place"),
+            @Result(property = "destination.office.id", column = "office_id"),
+            @Result(property = "destination.office.address", column = "office_address"),
+            @Result(property = "destination.office.description", column = "office_description")
+    })
+    @Select("""
+            SELECT t.id as trip_id, t.trip_status, t.request_id, a.id as accom_id, a.address, a.booking_tickets,
+            d.id as dest_id, d.description as destination_description, d.seat_place,
+            o.id as office_id, o.address as office_address, o.description as office_description, r.start_date, r.end_date
+            FROM trip t
+            JOIN request r on t.request_id = r.id
+            JOIN accommodation a on t.accommodation_id = a.id
+            JOIN destination d on t.destination_id = d.id
+            JOIN office o on d.office_id = o.id
+            WHERE r.worker_id = '${userId}' AND t.trip_status = #{status}
+            ORDER BY r.start_date OFFSET #{offset} ROWS FETCH NEXT #{rows} ROWS ONLY;
+            """)
+    List<Trip> selectSomeTripsWithStatus(@Param("userId") UUID userId, int offset, int rows, String status);
 
 
     @Update("""
