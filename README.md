@@ -1,12 +1,41 @@
 # Trip-API (API сервис командировок)
 Здесь представлена реализация API сервиса для оформления командировок.
-### 1. **Какова задача этого проекта?**
+## Содержание
+#### 1. [Задача проекта](#1-задача-проекта)
+#### 2. [Функционал](#2-функционал)
+#### 3. [Стек технологий](#3-стек-технологий)
+#### 4. [Методы API](#методы-api)
+- [Accommodation's endpoints](#1-accommodations-endpoints-roles-user-admin)
+- [Destination's endpoints](#2-destinations-endpoints-roles-user-admin)
+- [Login's endpoints](#3-logins-endpoint-авторизация-не-нужна)
+- [Notification's endpoints](#4-notifications-endpoints-roles-user-admin)
+- [Office's endpoints](#5-offices-endpoints-roles-admin)
+- [Request's endpoints](#6-requests-endpoints-roles-user-admin)
+- [Trip's endpoints](#7-trips-endpoints--roles-user-admin)
+- [User's endpoints](#8-users-endpoints)
+#### 5. [Модели](#модели)
+- [Accommodation](#1-accommodation)
+- [Destination](#2-destination)
+- [DestinationDto](#3-destinationdto)
+- [Id](#4-id)
+- [LoginRequest](#5-loginrequest)
+- [Notification](#6-notification)
+- [NotificationDto](#7-notificationdto)
+- [Office](#8-office)
+- [Request](#9-request)
+- [RequestDto](#10-requestdto)
+- [RequestStatusChangeDto](#11-requeststatuschangedto)
+- [Trip](#12-trip)
+- [TripDto](#13-tripdto)
+- [User](#14-user)
+---
+### 1. Задача проекта.
 Задача проекта в том, чтобы упростить взаимдействие между начальником и работником в случае оформления командировок.
-### 2. **Функционал**
+### 2. Функционал.
 - Создание связей между начальниками и подчиненными.
 - Оформление командировок.
 - Создание уведомлений для оптимального рассмотрения заявок.
-### 3. **Стек технологий**
+### 3. Стек технологий.
 - Spring boot
 - PostgreSQL
 - MyBatis
@@ -14,16 +43,20 @@
 - Spring Security
 - MockMVC
 - Docker
-## **Методы API**
+- Yandex Cloud
+- GitHub Actions
+- OpenAPI
+
+## Методы API
 
 
 
-### 1. **Accommodation's endpoints** (Roles: USER, ADMIN)  
+### 1. Accommodation's endpoints (Roles: USER, ADMIN)  
 - POST /accommodations  
 **Создание места размещения.**  
 Принимает на вход данные в формате *application/json*  
 Передаваемый тип: Accommodation accommodation (обязательно)   
-Возвращаемый тип: Id  
+Возвращаемый тип: Id   
 Данные возвращаются в формате *application/json*  
 Пример:  
 ```
