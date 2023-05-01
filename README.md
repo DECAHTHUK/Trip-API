@@ -15,33 +15,31 @@
 - MockMVC
 - Docker
 ## **Методы API**
-### 1. **Accommodation's endpoints**
+
+
+
+### 1. **Accommodation's endpoints** (Roles: USER, ADMIN)  
 - POST /accommodations  
 **Создание места размещения**  
-Принимает на вход application/json  
-RequestBody: Accommodation Accommodation (required)  
-Return type: Id  
-Example data:  
-Content-Type: application/json
+Принимает на вход данные в формате *application/json*  
+Передаваемый тип: Accommodation accommodation (обязательно)   
+Возвращаемый тип: Id  
+Данные возвращаются в формате *application/json*  
+Пример:  
 ```
 {
   "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
 }
 ```
 - DELETE /accommodations/{uuid}  
-**Удаление места размещения**  
-Path parameters:  
-uuid (required)  
-Path Parameter — default: null format: uuid  
+**Удаление места размещения по id**  
+Параметры: uuid (обязательно)      
 - GET /accommodations/{uuid}  
-**Получить место размещения** (getAccommodation)  
-Path parameters:  
-uuid (required)  
-Path Parameter — default: null format: uuid  
-Return type:  
-Accommodation
-Example data:  
-Content-Type: application/json  
+**Получить место размещения по id**    
+параметры: uuid (обязательно)      
+Возвращаемый тип: Accommodation  
+Данные возвращаются в формате *application/json*  
+Пример:    
 ```
 {
   "address" : "address",
@@ -50,36 +48,33 @@ Content-Type: application/json
 }
 ```
 - PUT /accommodations  
-**Обновление места размещения** (updateAccommodation)  
-Consumes  
-This API call consumes the following media types via the Content-Type request header:  
-application/json  
-Request body  
-Accommodation Accommodation (required)  
-### 2. Destination's endpoints
+**Обновление места размещения**    
+Принимает на вход данные в формате *application/json*   
+Передаваемый тип: Accommodation accommodation (обязательно)   
+
+
+
+### 2. Destination's endpoints (Roles: USER, ADMIN)  
 - POST /destinations  
-**Destination creation** (createNewDestination)  
-Consumes: application/json  
-Request body: DestinationDto DestinationDto (required)  
-Return type: Id  
-Content-Type: application/json  
+**Создание места назначения**    
+Принимает на вход данные в формате *application/json*     
+Передаваемый тип: DestinationDto destinationDto (обязательно)   
+Возвращаемый тип: Id  
+Данные возвращаются в формате *application/json*  
 ```
 {
   "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
 }
 ```
 - DELETE /destinations/{uuid}  
-**Delete a destination** (deleteDestination)  
-Path parameters:  
-uuid (required)  
-Path Parameter — default: null format: uuid  
-- GET /destinations/{uuid}
-**Get a destination** (getDestination)  
-Path parameters:  
-uuid (required)  
-Path Parameter — default: null format: uuid  
-Return type: Destination  
-Content-Type: application/json  
+**Удаление места назначения по id**  
+Параметры: uuid (обязательно)    
+- GET /destinations/{uuid}  
+**Получение места назначения по id**  
+параметры: uuid (обязательно)      
+Возвращаемый тип: Destination  
+Данные возвращаются в формате *application/json*  
+Пример:  
 ```
 {
   "description" : "description",
@@ -93,6 +88,97 @@ Content-Type: application/json
 }
 ```
 - PUT /destinations  
-**Destination update** (updateDestination)  
-Consumes: application/json  
-Request body: DestinationDto DestinationDto (required)
+**Обновление места назначения**    
+Принимает на вход данные в формате *application/json*   
+Передаваемый тип: DestinationDto destinationDto (обязательно)  
+
+
+
+### 3. Login's endpoint (Авторизация не нужна)  
+- POST /api/login  
+**Аутентификация**  
+Принимает на вход данные в формате *application/json*   
+Передаваемый тип: LoginRequest LoginRequest (обязательно)  
+Возвращаемый тип: String    
+
+
+
+### 4. Notification's endpoints (Roles: USER, ADMIN)  
+- GET /notifications/{uuid}  
+**Получение уведомления по id**  
+параметры: uuid (обязательно)      
+Возвращаемый тип: Notification  
+Данные возвращаются в формате *application/json*  
+Пример:  
+```
+{
+  "request" : {
+    "workerFirstName" : "workerFirstName",
+    "ticketsUrl" : "http://example.com/aeiou",
+    "workerSecondName" : "workerSecondName",
+    "workerEmail" : "workerEmail",
+    "endDate" : "2000-01-23",
+    "approverId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "destination" : {
+      "description" : "description",
+      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+      "office" : {
+        "address" : "address",
+        "description" : "description",
+        "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+      },
+      "seatPlace" : "seatPlace"
+    },
+    "description" : "description",
+    "comment" : "comment",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "requestStatus" : "approved",
+    "startDate" : "2000-01-23"
+  },
+  "watched" : true,
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "userId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+}
+```
+
+- PUT /notifications/{uuid}/watch  
+**Изменение статуса уведомления по id на просмотренный**  
+параметры: uuid (обязательно)  
+
+
+
+### 5. Office's endpoints (Roles: ADMIN)
+- POST /offices  
+**Создание офиса**    
+Принимает на вход данные в формате *application/json*     
+Передаваемый тип: Office office (обязательно)   
+Возвращаемый тип: Id  
+Данные возвращаются в формате *application/json*  
+```
+{
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+}
+```
+
+- DELETE /offices/{uuid}  
+**Удаление офиса по id**  
+Параметры: uuid (обязательно)    
+
+- GET /offices/{uuid}  
+**Получение офиса по id**  
+параметры: uuid (обязательно)      
+Возвращаемый тип: Notification  
+Данные возвращаются в формате *application/json*  
+Пример:  
+```
+{
+  "address" : "address",
+  "description" : "description",
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+}
+```
+
+- PUT /offices  
+**Обновление данных об офисе**  
+Принимает на вход данные в формате *application/json*   
+Передаваемый тип: Office office (обязательно)  
