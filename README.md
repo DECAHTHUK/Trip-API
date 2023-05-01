@@ -257,7 +257,7 @@
 
 
 
-### 7. Trip's endpoints  
+### 7. Trip's endpoints  (Roles: USER, ADMIN)  
 - PUT /trips/{uuid}/cancel  
 **Отмена командировки по UUID.**  
 Параметры: uuid (обязательно)    
@@ -385,7 +385,7 @@ page: int (не обязательно)
   "startDate" : "2000-01-23"
 } ]
 ```  
-- GET /{uuid}/incoming-requests-at/{page}/{status}  
+- GET /{uuid}/incoming-requests-at/{page}/{status}  (Roles: USER, ADMIN)  
 **Получение страницы номер {page}(либо все сразу если не указано) из n запросов для ментора с заданным {id} и статусом {status}.** (Roles: USER, ADMIN)  
 Параметры:  
 uuid: UUID (обязательно)  
@@ -748,3 +748,86 @@ uuid: UUID (обязательно)
 - DELETE /users/{uuid} (Roles: ADMIN)  
 **Удаление пользователя по заданному UUID.**  
 Параметры: uuid: UUID (обязательно)  
+
+## **Модели**
+### 1. Accommodation
+- id: UUID
+- address: String
+- bookingUrl: String
+### 2. Destination
+- id: UUID
+- description: String
+- office: Office
+- seatPlace: String
+### 3. DestinationDto
+- id: UUID
+- description: String
+- officeId: UUID
+- seatPlace: String
+### 4. Id
+- id: UUID
+### 5. LoginRequest
+- email: String
+- password: UUID
+### 6. Notification
+- id: UUID
+- request: Request
+- watched: Boolean
+- userId: UUID
+### 7. NotificationDto
+- id: UUID
+- requestId: UUID
+- watched: Boolean
+- userId: UUID
+### 8. Office
+- id: UUID
+- address: String
+- description: String
+### 9. Request
+- id: UUID
+- requestStatus: String (Enum of: approved, pending, awaitChanges, declined)
+- description: String
+- workerFirstName: String
+- workerSecondName: String
+- workerEmail: String
+- destination: Destination
+- comment: String
+- approvedId: UUID
+- startDate: date
+- endDate: date
+- ticketsUrl: String
+### 10. RequestDto
+- id: UUID
+- description: String
+- workerId: UUID
+- destinationId: UUID
+- comment: String
+- startDate: date
+- endDate: date
+- ticketsUrl: String
+### 11. RequestStatusChangeDto
+- approverId: UUID
+- tripDto: TripDto
+- comment: String
+### 12. Trip
+- id: UUID
+- tripStatus: String (Enum of: pending, completed, cancelled)
+- accommodation: Accommodation
+- destination: Destination
+- requestId: UUID
+- startDate: date
+- endDate: date
+### 13. TripDto
+- id: UUID
+- tripStatus: String (Enum of: pending, completed, cancelled)
+- accommodationId: UUID
+- destinationId: UUID
+- requestId: UUID
+### 14. User
+- id: UUID
+- email: String
+- password: String
+- firstName: String
+- secondName: String
+- subordinates: array[User]
+- userRole: String
