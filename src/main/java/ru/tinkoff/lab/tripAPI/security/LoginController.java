@@ -18,11 +18,9 @@ public class LoginController {
         return authService.login(loginRequest);
     }
 
-    @PreAuthorize("hasAuthority('USER')")
     @GetMapping("/hello/user")
     public String helloUser() {
-        final JwtAuthentication authInfo = authService.getAuthInfo();
-        return authInfo.getPrincipal().toString();
+        return "We got em4";
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")

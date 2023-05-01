@@ -31,7 +31,6 @@ public class UserService {
             throw new UserCreateException("Error creating this user: " + e.getMessage());
         }
     }
-    //TODO: issue: mybatis throws forbidden if something wrong with request(ex. if user already exists in db)
 
     public User findById(UUID uuid) {
         User user = userMapper.selectUser(uuid);

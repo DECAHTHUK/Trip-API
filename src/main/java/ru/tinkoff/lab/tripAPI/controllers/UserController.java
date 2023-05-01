@@ -65,20 +65,38 @@ public class UserController {
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @GetMapping("/{uuid}/incoming-requests-at/{page}")
-    public List<Request> getIncomingRequests(@PathVariable UUID uuid, @PathVariable int page) {
-        return requestService.getIncomingRequests(uuid, page);
+    public List<Request> getAnyIncomingRequests(@PathVariable UUID uuid, @PathVariable int page) {
+        return requestService.getIncomingRequests(uuid, page, null);
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @GetMapping("/{uuid}/outgoing-requests-at/{page}")
-    public List<Request> getOutgoingRequests(@PathVariable UUID uuid, @PathVariable int page) {
-        return requestService.getOutgoingRequests(uuid, page);
+    public List<Request> getAnyOutgoingRequests(@PathVariable UUID uuid, @PathVariable int page) {
+        return requestService.getOutgoingRequests(uuid, page, null);
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
     @GetMapping("/{uuid}/trips-at/{page}")
-    public List<Trip> getSomeTrips(@PathVariable UUID uuid, @PathVariable int page) {
-        return accommodationDestinationTripService.getSomeTrips(uuid, page);
+    public List<Trip> getAnySomeTrips(@PathVariable UUID uuid, @PathVariable int page) {
+        return accommodationDestinationTripService.getSomeTrips(uuid, page, null);
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    @GetMapping("/{uuid}/incoming-requests-at/{page}/{status}")
+    public List<Request> getIncomingRequestsWithStatus(@PathVariable UUID uuid, @PathVariable int page, @PathVariable String status) {
+        return requestService.getIncomingRequests(uuid, page, status);
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    @GetMapping("/{uuid}/outgoing-requests-at/{page}/{status}")
+    public List<Request> getOutgoingRequestsWithStatus(@PathVariable UUID uuid, @PathVariable int page, @PathVariable String status) {
+        return requestService.getOutgoingRequests(uuid, page, status);
+    }
+
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    @GetMapping("/{uuid}/trips-at/{page}/{status}")
+    public List<Trip> getSomeTripsWithStatus(@PathVariable UUID uuid, @PathVariable int page, @PathVariable String status) {
+        return accommodationDestinationTripService.getSomeTrips(uuid, page, status);
     }
 
     @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")

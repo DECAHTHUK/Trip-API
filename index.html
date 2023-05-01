@@ -183,7 +183,7 @@ font-style: italic;
     <div class="app-desc">API for reserving trips for Tinkoff employers</div>
     <div class="app-desc">More information: <a href="https://openapi-generator.tech">https://openapi-generator.tech</a></div>
     <div class="app-desc">Contact Info: <a href="alexei.talanov003@mail.ru">alexei.talanov003@mail.ru</a></div>
-    <div class="app-desc">Version: 0.0.1-SNAPSHOT</div>
+    <div class="app-desc">Version: 1.1.0</div>
     <div class="app-desc">BasePath:</div>
     <div class="license-info">Chestnoye slovo 2.0</div>
     <div class="license-url">http://apache.org/licenses/LICENSE-2.0.html</div>
@@ -208,10 +208,21 @@ font-style: italic;
   <li><a href="#getDestination"><code><span class="http-method">get</span> /destinations/{uuid}</code></a></li>
   <li><a href="#updateDestination"><code><span class="http-method">put</span> /destinations</code></a></li>
   </ul>
+  <h4><a href="#LoginEnd">LoginEnd</a></h4>
+  <ul>
+  <li><a href="#login"><code><span class="http-method">post</span> /api/login</code></a></li>
+  </ul>
   <h4><a href="#NotificationsEnd">NotificationsEnd</a></h4>
   <ul>
   <li><a href="#getNotification"><code><span class="http-method">get</span> /notifications/{uuid}</code></a></li>
   <li><a href="#markAsWatched"><code><span class="http-method">put</span> /notifications/{uuid}/watch</code></a></li>
+  </ul>
+  <h4><a href="#OfficesEnd">OfficesEnd</a></h4>
+  <ul>
+  <li><a href="#createNewOffice"><code><span class="http-method">post</span> /offices</code></a></li>
+  <li><a href="#deleteOffice"><code><span class="http-method">delete</span> /offices/{uuid}</code></a></li>
+  <li><a href="#getOffice"><code><span class="http-method">get</span> /offices/{uuid}</code></a></li>
+  <li><a href="#updateOffice"><code><span class="http-method">put</span> /offices</code></a></li>
   </ul>
   <h4><a href="#RequestsEnd">RequestsEnd</a></h4>
   <ul>
@@ -235,7 +246,10 @@ font-style: italic;
   <li><a href="#createRelation"><code><span class="http-method">post</span> /users/{approver}/subordinates/{subordinate}</code></a></li>
   <li><a href="#deleteRelation"><code><span class="http-method">delete</span> /users/{approver}/subordinates/{subordinate}</code></a></li>
   <li><a href="#getIncomingRequestsAt"><code><span class="http-method">get</span> /users/{uuid}/incoming-requests-at/{page}</code></a></li>
+  <li><a href="#getIncomingRequestsWithStatus"><code><span class="http-method">get</span> /{uuid}/incoming-requests-at/{page}/{status}</code></a></li>
   <li><a href="#getOutgoingRequestsAt"><code><span class="http-method">get</span> /users/{uuid}/outgoing-requests-at/{page}</code></a></li>
+  <li><a href="#getOutgoingRequestsWithStatus"><code><span class="http-method">get</span> /{uuid}/outgoing-requests-at/{page}/{status}</code></a></li>
+  <li><a href="#getSomeTripsWithStatus"><code><span class="http-method">get</span> /{uuid}/trips-at/{page}/{status}</code></a></li>
   <li><a href="#getTripsAt"><code><span class="http-method">get</span> /users/{uuid}/trips-at/{page}</code></a></li>
   <li><a href="#getUnwatchedNotifications"><code><span class="http-method">get</span> /users/{uuid}/unwatched-notifications</code></a></li>
   <li><a href="#getUserById"><code><span class="http-method">get</span> /users/{uuid}</code></a></li>
@@ -265,6 +279,13 @@ font-style: italic;
 
     </div>  <!-- field-items -->
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -317,6 +338,13 @@ font-style: italic;
 
 
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -359,6 +387,13 @@ font-style: italic;
 
 
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -419,6 +454,13 @@ font-style: italic;
 
     </div>  <!-- field-items -->
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -468,6 +510,13 @@ font-style: italic;
 
     </div>  <!-- field-items -->
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -520,6 +569,13 @@ font-style: italic;
 
 
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -562,6 +618,13 @@ font-style: italic;
 
 
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -627,6 +690,13 @@ font-style: italic;
 
     </div>  <!-- field-items -->
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -653,6 +723,60 @@ font-style: italic;
         <a href="#"></a>
   </div> <!-- method -->
   <hr/>
+  <h1><a name="LoginEnd">LoginEnd</a></h1>
+  <div class="method"><a name="login"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /api/login</code></pre></div>
+    <div class="method-summary">Login as a user (<span class="nickname">login</span>)</div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">LoginRequest <a href="#LoginRequest">LoginRequest</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+
+    </div>  <!-- field-items -->
+
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      
+      String
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#String">String</a>
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
   <h1><a name="NotificationsEnd">NotificationsEnd</a></h1>
   <div class="method"><a name="getNotification"/>
     <div class="method-path">
@@ -670,6 +794,13 @@ font-style: italic;
 
 
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -747,6 +878,244 @@ font-style: italic;
 
 
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <h1><a name="OfficesEnd">OfficesEnd</a></h1>
+  <div class="method"><a name="createNewOffice"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="post"><code class="huge"><span class="http-method">post</span> /offices</code></pre></div>
+    <div class="method-summary">Office creation (<span class="nickname">createNewOffice</span>)</div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">Office <a href="#Office">Office</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+
+    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Id">Id</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#Id">Id</a>
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="deleteOffice"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="delete"><code class="huge"><span class="http-method">delete</span> /offices/{uuid}</code></pre></div>
+    <div class="method-summary">Delete an office (<span class="nickname">deleteOffice</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">uuid (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: uuid</div>
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
+
+
+
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#"></a>
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getOffice"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /offices/{uuid}</code></pre></div>
+    <div class="method-summary">Get an office (<span class="nickname">getOffice</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">uuid (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: uuid</div>
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      <a href="#Office">Office</a>
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>{
+  "address" : "address",
+  "description" : "description",
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+}</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        <a href="#Office">Office</a>
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="updateOffice"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="put"><code class="huge"><span class="http-method">put</span> /offices</code></pre></div>
+    <div class="method-summary">Office update (<span class="nickname">updateOffice</span>)</div>
+    <div class="method-notes"></div>
+
+
+    <h3 class="field-label">Consumes</h3>
+    This API call consumes the following media types via the <span class="header">Content-Type</span> request header:
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Request body</h3>
+    <div class="field-items">
+      <div class="param">Office <a href="#Office">Office</a> (required)</div>
+
+      <div class="param-desc"><span class="param-type">Body Parameter</span> &mdash;  </div>
+
+    </div>  <!-- field-items -->
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -802,6 +1171,13 @@ font-style: italic;
 
     </div>  <!-- field-items -->
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -860,6 +1236,13 @@ font-style: italic;
 
     </div>  <!-- field-items -->
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -924,6 +1307,13 @@ font-style: italic;
 
     </div>  <!-- field-items -->
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -966,6 +1356,13 @@ font-style: italic;
 
 
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -1050,6 +1447,13 @@ font-style: italic;
 
     </div>  <!-- field-items -->
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -1098,6 +1502,13 @@ font-style: italic;
 
     </div>  <!-- field-items -->
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -1141,6 +1552,13 @@ font-style: italic;
 
 
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -1189,6 +1607,13 @@ font-style: italic;
 
     </div>  <!-- field-items -->
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -1241,6 +1666,13 @@ font-style: italic;
 
 
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -1255,6 +1687,7 @@ font-style: italic;
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
+  "endDate" : "2000-01-23",
   "requestId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
   "accommodation" : {
     "address" : "address",
@@ -1272,6 +1705,7 @@ font-style: italic;
     "seatPlace" : "seatPlace"
   },
   "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "startDate" : "2000-01-23",
   "tripStatus" : "pending"
 }</code></pre>
 
@@ -1316,6 +1750,13 @@ font-style: italic;
 
     </div>  <!-- field-items -->
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -1365,6 +1806,13 @@ font-style: italic;
 
     </div>  <!-- field-items -->
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -1419,6 +1867,13 @@ font-style: italic;
 
 
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -1463,6 +1918,13 @@ font-style: italic;
 
 
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -1507,12 +1969,19 @@ font-style: italic;
 
 
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
     <h3 class="field-label">Return type</h3>
     <div class="return-type">
-      array[<a href="#RequestDto">RequestDto</a>]
+      array[<a href="#Request">Request</a>]
       
     </div>
 
@@ -1520,16 +1989,156 @@ font-style: italic;
 
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
-    <pre class="example"><code>{
+    <pre class="example"><code>[ {
+  "workerFirstName" : "workerFirstName",
   "ticketsUrl" : "http://example.com/aeiou",
-  "workerId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "workerSecondName" : "workerSecondName",
+  "workerEmail" : "workerEmail",
   "endDate" : "2000-01-23",
+  "approverId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "destination" : {
+    "description" : "description",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "office" : {
+      "address" : "address",
+      "description" : "description",
+      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+    },
+    "seatPlace" : "seatPlace"
+  },
   "description" : "description",
   "comment" : "comment",
   "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-  "destinationId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "requestStatus" : "approved",
   "startDate" : "2000-01-23"
-}</code></pre>
+}, {
+  "workerFirstName" : "workerFirstName",
+  "ticketsUrl" : "http://example.com/aeiou",
+  "workerSecondName" : "workerSecondName",
+  "workerEmail" : "workerEmail",
+  "endDate" : "2000-01-23",
+  "approverId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "destination" : {
+    "description" : "description",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "office" : {
+      "address" : "address",
+      "description" : "description",
+      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+    },
+    "seatPlace" : "seatPlace"
+  },
+  "description" : "description",
+  "comment" : "comment",
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "requestStatus" : "approved",
+  "startDate" : "2000-01-23"
+} ]</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getIncomingRequestsWithStatus"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /{uuid}/incoming-requests-at/{page}/{status}</code></pre></div>
+    <div class="method-summary">Получение страницы номер {page}(либо все сразу если не указано) из n запросов для ментора с заданным {id} и статусом {status} (<span class="nickname">getIncomingRequestsWithStatus</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">uuid (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: uuid</div><div class="param">page (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: int32</div><div class="param">status (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: RequestStatus</div>
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      array[<a href="#Request">Request</a>]
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>[ {
+  "workerFirstName" : "workerFirstName",
+  "ticketsUrl" : "http://example.com/aeiou",
+  "workerSecondName" : "workerSecondName",
+  "workerEmail" : "workerEmail",
+  "endDate" : "2000-01-23",
+  "approverId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "destination" : {
+    "description" : "description",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "office" : {
+      "address" : "address",
+      "description" : "description",
+      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+    },
+    "seatPlace" : "seatPlace"
+  },
+  "description" : "description",
+  "comment" : "comment",
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "requestStatus" : "approved",
+  "startDate" : "2000-01-23"
+}, {
+  "workerFirstName" : "workerFirstName",
+  "ticketsUrl" : "http://example.com/aeiou",
+  "workerSecondName" : "workerSecondName",
+  "workerEmail" : "workerEmail",
+  "endDate" : "2000-01-23",
+  "approverId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "destination" : {
+    "description" : "description",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "office" : {
+      "address" : "address",
+      "description" : "description",
+      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+    },
+    "seatPlace" : "seatPlace"
+  },
+  "description" : "description",
+  "comment" : "comment",
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "requestStatus" : "approved",
+  "startDate" : "2000-01-23"
+} ]</code></pre>
 
     <h3 class="field-label">Produces</h3>
     This API call produces the following media types according to the <span class="header">Accept</span> request header;
@@ -1568,12 +2177,19 @@ font-style: italic;
 
 
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
     <h3 class="field-label">Return type</h3>
     <div class="return-type">
-      array[<a href="#RequestDto">RequestDto</a>]
+      array[<a href="#Request">Request</a>]
       
     </div>
 
@@ -1581,16 +2197,259 @@ font-style: italic;
 
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
-    <pre class="example"><code>{
+    <pre class="example"><code>[ {
+  "workerFirstName" : "workerFirstName",
   "ticketsUrl" : "http://example.com/aeiou",
-  "workerId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "workerSecondName" : "workerSecondName",
+  "workerEmail" : "workerEmail",
   "endDate" : "2000-01-23",
+  "approverId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "destination" : {
+    "description" : "description",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "office" : {
+      "address" : "address",
+      "description" : "description",
+      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+    },
+    "seatPlace" : "seatPlace"
+  },
   "description" : "description",
   "comment" : "comment",
   "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-  "destinationId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "requestStatus" : "approved",
   "startDate" : "2000-01-23"
-}</code></pre>
+}, {
+  "workerFirstName" : "workerFirstName",
+  "ticketsUrl" : "http://example.com/aeiou",
+  "workerSecondName" : "workerSecondName",
+  "workerEmail" : "workerEmail",
+  "endDate" : "2000-01-23",
+  "approverId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "destination" : {
+    "description" : "description",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "office" : {
+      "address" : "address",
+      "description" : "description",
+      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+    },
+    "seatPlace" : "seatPlace"
+  },
+  "description" : "description",
+  "comment" : "comment",
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "requestStatus" : "approved",
+  "startDate" : "2000-01-23"
+} ]</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getOutgoingRequestsWithStatus"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /{uuid}/outgoing-requests-at/{page}/{status}</code></pre></div>
+    <div class="method-summary">Получение страницы номер {page}(либо все сразу если не указано) из n запросов для сотрудника с заданным {id} и статусом {status} (<span class="nickname">getOutgoingRequestsWithStatus</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">uuid (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: uuid</div><div class="param">page (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: int32</div><div class="param">status (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: RequestStatus</div>
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      array[<a href="#Request">Request</a>]
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>[ {
+  "workerFirstName" : "workerFirstName",
+  "ticketsUrl" : "http://example.com/aeiou",
+  "workerSecondName" : "workerSecondName",
+  "workerEmail" : "workerEmail",
+  "endDate" : "2000-01-23",
+  "approverId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "destination" : {
+    "description" : "description",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "office" : {
+      "address" : "address",
+      "description" : "description",
+      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+    },
+    "seatPlace" : "seatPlace"
+  },
+  "description" : "description",
+  "comment" : "comment",
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "requestStatus" : "approved",
+  "startDate" : "2000-01-23"
+}, {
+  "workerFirstName" : "workerFirstName",
+  "ticketsUrl" : "http://example.com/aeiou",
+  "workerSecondName" : "workerSecondName",
+  "workerEmail" : "workerEmail",
+  "endDate" : "2000-01-23",
+  "approverId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "destination" : {
+    "description" : "description",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "office" : {
+      "address" : "address",
+      "description" : "description",
+      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+    },
+    "seatPlace" : "seatPlace"
+  },
+  "description" : "description",
+  "comment" : "comment",
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "requestStatus" : "approved",
+  "startDate" : "2000-01-23"
+} ]</code></pre>
+
+    <h3 class="field-label">Produces</h3>
+    This API call produces the following media types according to the <span class="header">Accept</span> request header;
+    the media type will be conveyed by the <span class="header">Content-Type</span> response header.
+    <ul>
+      <li><code>application/json</code></li>
+    </ul>
+
+    <h3 class="field-label">Responses</h3>
+    <h4 class="field-label">200</h4>
+    Success
+        
+    <h4 class="field-label">400</h4>
+    Bad Request
+        <a href="#String">String</a>
+    <h4 class="field-label">500</h4>
+    Internal server error
+        <a href="#"></a>
+  </div> <!-- method -->
+  <hr/>
+  <div class="method"><a name="getSomeTripsWithStatus"/>
+    <div class="method-path">
+    <a class="up" href="#__Methods">Up</a>
+    <pre class="get"><code class="huge"><span class="http-method">get</span> /{uuid}/trips-at/{page}/{status}</code></pre></div>
+    <div class="method-summary">Получение страницы номер {page}(либо все сразу если не указано) из n командировок для пользователя с заданным {id} и статусом {status} (<span class="nickname">getSomeTripsWithStatus</span>)</div>
+    <div class="method-notes"></div>
+
+    <h3 class="field-label">Path parameters</h3>
+    <div class="field-items">
+      <div class="param">uuid (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: uuid</div><div class="param">page (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: int32</div><div class="param">status (required)</div>
+
+      <div class="param-desc"><span class="param-type">Path Parameter</span> &mdash;  default: null format: RequestStatus</div>
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
+
+
+
+    <h3 class="field-label">Return type</h3>
+    <div class="return-type">
+      array[<a href="#Trip">Trip</a>]
+      
+    </div>
+
+    <!--Todo: process Response Object and its headers, schema, examples -->
+
+    <h3 class="field-label">Example data</h3>
+    <div class="example-data-content-type">Content-Type: application/json</div>
+    <pre class="example"><code>[ {
+  "endDate" : "2000-01-23",
+  "requestId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "accommodation" : {
+    "address" : "address",
+    "bookingUrl" : "http://example.com/aeiou",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+  },
+  "destination" : {
+    "description" : "description",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "office" : {
+      "address" : "address",
+      "description" : "description",
+      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+    },
+    "seatPlace" : "seatPlace"
+  },
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "startDate" : "2000-01-23",
+  "tripStatus" : "pending"
+}, {
+  "endDate" : "2000-01-23",
+  "requestId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "accommodation" : {
+    "address" : "address",
+    "bookingUrl" : "http://example.com/aeiou",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+  },
+  "destination" : {
+    "description" : "description",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "office" : {
+      "address" : "address",
+      "description" : "description",
+      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+    },
+    "seatPlace" : "seatPlace"
+  },
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "startDate" : "2000-01-23",
+  "tripStatus" : "pending"
+} ]</code></pre>
 
     <h3 class="field-label">Produces</h3>
     This API call produces the following media types according to the <span class="header">Accept</span> request header;
@@ -1629,12 +2488,19 @@ font-style: italic;
 
 
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
     <h3 class="field-label">Return type</h3>
     <div class="return-type">
-      array[<a href="#TripDto">TripDto</a>]
+      array[<a href="#Trip">Trip</a>]
       
     </div>
 
@@ -1642,13 +2508,49 @@ font-style: italic;
 
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
-    <pre class="example"><code>{
-  "accommodationId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    <pre class="example"><code>[ {
+  "endDate" : "2000-01-23",
   "requestId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "accommodation" : {
+    "address" : "address",
+    "bookingUrl" : "http://example.com/aeiou",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+  },
+  "destination" : {
+    "description" : "description",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "office" : {
+      "address" : "address",
+      "description" : "description",
+      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+    },
+    "seatPlace" : "seatPlace"
+  },
   "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
-  "destinationId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "startDate" : "2000-01-23",
   "tripStatus" : "pending"
-}</code></pre>
+}, {
+  "endDate" : "2000-01-23",
+  "requestId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "accommodation" : {
+    "address" : "address",
+    "bookingUrl" : "http://example.com/aeiou",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+  },
+  "destination" : {
+    "description" : "description",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "office" : {
+      "address" : "address",
+      "description" : "description",
+      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+    },
+    "seatPlace" : "seatPlace"
+  },
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "startDate" : "2000-01-23",
+  "tripStatus" : "pending"
+} ]</code></pre>
 
     <h3 class="field-label">Produces</h3>
     This API call produces the following media types according to the <span class="header">Accept</span> request header;
@@ -1685,6 +2587,13 @@ font-style: italic;
 
 
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -1698,7 +2607,7 @@ font-style: italic;
 
     <h3 class="field-label">Example data</h3>
     <div class="example-data-content-type">Content-Type: application/json</div>
-    <pre class="example"><code>{
+    <pre class="example"><code>[ {
   "request" : {
     "workerFirstName" : "workerFirstName",
     "ticketsUrl" : "http://example.com/aeiou",
@@ -1725,7 +2634,34 @@ font-style: italic;
   "watched" : true,
   "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
   "userId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
-}</code></pre>
+}, {
+  "request" : {
+    "workerFirstName" : "workerFirstName",
+    "ticketsUrl" : "http://example.com/aeiou",
+    "workerSecondName" : "workerSecondName",
+    "workerEmail" : "workerEmail",
+    "endDate" : "2000-01-23",
+    "approverId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "destination" : {
+      "description" : "description",
+      "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+      "office" : {
+        "address" : "address",
+        "description" : "description",
+        "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+      },
+      "seatPlace" : "seatPlace"
+    },
+    "description" : "description",
+    "comment" : "comment",
+    "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+    "requestStatus" : "approved",
+    "startDate" : "2000-01-23"
+  },
+  "watched" : true,
+  "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "userId" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+} ]</code></pre>
 
     <h3 class="field-label">Produces</h3>
     This API call produces the following media types according to the <span class="header">Accept</span> request header;
@@ -1762,6 +2698,13 @@ font-style: italic;
 
 
 
+    <h3 class="field-label">Request headers</h3>
+    <div class="field-items">
+      <div class="param">Authorization (required)</div>
+
+      <div class="param-desc"><span class="param-type">Header Parameter</span> &mdash;  default: null format: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</div>
+
+    </div>  <!-- field-items -->
 
 
 
@@ -1777,9 +2720,9 @@ font-style: italic;
     <div class="example-data-content-type">Content-Type: application/json</div>
     <pre class="example"><code>{
   "firstName" : "firstName",
-  "user_role" : "user_role",
   "password" : "password",
   "id" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+  "userRole" : "userRole",
   "subordinates" : [ null, null ],
   "email" : "email",
   "secondName" : "secondName"
@@ -1862,7 +2805,9 @@ font-style: italic;
     <li><a href="#Destination"><code>Destination</code> - </a></li>
     <li><a href="#DestinationDto"><code>DestinationDto</code> - </a></li>
     <li><a href="#Id"><code>Id</code> - </a></li>
+    <li><a href="#LoginRequest"><code>LoginRequest</code> - </a></li>
     <li><a href="#Notification"><code>Notification</code> - </a></li>
+    <li><a href="#NotificationDto"><code>NotificationDto</code> - </a></li>
     <li><a href="#Office"><code>Office</code> - </a></li>
     <li><a href="#Request"><code>Request</code> - </a></li>
     <li><a href="#RequestDto"><code>RequestDto</code> - </a></li>
@@ -1909,11 +2854,29 @@ font-style: italic;
     </div>  <!-- field-items -->
   </div>
   <div class="model">
+    <h3><a name="LoginRequest"><code>LoginRequest</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'>Needed at login endpoint</div>
+    <div class="field-items">
+      <div class="param">email (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">password (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
     <h3><a name="Notification"><code>Notification</code> - </a> <a class="up" href="#__Models">Up</a></h3>
     <div class='model-description'></div>
     <div class="field-items">
       <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
 <div class="param">request (optional)</div><div class="param-desc"><span class="param-type"><a href="#Request">Request</a></span>  </div>
+<div class="param">watched (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
+<div class="param">userId (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
+    </div>  <!-- field-items -->
+  </div>
+  <div class="model">
+    <h3><a name="NotificationDto"><code>NotificationDto</code> - </a> <a class="up" href="#__Models">Up</a></h3>
+    <div class='model-description'></div>
+    <div class="field-items">
+      <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
+<div class="param">requestId (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
 <div class="param">watched (optional)</div><div class="param-desc"><span class="param-type"><a href="#boolean">Boolean</a></span>  </div>
 <div class="param">userId (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
     </div>  <!-- field-items -->
@@ -1932,12 +2895,12 @@ font-style: italic;
     <div class='model-description'></div>
     <div class="field-items">
       <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
-<div class="param">requestStatus (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">requestStatus </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
         <div class="param-enum-header">Enum:</div>
         <div class="param-enum">approved</div><div class="param-enum">pending</div><div class="param-enum">awaitChanges</div><div class="param-enum">declined</div>
 <div class="param">description (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-<div class="param">workerFirstName (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-<div class="param">workerSecondName (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">workerFirstName </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">workerSecondName </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
 <div class="param">workerEmail (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
 <div class="param">destination </div><div class="param-desc"><span class="param-type"><a href="#Destination">Destination</a></span>  </div>
 <div class="param">comment (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
@@ -1967,6 +2930,7 @@ font-style: italic;
     <div class="field-items">
       <div class="param">approverId (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
 <div class="param">tripDto (optional)</div><div class="param-desc"><span class="param-type"><a href="#TripDto">TripDto</a></span>  </div>
+<div class="param">comment (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
@@ -1980,6 +2944,8 @@ font-style: italic;
 <div class="param">accommodation (optional)</div><div class="param-desc"><span class="param-type"><a href="#Accommodation">Accommodation</a></span>  </div>
 <div class="param">destination (optional)</div><div class="param-desc"><span class="param-type"><a href="#Destination">Destination</a></span>  </div>
 <div class="param">requestId (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
+<div class="param">startDate (optional)</div><div class="param-desc"><span class="param-type"><a href="#date">date</a></span>  format: date</div>
+<div class="param">endDate (optional)</div><div class="param-desc"><span class="param-type"><a href="#date">date</a></span>  format: date</div>
     </div>  <!-- field-items -->
   </div>
   <div class="model">
@@ -2002,10 +2968,10 @@ font-style: italic;
       <div class="param">id (optional)</div><div class="param-desc"><span class="param-type"><a href="#UUID">UUID</a></span>  format: uuid</div>
 <div class="param">email </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
 <div class="param">password </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-<div class="param">firstName (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
-<div class="param">secondName (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">firstName </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">secondName </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
 <div class="param">subordinates (optional)</div><div class="param-desc"><span class="param-type"><a href="#User">array[User]</a></span>  </div>
-<div class="param">user_role (optional)</div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
+<div class="param">userRole </div><div class="param-desc"><span class="param-type"><a href="#string">String</a></span>  </div>
     </div>  <!-- field-items -->
   </div>
   </body>
