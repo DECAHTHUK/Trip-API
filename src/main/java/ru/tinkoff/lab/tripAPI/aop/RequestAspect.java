@@ -51,7 +51,7 @@ public class RequestAspect {
 
     @AfterThrowing("execution(* ru.tinkoff.lab.tripAPI.business.service.RequestService.updateRequest(..)))")
     public void setLoggerUpdateException() {
-        logger.info("request was not updated!");
+        logger.error("request was not updated!");
     }
 
     @After("execution(* ru.tinkoff.lab.tripAPI.business.service.RequestService.getIncomingRequests(..)))")

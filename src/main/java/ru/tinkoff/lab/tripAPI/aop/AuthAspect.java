@@ -19,6 +19,6 @@ public class AuthAspect {
 
     @AfterThrowing("execution(* ru.tinkoff.lab.tripAPI.security.AuthService.login(..))")
     public void setLoggerWrongData() {
-        logger.info("Wrong password or login / access denied");
+        logger.error("Wrong password or login / access denied");
     }
 }
