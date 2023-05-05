@@ -35,6 +35,8 @@ dependencies {
 	implementation 'org.springframework:spring-jdbc:6.0.6'
 	implementation group: 'org.mybatis.spring.boot', name: 'mybatis-spring-boot-starter', version: '3.0.1'
 	implementation group: 'org.postgresql', name: 'postgresql', version: '42.5.4'
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: '3.0.6'
+
 
 
 
