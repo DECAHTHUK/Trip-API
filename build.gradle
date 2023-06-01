@@ -9,8 +9,7 @@ version = '1.2.0'
 sourceCompatibility = '17'
 
 jar {
-	enabled = true
-	archiveClassifier.set("")
+	enabled = false
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 	manifest {
 		attributes "Main-Class": "ru.tinkoff.lab.tripAPI.TripApiApplication"
