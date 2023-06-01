@@ -5,10 +5,12 @@ plugins {
 }
 
 group = 'ru.tinkoff.lab'
-version = '1.1.0'
+version = '1.2.0'
 sourceCompatibility = '17'
 
 jar {
+	enabled = true
+	archiveClassifier.set("")
 	duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 	manifest {
 		attributes "Main-Class": "ru.tinkoff.lab.tripAPI.TripApiApplication"
