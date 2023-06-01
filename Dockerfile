@@ -1,5 +1,14 @@
-FROM openjdk:17
-ARG JAR_FILE=build/libs/trip-api-1.1.0.jar
-WORKDIR /opt/app
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","app.jar"]
+FROM gradle:latest AS build
+COPY --chown=gradle:gradle . /home/gradle/src
+WORKDIR /home/gradle/src
+RUN gradle build --no-daemon -x test
+
+FROM openjdk:latest
+
+EXPOSE 8080
+
+RUN rm -rf /app && mkdir /app
+
+COPY --from=build /home/gradle/src/build/libs/*.jar /app/trip-api.jar
+
+ENTRYPOINT ["java", "-jar", "/app/trip-api.jar"]

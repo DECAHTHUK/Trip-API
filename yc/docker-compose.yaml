@@ -2,7 +2,7 @@ version: '3.7'
 
 services:
   tripapi:
-    image: decahthuk/tripapi:1.1.0
+    image: decahthuk/tripapi:1.2.0
     ports:
       - '8080:8080'
     restart: on-failure
