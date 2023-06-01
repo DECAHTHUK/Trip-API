@@ -20,7 +20,7 @@ jobs:
         with:
           file: ./Dockerfile
           push: true
-          tags: decahthuk/tripapi:1.2.0
+          tags: decahthuk/tripapi:1.2.1
 
   update-yc:
     runs-on: ubuntu-latest
